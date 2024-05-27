@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from backend.src.db.models.utils import UuidStr
+from src.db.models.utils import UuidStr
 
 
 class Term(BaseModel):

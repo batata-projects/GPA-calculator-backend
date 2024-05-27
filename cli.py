@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-FILES_TO_CLEAN = ["backend"]
+FILES_TO_CLEAN = ["src"]
 
 
 def clean():
@@ -21,8 +21,8 @@ def clean():
     subprocess.run(["mypy", *FILES_TO_CLEAN])
 
 
-def run_backend():
-    subprocess.run(["uvicorn", "backend.src.main:app", "--reload"])
+def run():
+    subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
 def main():
@@ -31,8 +31,8 @@ def main():
     args = parser.parse_args()
     if args.command == "clean":
         clean()
-    elif args.command == "run-backend":
-        run_backend()
+    elif args.command == "run":
+        run()
     else:
         print("Invalid command")
 

@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from backend.src.db.models.utils import EmailStr, UuidStr
+from src.db.models.utils import EmailStr, UuidStr
 
 
 class Users(BaseModel):
