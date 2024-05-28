@@ -16,6 +16,12 @@ jobs:
         
       - name: List files
         run: ls -la
+      
+      - name: check if repo is cloned
+        run: |
+          ls -la $GITHUB_WORKSPACE
+          cd ~
+          ls -la
 
       - name: Install dependencies
         run: |
