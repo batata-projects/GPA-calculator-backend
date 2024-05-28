@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 
-FILES_TO_CLEAN = ["src"]
+FILES_TO_CLEAN = ["src", "tests", "cli.py"]
 
 
 def clean():
