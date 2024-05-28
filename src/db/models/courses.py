@@ -7,9 +7,6 @@ from src.db.models.utils import UuidStr
 
 class Course(BaseModel):
     id: Optional[UuidStr] = None
-    username: Optional[str] = None
-
-
-# TODO: Specify string kind, ie. create a util where the string has the type: COURSE_NAME COURSE NUMBER; example: EECE 230
-
-course = Course()
+    user_id: UuidStr
+    all_courses_id: UuidStr
+    grade: Optional[float] = None
