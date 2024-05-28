@@ -10,18 +10,10 @@ jobs:
   lint-format:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-        
-      - name: List files
-        run: ls -la
-      
-      - name: check if repo is cloned
-        run: |
-          ls -la $GITHUB_WORKSPACE
-          cd ~
-          ls -la
 
       - name: Install dependencies
         run: |
