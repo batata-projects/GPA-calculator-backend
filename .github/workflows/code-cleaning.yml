@@ -1,4 +1,4 @@
-name: Code Quality Checks
+name: Run Tests
 
 on:
   push:
@@ -25,3 +25,6 @@ jobs:
 
       - name: black check
         run: black --check src tests cli.py
+
+      - name: mypy check
+        run: mypy src tests cli.py
