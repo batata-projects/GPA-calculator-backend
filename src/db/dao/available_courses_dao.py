@@ -80,10 +80,10 @@ class AvailableCourseDAO:
             for available_course in data.data
         ]
 
-    def create_available_course(self, available_course: AvailableCourse):
+    def create_available_course(self, available_course_data: dict):
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
-            .insert(available_course.model_dump())
+            .insert(available_course_data)
             .execute()
         )
         if not data.data:
