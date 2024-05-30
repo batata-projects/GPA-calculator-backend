@@ -5,7 +5,7 @@ from src.db.models.utils import TermStr
 from src.db.tables import SupabaseTables
 
 
-class TermsDAO:
+class TermDAO:
     def __init__(self, client: Client):
         self.client = client
 

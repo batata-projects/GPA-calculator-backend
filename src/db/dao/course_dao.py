@@ -5,7 +5,7 @@ from src.db.models.utils import UuidStr
 from src.db.tables import SupabaseTables
 
 
-class CoursesDAO:
+class CourseDAO:
     def __init__(self, client: Client):
         self.client = client
 
@@ -20,7 +20,7 @@ class CoursesDAO:
             return None
         return Course.model_validate(data.data[0])
 
-    def get_course_by_user_id(self, user_id: UuidStr):
+    def get_courses_by_user_id(self, user_id: UuidStr) -> list[Course]:
         data = (
             (self.client.table(SupabaseTables.COURSES))
             .select("*")
@@ -28,10 +28,10 @@ class CoursesDAO:
             .execute()
         )
         if not data.data:
-            return None
-        return Course.model_validate(data.data[0])
+            return []
+        return [Course.model_validate(course) for course in data.data]
 
-    def get_course_by_all_courses_id(self, all_courses_id: UuidStr):
+    def get_courses_by_all_courses_id(self, all_courses_id: UuidStr) -> list[Course]:
         data = (
             (self.client.table(SupabaseTables.COURSES))
             .select("*")
@@ -39,8 +39,8 @@ class CoursesDAO:
             .execute()
         )
         if not data.data:
-            return None
-        return Course.model_validate(data.data[0])
+            return []
+        return [Course.model_validate(course) for course in data.data]
 
     def create_course(self, course: Course):
         data = (
