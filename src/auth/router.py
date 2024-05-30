@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 from src.common.responses import APIResponse
 
@@ -14,5 +14,5 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def login_route():
     return APIResponse(
         message="Login successful",
-        status="ok",
+        status=status.HTTP_200_OK,
     )
