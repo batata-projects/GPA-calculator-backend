@@ -11,3 +11,4 @@ class AvailableCourse(BaseModel):
     course_code: CourseCodeStr
     credits: int
     terms_name: TermStr
+    graded: bool
