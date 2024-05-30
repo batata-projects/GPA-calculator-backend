@@ -13,6 +13,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     credits: int
+    counted_credits: int
     grade: float
 
     @classmethod
@@ -24,5 +25,6 @@ class User(BaseModel):
             first_name=user.user_metadata["first_name"],
             last_name=user.user_metadata["last_name"],
             credits=user.user_metadata["credits"],
+            counted_credits=user.user_metadata["counted_credits"],
             grade=user.user_metadata["grade"],
         )

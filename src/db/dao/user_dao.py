@@ -42,8 +42,8 @@ class UserDAO:
             return None
         return User.model_validate(data.data[0])
 
-    def create_user(self, user: User):
-        data = self.client.table(SupabaseTables.USERS).insert(user.dict()).execute()
+    def create_user(self, user_data: dict):
+        data = self.client.table(SupabaseTables.USERS).insert(user_data).execute()
         if not data.data:
             return None
         return User.model_validate(data.data[0])
