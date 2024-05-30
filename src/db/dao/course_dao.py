@@ -4,12 +4,7 @@ from src.db.models.courses import Course
 from src.db.models.utils import UuidStr
 from src.db.tables import SupabaseTables
 
-from src.db.models.courses import Course
-from src.db.models.utils import UuidStr
-from src.db.tables import SupabaseTables
 
-
-class CourseDAO:
 class CourseDAO:
     def __init__(self, client: Client):
         self.client = client
@@ -59,14 +54,10 @@ class CourseDAO:
         )
         if not data.data:
             return []
-        return [Course.model_validate(course) for course in data.data] 
+        return [Course.model_validate(course) for course in data.data]
 
     def create_course(self, course_data: dict):
-        data = (
-            (self.client.table(SupabaseTables.COURSES))
-            .insert(course_data)
-            .execute()
-        )
+        data = (self.client.table(SupabaseTables.COURSES)).insert(course_data).execute()
         if not data.data:
             return None
         return Course.model_validate(data.data[0])

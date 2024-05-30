@@ -1,7 +1,7 @@
 from supabase import Client
 
 from src.db.models.available_courses import AvailableCourse
-from src.db.models.utils import CourseCodeStr, CourseNameStr, TermStr, UuidStr
+from src.db.models.utils import CourseNameStr, UuidStr
 from src.db.tables import SupabaseTables
 
 

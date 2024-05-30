@@ -6,7 +6,6 @@ from src.db.tables import SupabaseTables
 
 
 class TermDAO:
-class TermDAO:
     def __init__(self, client: Client):
         self.client = client
 
@@ -33,9 +32,7 @@ class TermDAO:
         return Term.model_validate(data.data[0])
 
     def create_term(self, term_data: dict):
-        data = (
-            self.client.table(SupabaseTables.TERMS).insert(term_data).execute()
-        )
+        data = self.client.table(SupabaseTables.TERMS).insert(term_data).execute()
         if not data.data:
             return None
         return Term.model_validate(data.data[0])
@@ -47,10 +44,7 @@ class TermDAO:
 
     def delete_term(self, term_id: UuidStr):
         data = (
-            self.client.table(SupabaseTables.TERMS)
-            .delete()
-            .eq("id", term_id)
-            .execute()
+            self.client.table(SupabaseTables.TERMS).delete().eq("id", term_id).execute()
         )
         if not data.data:
             return None
