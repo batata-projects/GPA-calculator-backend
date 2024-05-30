@@ -2,13 +2,13 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from src.db.models.utils import CourseCodeStr, CourseNameStr, TermStr, UuidStr
+from src.db.models.utils import CourseCodeStr, CourseNameStr, UuidStr
 
 
 class AvailableCourse(BaseModel):
     id: Optional[UuidStr] = None
+    term_id: UuidStr
     name: CourseNameStr
     code: CourseCodeStr
     credits: int
-    term_name: TermStr
     graded: bool

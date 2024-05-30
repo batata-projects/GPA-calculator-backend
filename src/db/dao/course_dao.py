@@ -44,10 +44,22 @@ class CourseDAO:
             return []
         return [Course.model_validate(course) for course in data.data]
 
-    def create_course(self, course: Course):
+    def get_courses_by_grade(self, grade: float, user_id: UuidStr) -> list[Course]:
         data = (
             (self.client.table(SupabaseTables.COURSES))
-            .insert(course.model_dump())
+            .select("*")
+            .eq("grade", grade)
+            .eq("user_id", user_id)
+            .execute()
+        )
+        if not data.data:
+            return []
+        return [Course.model_validate(course) for course in data.data] 
+
+    def create_course(self, course_data: dict):
+        data = (
+            (self.client.table(SupabaseTables.COURSES))
+            .insert(course_data)
             .execute()
         )
         if not data.data:

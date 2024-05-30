@@ -13,6 +13,7 @@ class User(BaseModel):
     first_name: str
     last_name: str
     credits: int
+    counted_credits: int
     grade: float
 
     @classmethod

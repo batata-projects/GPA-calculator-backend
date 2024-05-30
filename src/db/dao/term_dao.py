@@ -1,13 +1,24 @@
 from supabase import Client
 
 from src.db.models.terms import Term
-from src.db.models.utils import TermStr
+from src.db.models.utils import TermStr, UuidStr
 from src.db.tables import SupabaseTables
 
 
 class TermDAO:
     def __init__(self, client: Client):
         self.client = client
+
+    def get_term_by_id(self, term_id: UuidStr):
+        data = (
+            self.client.table(SupabaseTables.TERMS)
+            .select("*")
+            .eq("id", term_id)
+            .execute()
+        )
+        if not data.data:
+            return None
+        return Term.model_validate(data.data[0])
 
     def get_term_by_name(self, name: TermStr):
         data = (
@@ -20,24 +31,24 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def create_term(self, term: Term):
+    def create_term(self, term_data: dict):
         data = (
-            self.client.table(SupabaseTables.TERMS).insert(term.model_dump()).execute()
+            self.client.table(SupabaseTables.TERMS).insert(term_data).execute()
         )
         if not data.data:
             return None
         return Term.model_validate(data.data[0])
 
-    def update_term(self, term_name: TermStr):
-        self.client.table(SupabaseTables.TERMS).update({"name": term_name}).eq(
-            "name", term_name
+    def update_term(self, term_id: UuidStr, term_data: dict):
+        self.client.table(SupabaseTables.TERMS).update(term_data).eq(
+            "id", term_id
         ).execute()
 
-    def delete_term(self, term_name: TermStr):
+    def delete_term(self, term_id: UuidStr):
         data = (
             self.client.table(SupabaseTables.TERMS)
             .delete()
-            .eq("name", term_name)
+            .eq("id", term_id)
             .execute()
         )
         if not data.data:

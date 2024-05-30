@@ -26,23 +26,7 @@ class AvailableCourseDAO:
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .select("*")
-            .eq("course_name", course_name)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [
-            AvailableCourse.model_validate(available_course)
-            for available_course in data.data
-        ]
-
-    def get_available_courses_by_course_code(
-        self, course_code: CourseCodeStr
-    ) -> list[AvailableCourse]:
-        data = (
-            self.client.table(SupabaseTables.AVAILABLE_COURSES)
-            .select("*")
-            .eq("course_code", course_code)
+            .eq("name", course_name)
             .execute()
         )
         if not data.data:
@@ -56,7 +40,7 @@ class AvailableCourseDAO:
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .select("*")
-            .eq("credit", credit)
+            .eq("credits", credit)
             .execute()
         )
         if not data.data:
@@ -66,13 +50,13 @@ class AvailableCourseDAO:
             for available_course in data.data
         ]
 
-    def get_available_courses_by_term_name(
-        self, term_name: TermStr
+    def get_available_courses_by_term_id(
+        self, term_id: UuidStr
     ) -> list[AvailableCourse]:
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .select("*")
-            .eq("term_name", term_name)
+            .eq("terms_id", term_id)
             .execute()
         )
         if not data.data:
