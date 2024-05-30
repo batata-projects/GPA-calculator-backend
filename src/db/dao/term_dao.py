@@ -6,6 +6,7 @@ from src.db.tables import SupabaseTables
 
 
 class TermDAO:
+class TermDAO:
     def __init__(self, client: Client):
         self.client = client
 
