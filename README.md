@@ -38,6 +38,12 @@ python cli.py run
 python cli.py clean
 ```
 
+### Generate empty test files
+
+```bash
+python cli.py generate-empty-tests
+```
+
 ## Contributors
 
 - [Jad Shaker](https://github.com/jadshaker)

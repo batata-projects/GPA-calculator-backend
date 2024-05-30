@@ -26,7 +26,7 @@ def run():
     subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
-def generate_tests():
+def generate_empty_tests():
     src_dir = "src"
     test_dir = "tests"
     for dirpath, dirnames, filenames in os.walk(src_dir):
@@ -59,8 +59,8 @@ def main():
         clean()
     elif args.command == "run":
         run()
-    elif args.command == "generate-tests":
-        generate_tests()
+    elif args.command == "generate-empty-tests":
+        generate_empty_tests()
     else:
         print("Invalid command")
 
