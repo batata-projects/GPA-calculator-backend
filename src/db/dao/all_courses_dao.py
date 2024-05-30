@@ -77,7 +77,10 @@ class AvailableCourseDAO:
         )
         if not data.data:
             return []
-        return [AvailableCourse.model_validate(available_courses) for available_courses in data.data]
+        return [
+            AvailableCourse.model_validate(available_courses)
+            for available_courses in data.data
+        ]
 
     def get_available_courses_by_graded(self, graded: bool) -> list[AvailableCourse]:
         data = (
