@@ -26,7 +26,7 @@ def run():
     subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
-def update_test_files():
+def generate_empty_tests():
     src_dir = "src"
     test_dir = "tests"
     for dirpath, dirnames, filenames in os.walk(src_dir):
@@ -47,20 +47,6 @@ def update_test_files():
                 )
                 test_file = os.path.join(test_path, test_filename)
                 open(test_file, "a").close()
-    
-    for dirpath, dirnames, filenames in os.walk(test_dir):
-        if "__pycache__" in dirpath:
-            continue
-        relative_path = os.path.relpath(dirpath, test_dir)
-        src_path = os.path.join(src_dir, relative_path)
-
-        for filename in filenames:
-            if filename == "__init__.py":
-                continue
-            src_file = os.path.join(src_path, filename)
-            if not os.path.exists(src_file):
-                test_file = os.path.join(dirpath, filename)
-                os.remove(test_file)
 
 
 def main():
@@ -71,8 +57,8 @@ def main():
         clean()
     elif args.command == "run":
         run()
-    elif args.command == "update-test-files":
-        update_test_files()
+    elif args.command == "generate-empty-tests":
+        generate_empty_tests()
     else:
         print("Invalid command")
 
