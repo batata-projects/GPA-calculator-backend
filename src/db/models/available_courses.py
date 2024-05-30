@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from src.db.models.utils import CourseCodeStr, CourseNameStr, TermStr, UuidStr, validate_term_str
+from src.db.models.utils import CourseCodeStr, CourseNameStr, TermStr, UuidStr
 
 
 class AvailableCourse(BaseModel):
