@@ -77,6 +77,17 @@ class AvailableCourseDAO:
         )
         if not data.data:
             return []
+        return [AvailableCourse.model_validate(available_courses) for available_courses in data.data]
+
+    def get_available_courses_by_graded(self, graded: bool) -> list[AvailableCourse]:
+        data = (
+            self.client.table(SupabaseTables.ALL_COURSES)
+            .select("*")
+            .eq("graded", graded)
+            .execute()
+        )
+        if not data.data:
+            return []
         return [
             AvailableCourse.model_validate(available_courses)
             for available_courses in data.data
