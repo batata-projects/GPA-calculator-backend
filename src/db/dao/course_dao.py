@@ -31,11 +31,13 @@ class CourseDAO:
             return []
         return [Course.model_validate(course) for course in data.data]
 
-    def get_courses_by_all_courses_id(self, all_courses_id: UuidStr) -> list[Course]:
+    def get_courses_by_available_courses_id(
+        self, available_courses_id: UuidStr
+    ) -> list[Course]:
         data = (
             (self.client.table(SupabaseTables.COURSES))
             .select("*")
-            .eq("all_courses_id", all_courses_id)
+            .eq("all_courses_id", available_courses_id)
             .execute()
         )
         if not data.data:
