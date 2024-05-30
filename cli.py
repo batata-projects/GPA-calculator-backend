@@ -81,6 +81,7 @@ def main():
     else:
         print("Invalid command")
         help()
+        exit(1)
 
 
 if __name__ == "__main__":
