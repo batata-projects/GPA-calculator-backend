@@ -26,27 +26,44 @@ def run():
     subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
-def generate_empty_tests():
+def generate_test_files():
     src_dir = "src"
     test_dir = "tests"
+    fixtures_dir = "tests/fixtures"
     for dirpath, dirnames, filenames in os.walk(src_dir):
         if "__pycache__" in dirpath:
             continue
         relative_path = os.path.relpath(dirpath, src_dir)
         test_path = os.path.join(test_dir, relative_path)
+        fixtures_path = os.path.join(fixtures_dir, relative_path)
 
         os.makedirs(test_path, exist_ok=True)
+        os.makedirs(fixtures_path, exist_ok=True)
 
         init_file = os.path.join(test_path, "__init__.py")
         open(init_file, "w").close()
 
+        init_file = os.path.join(fixtures_path, "__init__.py")
+        open(init_file, "w").close()
+
         for filename in filenames:
             if filename.endswith(".py"):
-                test_filename = (
-                    "test_" + filename if filename != "__init__.py" else filename
-                )
+                if filename == "__init__.py":
+                    continue
+                test_filename = "test_" + filename
                 test_file = os.path.join(test_path, test_filename)
                 open(test_file, "a").close()
+
+                fixture_file = os.path.join(fixtures_path, filename)
+                open(fixture_file, "a").close()
+
+
+def help():
+    print("Usage: python cli.py [command]")
+    print("Commands:")
+    print("  clean: Clean up the code")
+    print("  run: Run the application")
+    print("  generate-test-files: Generate test files")
 
 
 def main():
@@ -57,10 +74,13 @@ def main():
         clean()
     elif args.command == "run":
         run()
-    elif args.command == "generate-empty-tests":
-        generate_empty_tests()
+    elif args.command == "generate-test-files":
+        generate_test_files()
+    elif args.command == "help":
+        help()
     else:
         print("Invalid command")
+        help()
 
 
 if __name__ == "__main__":
