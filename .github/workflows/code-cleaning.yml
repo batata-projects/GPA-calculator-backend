@@ -1,4 +1,4 @@
-name: Run Tests
+name: Python Code Quality and Testing Workflow
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  lint-format:
+  python-code-quality-and-testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,3 +28,6 @@ jobs:
 
       - name: mypy check
         run: mypy src tests cli.py
+
+      - name: Run tests
+        run: pytest tests
