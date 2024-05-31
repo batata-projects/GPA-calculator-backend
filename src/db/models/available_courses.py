@@ -7,7 +7,7 @@ from src.db.models.utils import CourseCodeStr, CourseNameStr, UuidStr
 
 class AvailableCourse(BaseModel):
     id: Optional[UuidStr] = None
-    term_id: UuidStr
+    terms_id: UuidStr
     name: CourseNameStr
     code: CourseCodeStr
     credits: int

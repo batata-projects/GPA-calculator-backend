@@ -50,7 +50,7 @@ class AvailableCourseDAO:
             for available_course in data.data
         ]
 
-    def get_available_courses_by_term_id(
+    def get_available_courses_by_terms_id(
         self, term_id: UuidStr
     ) -> list[AvailableCourse]:
         data = (
