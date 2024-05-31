@@ -37,7 +37,7 @@ class CourseDAO:
         data = (
             (self.client.table(SupabaseTables.COURSES))
             .select("*")
-            .eq("all_courses_id", available_courses_id)
+            .eq("available_courses_id", available_courses_id)
             .execute()
         )
         if not data.data:
