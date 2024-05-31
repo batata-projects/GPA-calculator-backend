@@ -32,7 +32,7 @@ pip install -r requirements.txt
 python cli.py run
 ```
 
-### Clean the code (necessary before backend pushing)
+### Clean the code (necessary before creating a pull request)
 
 ```bash
 python cli.py clean
