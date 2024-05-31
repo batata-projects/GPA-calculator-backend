@@ -5,8 +5,8 @@ import pytest
 from src.db.models.available_courses import AvailableCourse
 
 
-class TestAvailableCourses:
-    def test_create_available_course_successful(self, uuid4: Mock):
+class TestAvailableCourse:
+    def test_available_course_successful(self, uuid4: Mock):
         available_course_id = str(uuid4())
         terms_id = str(uuid4())
         name = "EECE"
@@ -30,7 +30,7 @@ class TestAvailableCourses:
         assert availableCourse.credits == credits
         assert availableCourse.graded == graded
 
-    def test_create_available_course_no_id(self, uuid4: Mock):
+    def test_available_course_no_id(self, uuid4: Mock):
         terms_id = str(uuid4())
         name = "EECE"
         code = "230"
@@ -58,7 +58,7 @@ class TestAvailableCourses:
             ("uuid4", "EECE", "230", 3, None),
         ],
     )
-    def test_create_available_course_invalid_attribute(
+    def test_available_course_invalid_attribute(
         self, terms_id, name, code, credits, graded, request: pytest.FixtureRequest
     ):
         if terms_id is not None:
