@@ -14,7 +14,7 @@ def clean():
             "--recursive",
             *FILES_TO_CLEAN,
             "-i",
-            "--exclude=__init__.py",
+            "--exclude=conftest.py",
         ]
     )
     subprocess.run(["isort", *FILES_TO_CLEAN, "--profile", "black"])
