@@ -1,4 +1,4 @@
-name: Python Code Quality and Testing Workflow
+name: Python Code Cleaning and Testing Workflow
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  python-code-quality-and-testing:
+  python-code-cleaning-and-testing:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
