@@ -12,7 +12,4 @@ router = APIRouter(prefix="/auth", tags=["auth"])
     description="Login to the system",
 )
 async def login_route():
-    return APIResponse(
-        message="Login successful",
-        status=status.HTTP_200_OK,
-    )
+    return APIResponse(message="Login successful", status=status.HTTP_200_OK)

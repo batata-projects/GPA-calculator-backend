@@ -32,6 +32,7 @@ class TermDAO:
         return Term.model_validate(data.data[0])
 
     def create_term(self, term_data: dict):
+        Term.model_validate(term_data)
         data = self.client.table(SupabaseTables.TERMS).insert(term_data).execute()
         if not data.data:
             return None
