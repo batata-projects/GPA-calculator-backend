@@ -28,20 +28,32 @@ pip install -r requirements.txt
 
 ### Run backend server
 
+Run the fastapi backend server
 ```bash
 python cli.py run
 ```
 
 ### Clean the code (necessary before creating a pull request)
 
+Clean up the code
 ```bash
 python cli.py clean
 ```
 
 ### Generate empty test files
 
+Generate empty test files in the `tests` and `tests/fixtures` directories for all the files in the `src` directory.
+
 ```bash
 python cli.py generate-empty-tests
+```
+
+### Import fixtures to `conftest.py`
+
+This command imports all the fixtures in the `tests/fixtures` directory to the `conftest.py` file.
+
+```bash
+python cli.py import-fixtures
 ```
 
 ## Contributors

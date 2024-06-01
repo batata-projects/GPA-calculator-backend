@@ -5,7 +5,19 @@ import subprocess
 FILES_TO_CLEAN = ["src", "tests", "cli.py"]
 
 
+def run():
+    """
+    command: run
+    Run the fastapi backend server
+    """
+    subprocess.run(["uvicorn", "src.main:app", "--reload"])
+
+
 def clean():
+    """
+    command: clean
+    Clean up the code
+    """
     subprocess.run(
         [
             "autoflake",
@@ -19,14 +31,14 @@ def clean():
     )
     subprocess.run(["isort", *FILES_TO_CLEAN, "--profile", "black"])
     subprocess.run(["black", *FILES_TO_CLEAN])
-    subprocess.run(["mypy", *FILES_TO_CLEAN])
-
-
-def run():
-    subprocess.run(["uvicorn", "src.main:app", "--reload"])
+    subprocess.run(["mypy", *FILES_TO_CLEAN, "--check-untyped-defs"])
 
 
 def generate_test_files():
+    """
+    command: generate-test-files
+    Generate empty test files in the `tests` and `tests/fixtures` directories for all the files in the `src` directory.
+    """
     src_dir = "src"
     test_dir = "tests"
     fixtures_dir = "tests/fixtures"
@@ -58,15 +70,67 @@ def generate_test_files():
                 open(fixture_file, "a").close()
 
 
+def import_fixtures():
+    """
+    command: import-fixtures
+    This command imports all the fixtures in the `tests/fixtures` directory to the `conftest.py` file.
+    """
+    conftest = open("tests/conftest.py", "w")
+    fixtures = os.path.join("tests", "fixtures")
+    for dirpath, dirnames, filenames in os.walk(fixtures):
+        for filename in filenames:
+            if filename.endswith(".py"):
+                lines = open(os.path.join(dirpath, filename)).read().split("\n")
+                i = 0
+                function_names = []
+                while i < len(lines):
+                    line = lines[i]
+                    if "@pytest.fixture" in line:
+                        line = lines[i + 1]
+                        function_names.append(line.split("def ")[1].split("(")[0])
+                    i += 1
+                if function_names:
+                    path = os.path.relpath(dirpath, fixtures).replace("/", ".")
+                    path = f".fixtures.{path}.{filename.split('.')[0]}"
+                    while ".." in path:
+                        path = path.replace("..", ".")
+                    print(f"from {path} import (")
+                    print("\t", *function_names, sep=", ")
+                    print(")")
+                    conftest.write(f"from {path} import {', '.join(function_names)}\n")
+    conftest.close()
+
+
 def help():
+    """
+    command: help
+    Show help
+    """
     print("Usage: python cli.py [command]")
     print("Commands:")
-    print("  clean: Clean up the code")
-    print("  run: Run the application")
-    print("  generate-test-files: Generate test files")
+    commands: list[dict[str, str]] = []
+    for name, func in globals().items():
+        if callable(func):
+            if type(func.__doc__) != str:
+                continue
+            commands.append(
+                {
+                    "command": func.__doc__.split("\n")[1].split(":")[1].strip(),
+                    "description": "\n".join(func.__doc__.split("\n")[2:-1]),
+                }
+            )
+    max_command_length = max([len(command["command"]) for command in commands])
+    for cmd in commands:
+        command = cmd["command"]
+        description = cmd["description"]
+        desc_lines = description.split("\n")
+        print(f"\t{command:<{max_command_length}}:\t{desc_lines[0]}")
+        for line in desc_lines[1:]:
+            print(f"\t{'':<{max_command_length}} \t{line}")
+        print()
 
 
-def main():
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("command", type=str, help="Command to run")
     args = parser.parse_args()
@@ -76,13 +140,11 @@ def main():
         run()
     elif args.command == "generate-test-files":
         generate_test_files()
+    elif args.command == "import-fixtures":
+        import_fixtures()
     elif args.command == "help":
         help()
     else:
         print("Invalid command")
         help()
         exit(1)
-
-
-if __name__ == "__main__":
-    main()
