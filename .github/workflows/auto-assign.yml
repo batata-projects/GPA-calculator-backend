@@ -5,6 +5,10 @@ on:
     types: [opened]
   pull_request:
     types: [opened]
+  workflow_run:
+    workflows: ["Python Code Cleaning and Testing Workflow"]
+    types:
+      - completed
 
 jobs:
   auto-assign:
