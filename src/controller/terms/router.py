@@ -4,7 +4,6 @@ from src.common.responses import APIResponse
 from src.controller.terms.schemas import TermResponse
 from src.db.dao.term_dao import TermDAO
 from src.db.dependencies import get_term_dao
-from src.db.models.terms import Term
 from src.db.models.utils import UuidStr
 
 router = APIRouter(
@@ -26,11 +25,19 @@ async def get_term_by_id(
         term = term_dao.get_term_by_id(term_id)
         if term:
             return APIResponse[TermResponse](
-                status=status.HTTP_200_OK, message="Term found", data=term
+                status=status.HTTP_200_OK,
+                message="Term found",
+                data=TermResponse(terms=[term]),
             )
-        return APIResponse(status=status.HTTP_404_NOT_FOUND, message="Term not found")
+        return APIResponse(
+            status=status.HTTP_404_NOT_FOUND,
+            message="Term not found",
+        )
     except Exception as e:
-        return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
+        return APIResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(e),
+        )
 
 
 @router.get(
@@ -46,11 +53,19 @@ async def get_term_by_name(
         term = term_dao.get_term_by_name(term_name)
         if term:
             return APIResponse[TermResponse](
-                status=status.HTTP_200_OK, message="Term found", data=term
+                status=status.HTTP_200_OK,
+                message="Term found",
+                data=TermResponse(terms=[term]),
             )
-        return APIResponse(status=status.HTTP_404_NOT_FOUND, message="Term not found")
+        return APIResponse(
+            status=status.HTTP_404_NOT_FOUND,
+            message="Term not found",
+        )
     except Exception as e:
-        return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
+        return APIResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(e),
+        )
 
 
 @router.post(
@@ -67,13 +82,19 @@ async def create_term(
         term = term_dao.create_term(term_data)
         if term:
             return APIResponse[TermResponse](
-                status=status.HTTP_201_CREATED, message="Term created", data=term
+                status=status.HTTP_201_CREATED,
+                message="Term created",
+                data=TermResponse(terms=[term]),
             )
         return APIResponse(
-            status=status.HTTP_400_BAD_REQUEST, message="Failed to create term"
+            status=status.HTTP_400_BAD_REQUEST,
+            message="Failed to create term",
         )
     except Exception as e:
-        return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
+        return APIResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(e),
+        )
 
 
 @router.put(
@@ -92,13 +113,19 @@ async def update_term(
         term = term_dao.get_term_by_id(term_id)
         if term:
             return APIResponse[TermResponse](
-                status=status.HTTP_200_OK, message="Term updated", data=term
+                status=status.HTTP_200_OK,
+                message="Term updated",
+                data=TermResponse(terms=[term]),
             )
         return APIResponse(
-            status=status.HTTP_400_BAD_REQUEST, message="Failed to update term"
+            status=status.HTTP_400_BAD_REQUEST,
+            message="Failed to update term",
         )
     except Exception as e:
-        return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
+        return APIResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(e),
+        )
 
 
 @router.delete(
@@ -114,29 +141,43 @@ async def delete_term(
         term = term_dao.delete_term(term_id)
         if term:
             return APIResponse[TermResponse](
-                status=status.HTTP_200_OK, message="Term deleted", data=term
+                status=status.HTTP_200_OK,
+                message="Term deleted",
+                data=TermResponse(terms=[term]),
             )
         return APIResponse(
-            status=status.HTTP_400_BAD_REQUEST, message="Failed to delete term"
+            status=status.HTTP_400_BAD_REQUEST,
+            message="Failed to delete term",
         )
     except Exception as e:
-        return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
+        return APIResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(e),
+        )
 
 
 @router.get(
     "/",
-    response_model=APIResponse[list[Term]],
+    response_model=APIResponse[TermResponse],
     response_description="Get all terms",
 )
 async def get_all_terms(
     term_dao: TermDAO = Depends(get_term_dao),
-) -> APIResponse[list[Term]]:
+) -> APIResponse[TermResponse]:
     try:
         terms = term_dao.get_all_terms()
         if terms:
-            return APIResponse[list[Term]](
-                status=status.HTTP_200_OK, message="Terms found", data=terms
+            return APIResponse[TermResponse](
+                status=status.HTTP_200_OK,
+                message="Terms found",
+                data=TermResponse(terms=terms),
             )
-        return APIResponse(status=status.HTTP_404_NOT_FOUND, message="No terms found")
+        return APIResponse(
+            status=status.HTTP_404_NOT_FOUND,
+            message="No terms found",
+        )
     except Exception as e:
-        return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
+        return APIResponse(
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            message=str(e),
+        )

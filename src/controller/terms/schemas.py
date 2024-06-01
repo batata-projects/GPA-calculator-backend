@@ -1,8 +1,7 @@
 from pydantic import BaseModel
 
-from src.db.models.utils import UuidStr
+from src.db.models.terms import Term
 
 
 class TermResponse(BaseModel):
-    id: UuidStr
-    name: str
+    terms: list[Term] = []

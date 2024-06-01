@@ -30,6 +30,5 @@ app.include_router(terms_router)
 @app.get("/")
 async def root():
     return APIResponse(
-        message="Welcome to the GPA calculator API",
-        status=status.HTTP_200_OK,
+        message="Welcome to the GPA calculator API", status=status.HTTP_200_OK
     )
