@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.auth.router import router as auth_router
 from src.common.responses import APIResponse
 from src.config import config
+from src.controller.status import router as status_router
+from src.controller.terms.router import router as terms_router
 
 app = FastAPI(
     title=config.APP.TITLE,
@@ -21,6 +23,8 @@ app.add_middleware(
 
 
 app.include_router(auth_router)
+app.include_router(status_router)
+app.include_router(terms_router)
 
 
 @app.get("/")
