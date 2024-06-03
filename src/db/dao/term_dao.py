@@ -39,9 +39,16 @@ class TermDAO:
         return Term.model_validate(data.data[0])
 
     def update_term(self, term_id: UuidStr, term_data: dict):
-        self.client.table(SupabaseTables.TERMS).update(term_data).eq(
-            "id", term_id
-        ).execute()
+        Term.model_validate(term_data)
+        data = (
+            self.client.table(SupabaseTables.TERMS)
+            .update(term_data)
+            .eq("id", term_id)
+            .execute()
+        )
+        if not data.data:
+            return None
+        return Term.model_validate(data.data[0])
 
     def delete_term(self, term_id: UuidStr):
         data = (

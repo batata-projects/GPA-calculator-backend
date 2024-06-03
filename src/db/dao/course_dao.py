@@ -57,15 +57,23 @@ class CourseDAO:
         return [Course.model_validate(course) for course in data.data]
 
     def create_course(self, course_data: dict):
+        Course.model_validate(course_data)
         data = (self.client.table(SupabaseTables.COURSES)).insert(course_data).execute()
         if not data.data:
             return None
         return Course.model_validate(data.data[0])
 
     def update_course(self, course_id: UuidStr, course_data: dict):
-        self.client.table(SupabaseTables.COURSES).update(course_data).eq(
-            "id", course_id
-        ).execute()
+        Course.model_validate(course_data)
+        data = (
+            self.client.table(SupabaseTables.COURSES)
+            .update(course_data)
+            .eq("id", course_id)
+            .execute()
+        )
+        if not data.data:
+            return None
+        return Course.model_validate(data.data[0])
 
     def delete_course(self, course_id: UuidStr):
         data = (
