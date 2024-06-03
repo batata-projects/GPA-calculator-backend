@@ -1,20 +1,20 @@
 from typing import Optional
 
 from gotrue.types import User as SupabaseUser  # type: ignore
-from pydantic import BaseModel
+from pydantic import BaseModel, NonNegativeFloat, NonNegativeInt
 
-from src.db.models.utils import EmailStr, UuidStr
+from src.db.models.utils import EmailStr, UsernameStr, UuidStr
 
 
 class User(BaseModel):
     id: Optional[UuidStr] = None
-    username: str
     email: EmailStr
+    username: UsernameStr
     first_name: str
     last_name: str
-    credits: int
-    counted_credits: int
-    grade: float
+    credits: NonNegativeInt
+    counted_credits: NonNegativeInt
+    grade: NonNegativeFloat
 
     @classmethod
     def validate_supabase_user(cls, user: SupabaseUser) -> "User":

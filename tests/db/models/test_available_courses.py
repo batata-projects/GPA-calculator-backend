@@ -58,11 +58,31 @@ class TestAvailableCourse:
             ("uuid4", "EECE", "230", 3, None),
         ],
     )
-    def test_available_course_invalid_attribute(
+    def test_available_course_none_attribute(
         self, terms_id, name, code, credits, graded, request: pytest.FixtureRequest
     ):
         if terms_id is not None:
-            terms_id = str(request.getfixturevalue(terms_id))
+            terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
+        with pytest.raises(ValueError):
+            AvailableCourse(
+                terms_id=terms_id, name=name, code=code, credits=credits, graded=graded
+            )
+
+    @pytest.mark.parametrize(
+        "terms_id, name, code, credits, graded",
+        [
+            ("12345", "EECE", "230", 3, True),
+            ("uuid4", "Electrical", "230", 3, True),
+            ("uuid4", "EECE", "L12", 3, True),
+            ("uuid4", "EECE", "230", 3.5, True),
+            ("uuid4", "EECE", "230", 3, -1),
+        ],
+    )
+    def test_available_course_invalid_attribute(
+        self, terms_id, name, code, credits, graded, request: pytest.FixtureRequest
+    ):
+        if terms_id == "uuid4":
+            terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
             AvailableCourse(
                 terms_id=terms_id, name=name, code=code, credits=credits, graded=graded

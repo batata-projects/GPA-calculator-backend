@@ -18,7 +18,7 @@ class TestTerm:
         assert term.id == term_id
         assert term.name == name
 
-    def test_term_no_id(self, uuid4: Mock):
+    def test_term_no_id(self):
         name = "Fall 2022 - 2023"
 
         term = Term(
@@ -27,6 +27,14 @@ class TestTerm:
 
         assert term.id is None
         assert term.name == name
+
+    def test_term_invalid_str(self):
+        name = "Fall 2022-2023"
+
+        with pytest.raises(ValueError):
+            Term(
+                name=name,
+            )
 
     def test_term_invalid_attribute(self):
         with pytest.raises(ValueError):
