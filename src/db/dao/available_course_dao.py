@@ -81,6 +81,7 @@ class AvailableCourseDAO:
         ]
 
     def create_available_course(self, available_course_data: dict):
+        AvailableCourse.model_validate(available_course_data)
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .insert(available_course_data)
@@ -93,9 +94,16 @@ class AvailableCourseDAO:
     def update_available_course(
         self, available_course_id: str, available_course_data: dict
     ):
-        self.client.table(SupabaseTables.AVAILABLE_COURSES).update(
-            available_course_data
-        ).eq("id", available_course_id).execute()
+        AvailableCourse.model_validate(available_course_data)
+        data = (
+            self.client.table(SupabaseTables.AVAILABLE_COURSES)
+            .update(available_course_data)
+            .eq("id", available_course_id)
+            .execute()
+        )
+        if not data.data:
+            return None
+        return AvailableCourse.model_validate(data.data[0])
 
     def delete_available_course(self, available_course_id: UuidStr):
         data = (
