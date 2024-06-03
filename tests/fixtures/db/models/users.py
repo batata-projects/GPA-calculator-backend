@@ -14,17 +14,17 @@ def users(uuid4: Mock) -> list[User]:
             username="Jad",
             first_name="Jad",
             last_name="Shaker",
-            credits=12,
-            counted_credits=15,
+            credits=15,
+            counted_credits=12,
             grade=15.0,
         ),
         User(
             id=str(uuid4()),
-            email="ld06@aub.edu.lb",
-            username="Lara",
-            first_name="Lara",
-            last_name="Dagher",
-            credits=15,
+            email="rmf40@mail.aub.edu",
+            username="Rayan",
+            first_name="Rayan",
+            last_name="Fakhreddine",
+            credits=16,
             counted_credits=15,
             grade=14.0,
         ),
@@ -32,10 +32,20 @@ def users(uuid4: Mock) -> list[User]:
 
 
 @pytest.fixture
+def user1(users: list[User]) -> User:
+    return users[0]
+
+
+@pytest.fixture
+def user2(users: list[User]) -> User:
+    return users[1]
+
+
+@pytest.fixture
 def users_same_email(
     users: list[User],
 ) -> list[User]:
-    users[1].email = users[0].email
+    users[0].email = users[1].email
     return users
 
 
@@ -43,7 +53,7 @@ def users_same_email(
 def users_same_username(
     users: list[User],
 ) -> list[User]:
-    users[1].username = users[0].username
+    users[0].username = users[1].username
     return users
 
 
@@ -51,7 +61,7 @@ def users_same_username(
 def users_same_first_name(
     users: list[User],
 ) -> list[User]:
-    users[1].first_name = users[0].first_name
+    users[0].first_name = users[1].first_name
     return users
 
 
@@ -59,7 +69,7 @@ def users_same_first_name(
 def users_same_last_name(
     users: list[User],
 ) -> list[User]:
-    users[1].last_name = users[0].last_name
+    users[0].last_name = users[1].last_name
     return users
 
 
@@ -67,7 +77,7 @@ def users_same_last_name(
 def users_same_credits(
     users: list[User],
 ) -> list[User]:
-    users[1].credits = users[0].credits
+    users[0].credits = users[1].credits
     return users
 
 
@@ -75,7 +85,7 @@ def users_same_credits(
 def users_same_counted_credits(
     users: list[User],
 ) -> list[User]:
-    users[1].counted_credits = users[0].counted_credits
+    users[0].counted_credits = users[1].counted_credits
     return users
 
 
@@ -83,5 +93,5 @@ def users_same_counted_credits(
 def users_same_grade(
     users: list[User],
 ) -> list[User]:
-    users[1].grade = users[0].grade
+    users[0].grade = users[1].grade
     return users

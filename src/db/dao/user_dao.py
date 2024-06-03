@@ -43,15 +43,23 @@ class UserDAO:
         return User.model_validate(data.data[0])
 
     def create_user(self, user_data: dict):
+        User.model_validate(user_data)
         data = self.client.table(SupabaseTables.USERS).insert(user_data).execute()
         if not data.data:
             return None
         return User.model_validate(data.data[0])
 
     def update_user(self, user_id: UuidStr, user_data: dict):
-        self.client.table(SupabaseTables.USERS).update(user_data).eq(
-            "id", user_id
-        ).execute()
+        User.model_validate(user_data)
+        data = (
+            self.client.table(SupabaseTables.USERS)
+            .update(user_data)
+            .eq("id", user_id)
+            .execute()
+        )
+        if not data.data:
+            return None
+        return User.model_validate(data.data[0])
 
     def delete_user(self, user_id: UuidStr):
         data = (
