@@ -61,3 +61,4 @@ python cli.py import-fixtures
 - [Jad Shaker](https://github.com/jadshaker)
 - [Karim Abboud](https://github.com/Kaa75)
 - [Rayan Fakhreddine](https://github.com/Rayan28461)
+- [Hadi Mchawrab](https://github.com/HadiMchawrab)
