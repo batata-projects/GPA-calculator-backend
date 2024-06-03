@@ -4,6 +4,8 @@ import subprocess
 
 FILES_TO_CLEAN = ["src", "tests", "cli.py"]
 
+SEP = os.path.sep
+
 
 def run():
     """
@@ -41,7 +43,7 @@ def generate_test_files():
     """
     src_dir = "src"
     test_dir = "tests"
-    fixtures_dir = "tests/fixtures"
+    fixtures_dir = f"tests{SEP}fixtures"
     for dirpath, dirnames, filenames in os.walk(src_dir):
         if "__pycache__" in dirpath:
             continue
@@ -75,7 +77,7 @@ def import_fixtures():
     command: import-fixtures
     This command imports all the fixtures in the `tests/fixtures` directory to the `conftest.py` file.
     """
-    conftest = open("tests/conftest.py", "w")
+    conftest = open(f"tests{SEP}conftest.py", "w")
     fixtures = os.path.join("tests", "fixtures")
     for dirpath, dirnames, filenames in os.walk(fixtures):
         for filename in filenames:
@@ -90,7 +92,7 @@ def import_fixtures():
                         function_names.append(line.split("def ")[1].split("(")[0])
                     i += 1
                 if function_names:
-                    path = os.path.relpath(dirpath, fixtures).replace("/", ".")
+                    path = os.path.relpath(dirpath, fixtures).replace(SEP, ".")
                     path = f".fixtures.{path}.{filename.split('.')[0]}"
                     while ".." in path:
                         path = path.replace("..", ".")
