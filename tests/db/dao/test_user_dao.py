@@ -44,7 +44,7 @@ class TestUserDAO:
             ),
         ],
     )
-    def test_get_users_by_attribute_successful(
+    def test_get_user_by_attribute_successful(
         self,
         method,
         method_arg,
@@ -69,12 +69,6 @@ class TestUserDAO:
         results = getattr(user_dao, method)(*method_arg)
 
         assert results == request.getfixturevalue(query_return)
-
-        for result in results:
-            assert getattr(result, attribute_name) is not None
-            assert getattr(result, attribute_name) == getattr(
-                results[0], attribute_name
-            )
 
     def test_get_all_users_successful(self, users: list[User]):
         mock_client = Mock(spec=Client)
