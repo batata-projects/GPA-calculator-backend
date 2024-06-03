@@ -76,6 +76,47 @@ class TestUser:
             ("rmf40@mail.aub.edu", "Rio", "Rayan", "Fakhreddine", 0, 0, None),
         ],
     )
+    def test_user_none_attribute(
+        self,
+        email,
+        username,
+        first_name,
+        last_name,
+        credits,
+        counted_credits,
+        grade,
+    ):
+        with pytest.raises(ValueError):
+            User(
+                email=email,
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                credits=credits,
+                counted_credits=counted_credits,
+                grade=grade,
+            )
+
+    @pytest.mark.parametrize(
+        "email, username, first_name, last_name, credits, counted_credits, grade",
+        [
+            ("jaadshaker@gmail.com", "Rio", "Rayan", "Fakhreddine", 0, 0, 0.0),
+            (
+                "rmf40@mail.aub.edu",
+                "Invalid Username",
+                "Rayan",
+                "Fakhreddine",
+                0,
+                0,
+                0.0,
+            ),
+            ("rmf40@mail.aub.edu", "Rio", 123, "Fakhreddine", 0, 0, 0.0),
+            ("rmf40@mail.aub.edu", "Rio", "Rayan", 123, 0, 0, 0.0),
+            ("rmf40@mail.aub.edu", "Rio", "Rayan", "Fakhreddine", -1, 0, 0.0),
+            ("rmf40@mail.aub.edu", "Rio", "Rayan", "Fakhreddine", 0, -1, 0.0),
+            ("rmf40@mail.aub.edu", "Rio", "Rayan", "Fakhreddine", 0, 0, -1),
+        ],
+    )
     def test_user_invalid_attribute(
         self,
         email,

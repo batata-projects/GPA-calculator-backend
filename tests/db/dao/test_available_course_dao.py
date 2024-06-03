@@ -1,3 +1,4 @@
+from typing import Literal
 from unittest.mock import Mock
 
 import pytest
@@ -64,11 +65,26 @@ class TestAvailableCourseDAO:
     )
     def test_get_available_courses_by_attribute_successful(
         self,
-        method,
-        method_arg,
-        query_methods,
-        query_return,
-        attribute_name,
+        method: (
+            Literal["get_available_courses_by_course_name"]
+            | Literal["get_available_courses_by_credit"]
+            | Literal["get_available_courses_by_graded"]
+            | Literal["get_available_courses_by_terms_id"]
+        ),
+        method_arg: list[str],
+        query_methods: list[str],
+        query_return: (
+            Literal["available_courses_same_course_name"]
+            | Literal["available_courses_same_credits"]
+            | Literal["available_courses_same_graded"]
+            | Literal["available_courses_same_terms"]
+        ),
+        attribute_name: (
+            Literal["name"]
+            | Literal["credits"]
+            | Literal["graded"]
+            | Literal["terms_id"]
+        ),
         request: pytest.FixtureRequest,
     ):
         mock_client = Mock(spec=Client)

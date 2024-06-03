@@ -45,6 +45,17 @@ def validate_term_str(v: Optional[str] = None) -> Optional[str]:
         raise ValueError(f"{v} is an invalid term string")
 
 
+def validate_username_str(v: Optional[str] = None) -> Optional[str]:
+    if not v:
+        return None
+    try:
+        if not v.isalnum():
+            raise ValueError
+        return v
+    except ValueError:
+        raise ValueError(f"{v} is an invalid username")
+
+
 def validate_course_name(v: Optional[str] = None) -> Optional[str]:
     if not v:
         return None
@@ -60,7 +71,7 @@ def validate_course_code(v: Optional[str] = None) -> Optional[str]:
     if not v:
         return None
     try:
-        if len(v) < 3 or len(v) > 5 or not v.isalnum():
+        if len(v) < 3 or len(v) > 5 or not v.isalnum() or v[0].isalpha():
             raise ValueError
         return v
     except ValueError:
@@ -70,5 +81,6 @@ def validate_course_code(v: Optional[str] = None) -> Optional[str]:
 UuidStr = Annotated[str, BeforeValidator(validate_uuid)]
 EmailStr = Annotated[str, BeforeValidator(validate_email_str)]
 TermStr = Annotated[str, BeforeValidator(validate_term_str)]
+UsernameStr = Annotated[str, BeforeValidator(validate_username_str)]
 CourseNameStr = Annotated[str, BeforeValidator(validate_course_name)]
 CourseCodeStr = Annotated[str, BeforeValidator(validate_course_code)]
