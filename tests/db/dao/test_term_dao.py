@@ -39,14 +39,26 @@ class TestTermDAO:
 
         assert result == term
 
+    def test_get_all_terms_successful(self, terms: list[Term]):
+        mock_client = Mock(spec=Client)
+        term_dao = TermDAO(mock_client)
+
+        mock_client.table(SupabaseTables.TERMS).select("*").execute.return_value = (
+            APIResponse(data=[term.model_dump() for term in terms], count=len(terms))
+        )
+
+        result = term_dao.get_all_terms()
+
+        assert result == terms
+
     def test_create_term_successful(self, terms: list[Term]):
         term = terms[0]
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
 
-        mock_client.table(SupabaseTables.TERMS).insert(term.model_dump()).execute.return_value = APIResponse(
-            data=[term.model_dump()], count=None
-        )
+        mock_client.table(SupabaseTables.TERMS).insert(
+            term.model_dump()
+        ).execute.return_value = APIResponse(data=[term.model_dump()], count=None)
 
         result = term_dao.create_term(term.model_dump())
 
@@ -57,9 +69,9 @@ class TestTermDAO:
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
 
-        mock_client.table(SupabaseTables.TERMS).update(
-            term.model_dump()
-        ).eq("id", term.id).execute.return_value = APIResponse(data=[term.model_dump()], count=None)
+        mock_client.table(SupabaseTables.TERMS).update(term.model_dump()).eq(
+            "id", term.id
+        ).execute.return_value = APIResponse(data=[term.model_dump()], count=None)
 
         assert term.id is not None
 
