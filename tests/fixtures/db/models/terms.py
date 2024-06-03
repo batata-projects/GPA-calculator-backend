@@ -20,6 +20,16 @@ def terms(uuid4: Mock) -> list[Term]:
 
 
 @pytest.fixture
+def term1(terms: list[Term]) -> Term:
+    return terms[0]
+
+
+@pytest.fixture
+def term2(terms: list[Term]) -> Term:
+    return terms[1]
+
+
+@pytest.fixture
 def terms_same_name(
     terms: list[Term],
 ) -> list[Term]:

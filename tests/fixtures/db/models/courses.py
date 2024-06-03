@@ -26,32 +26,34 @@ def courses(uuid4: Mock) -> list[Course]:
 
 
 @pytest.fixture
+def course1(courses: list[Course]) -> Course:
+    return courses[0]
+
+
+@pytest.fixture
+def course2(courses: list[Course]) -> Course:
+    return courses[1]
+
+
+@pytest.fixture
 def courses_same_available_course_id(
-    course: list[Course],
+    courses: list[Course],
 ) -> list[Course]:
-    course[1].available_course_id = course[0].available_course_id
-    return course
+    courses[1].available_course_id = courses[0].available_course_id
+    return courses
 
 
 @pytest.fixture
 def courses_same_user_id(
-    course: list[Course],
+    courses: list[Course],
 ) -> list[Course]:
-    course[1].user_id = course[0].user_id
-    return course
+    courses[1].user_id = courses[0].user_id
+    return courses
 
 
 @pytest.fixture
 def courses_same_grade(
-    course: list[Course],
+    courses: list[Course],
 ) -> list[Course]:
-    course[1].grade = course[0].grade
-    return course
-
-
-@pytest.fixture
-def courses_same_passed(
-    course: list[Course],
-) -> list[Course]:
-    course[1].passed = course[0].passed
-    return course
+    courses[1].grade = courses[0].grade
+    return courses
