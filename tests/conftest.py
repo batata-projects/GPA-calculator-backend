@@ -23,4 +23,16 @@ from .fixtures.db.models.users import (
     users_same_last_name,
     users_same_username,
 )
+from .fixtures.db.models.utils import (
+    invalid_course_code,
+    invalid_course_name,
+    invalid_email,
+    invalid_term,
+    invalid_uuid,
+    valid_course_code,
+    valid_course_name,
+    valid_email,
+    valid_term,
+    valid_uuid,
+)
 from .fixtures.uuid import uuid4
