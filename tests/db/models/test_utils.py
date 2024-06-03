@@ -13,7 +13,15 @@ class TestUtils:
         ],
     )
     def test_validate_successful(
-        self, function_name, function_args, request: pytest.FixtureRequest
+        self,
+        function_name,
+        function_args,
+        valid_uuid,
+        valid_email,
+        valid_term,
+        valid_course_name,
+        valid_course_code,
+        request: pytest.FixtureRequest,
     ):
         func = globals()[function_name]
         assert func(request.getfixturevalue(function_args)) == request.getfixturevalue(
@@ -32,7 +40,16 @@ class TestUtils:
         ],
     )
     def test_validate_invalid(
-        self, function_name, function_args, request: pytest.FixtureRequest
+        self,
+        function_name,
+        function_args,
+        invalid_uuid,
+        invalid_email,
+        invalid_domain,
+        invalid_term,
+        invalid_course_name,
+        invalid_course_code,
+        request: pytest.FixtureRequest,
     ):
         with pytest.raises(ValueError):
             func = globals()[function_name]
