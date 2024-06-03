@@ -94,9 +94,6 @@ def import_fixtures():
                     path = f".fixtures.{path}.{filename.split('.')[0]}"
                     while ".." in path:
                         path = path.replace("..", ".")
-                    print(f"from {path} import (")
-                    print("\t", *function_names, sep=", ")
-                    print(")")
                     conftest.write(f"from {path} import {', '.join(function_names)}\n")
     conftest.close()
 
