@@ -20,15 +20,14 @@ from .fixtures.db.models.users import (
     users,
     users_same_counted_credits,
     users_same_credits,
-    users_same_email,
     users_same_first_name,
     users_same_grade,
     users_same_last_name,
-    users_same_username,
 )
 from .fixtures.db.models.utils import (
     invalid_course_code,
     invalid_course_name,
+    invalid_domain,
     invalid_email,
     invalid_term,
     invalid_uuid,

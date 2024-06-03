@@ -42,22 +42,6 @@ def user2(users: list[User]) -> User:
 
 
 @pytest.fixture
-def users_same_email(
-    users: list[User],
-) -> list[User]:
-    users[0].email = users[1].email
-    return users
-
-
-@pytest.fixture
-def users_same_username(
-    users: list[User],
-) -> list[User]:
-    users[0].username = users[1].username
-    return users
-
-
-@pytest.fixture
 def users_same_first_name(
     users: list[User],
 ) -> list[User]:

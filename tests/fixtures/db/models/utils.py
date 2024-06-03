@@ -22,6 +22,11 @@ def invalid_email():
 
 
 @pytest.fixture
+def invalid_domain():
+    return "rmf40@gmail.com"
+
+
+@pytest.fixture
 def valid_term():
     return "Fall 2021 - 2022"
 

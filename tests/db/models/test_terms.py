@@ -28,14 +28,8 @@ class TestTerm:
         assert term.id is None
         assert term.name == name
 
-    @pytest.mark.parametrize(
-        "name",
-        [
-            None,
-        ],
-    )
-    def test_term_invalid_attribute(self, name):
+    def test_term_invalid_attribute(self):
         with pytest.raises(ValueError):
             Term(
-                name=name,
+                name=None,  # type: ignore
             )
