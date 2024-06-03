@@ -39,7 +39,8 @@ def clean():
 def generate_test_files():
     """
     command: generate-test-files
-    Generate empty test files in the `tests` and `tests/fixtures` directories for all the files in the `src` directory.
+    Generate empty test files in the `tests` and `tests/fixtures`
+    directories for all the files in the `src` directory.
     """
     src_dir = "src"
     test_dir = "tests"
@@ -75,7 +76,8 @@ def generate_test_files():
 def import_fixtures():
     """
     command: import-fixtures
-    This command imports all the fixtures in the `tests/fixtures` directory to the `conftest.py` file.
+    This command imports all the fixtures in the
+    `tests/fixtures` directory to the `conftest.py` file.
     """
     conftest = open(f"tests{SEP}conftest.py", "w")
     fixtures = os.path.join("tests", "fixtures")
@@ -98,6 +100,25 @@ def import_fixtures():
                         path = path.replace("..", ".")
                     conftest.write(f"from {path} import {', '.join(function_names)}\n")
     conftest.close()
+
+
+def run_tests():
+    """
+    command: run-tests
+    This command runs all the tests in the `tests` directory.
+    """
+    subprocess.run(["pytest", "tests"])
+
+
+def pre_stage():
+    """
+    command: pre-stage
+    This command runs the `import-fixtures`,
+    `clean` and `run-tests` commands in this order.
+    """
+    import_fixtures()
+    clean()
+    run_tests()
 
 
 def help():
@@ -141,6 +162,10 @@ if __name__ == "__main__":
         generate_test_files()
     elif args.command == "import-fixtures":
         import_fixtures()
+    elif args.command == "run-tests":
+        run_tests()
+    elif args.command == "pre-stage":
+        pre_stage()
     elif args.command == "help":
         help()
     else:

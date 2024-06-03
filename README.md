@@ -56,6 +56,22 @@ This command imports all the fixtures in the `tests/fixtures` directory to the `
 python cli.py import-fixtures
 ```
 
+### Run tests
+
+This command runs all the tests in the `tests` directory.
+
+```bash
+python cli.py run-tests
+```
+
+### Run pre-stage command
+
+This command runs the `import-fixtures`, `clean` and `run-tests` commands in this order.
+
+```bash
+python cli.py pre-stage
+```
+
 ## Contributors
 
 - [Jad Shaker](https://github.com/jadshaker)
