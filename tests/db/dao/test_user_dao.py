@@ -30,16 +30,16 @@ class TestUserDAO:
         [
             (
                 "get_user_by_email",
-                ["users_same_email[0].email"],
+                ["users[0].email"],
                 ["select", "eq"],
-                "users_same_email",
+                "user1",
                 "email",
             ),
             (
                 "get_user_by_username",
                 ["users_same_username[0].username"],
                 ["select", "eq"],
-                "users_same_username",
+                "user2",
                 "username",
             ),
         ],
@@ -62,13 +62,13 @@ class TestUserDAO:
             mock_obj = mock_method()
 
         mock_obj.execute.return_value = APIResponse(
-            data=[user.model_dump() for user in request.getfixturevalue(query_return)],
+            data=[request.getfixturevalue(query_return).model_dump()],
             count=None,
         )
 
-        results = getattr(user_dao, method)(*method_arg)
+        result = getattr(user_dao, method)(*method_arg)
 
-        assert results == request.getfixturevalue(query_return)
+        assert result == request.getfixturevalue(query_return)
 
     def test_get_all_users_successful(self, users: list[User]):
         mock_client = Mock(spec=Client)

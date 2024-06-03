@@ -10,22 +10,62 @@ from src.db.tables import SupabaseTables
 
 
 class TestCourseDAO:
-    def test_get_course_by_id_successful(self, courses: list[Course]):
-        course = courses[0]
+    def test_get_course_by_id_successful(self, course1: Course):
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 
         mock_client.table(SupabaseTables.COURSES).select("*").eq(
-            "id", course.id
-        ).execute.return_value = APIResponse(data=[course.model_dump()], count=None)
+            "id", course1.id
+        ).execute.return_value = APIResponse(data=[course1.model_dump()], count=None)
 
-        assert course.id is not None
+        assert course1.id is not None
 
-        result = course_dao.get_course_by_id(course.id)
+        result = course_dao.get_course_by_id(course1.id)
 
-        assert result == course
+        assert result == course1
 
-    # TODO: reviwe the following test
+    def test_create_course_successful(self, course1: Course):
+        mock_client = Mock(spec=Client)
+        course_dao = CourseDAO(mock_client)
+
+        mock_client.table(SupabaseTables.COURSES).insert(
+            course1.model_dump()
+        ).execute.return_value = APIResponse(data=[course1.model_dump()], count=None)
+
+        assert course1.id is not None
+
+        result = course_dao.create_course(course1.model_dump())
+
+        assert result == course1
+
+    def test_update_course_successful(self, course1: Course):
+        mock_client = Mock(spec=Client)
+        course_dao = CourseDAO(mock_client)
+
+        mock_client.table(SupabaseTables.COURSES).update(course1.model_dump()).eq(
+            "id", course1.id
+        ).execute.return_value = APIResponse(data=[course1.model_dump()], count=None)
+
+        assert course1.id is not None
+
+        result = course_dao.update_course(course1.id, course1.model_dump())
+
+        assert result == course1
+
+    def test_delete_course_successful(self, course1: Course):
+        mock_client = Mock(spec=Client)
+        course_dao = CourseDAO(mock_client)
+
+        mock_client.table(SupabaseTables.COURSES).delete().eq(
+            "id", course1.id
+        ).execute.return_value = APIResponse(data=[course1.model_dump()], count=None)
+
+        assert course1.id is not None
+
+        result = course_dao.delete_course(course1.id)
+
+        assert result == course1
+
     @pytest.mark.parametrize(
         "method, method_arg, query_methods, query_return, attribute_name",
         [
@@ -102,46 +142,3 @@ class TestCourseDAO:
         for result in results:
             assert result.id is not None
             assert result.id == results[0].id
-
-    def test_create_course_successful(self, courses: list[Course]):
-        course = courses[0]
-        mock_client = Mock(spec=Client)
-        course_dao = CourseDAO(mock_client)
-
-        mock_client.table(SupabaseTables.COURSES).insert(
-            course.model_dump()
-        ).execute.return_value = APIResponse(data=[course.model_dump()], count=None)
-
-        result = course_dao.create_course(course.model_dump())
-
-        assert result == course
-
-    def test_update_course_successful(self, courses: list[Course]):
-        course = courses[0]
-        mock_client = Mock(spec=Client)
-        course_dao = CourseDAO(mock_client)
-
-        mock_client.table(SupabaseTables.COURSES).update(course.model_dump()).eq(
-            "id", course.id
-        ).execute.return_value = APIResponse(data=[course.model_dump()], count=None)
-
-        assert course.id is not None
-
-        result = course_dao.update_course(course.id, course.model_dump())
-
-        assert result == course
-
-    def test_delete_course_successful(self, courses: list[Course]):
-        course = courses[0]
-        mock_client = Mock(spec=Client)
-        course_dao = CourseDAO(mock_client)
-
-        mock_client.table(SupabaseTables.COURSES).delete().eq(
-            "id", course.id
-        ).execute.return_value = APIResponse(data=[course.model_dump()], count=None)
-
-        assert course.id is not None
-
-        result = course_dao.delete_course(course.id)
-
-        assert result == course

@@ -26,6 +26,16 @@ def courses(uuid4: Mock) -> list[Course]:
 
 
 @pytest.fixture
+def course1(courses: list[Course]) -> Course:
+    return courses[0]
+
+
+@pytest.fixture
+def course2(courses: list[Course]) -> Course:
+    return courses[1]
+
+
+@pytest.fixture
 def courses_same_available_course_id(
     courses: list[Course],
 ) -> list[Course]:
