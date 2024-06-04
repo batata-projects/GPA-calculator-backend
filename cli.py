@@ -110,6 +110,23 @@ def run_tests():
     subprocess.run(["pytest", "tests"])
 
 
+def clean_unused_files():
+    """
+    command: clean-unused-files
+    This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
+    """
+    for dirpath, dirnames, filenames in os.walk("tests"):
+        if "__pycache__" in dirpath:
+            continue
+        for filename in filenames:
+            if filename.endswith(".py"):
+                if filename == "__init__.py":
+                    continue
+                file = os.path.join(dirpath, filename)
+                if not open(file).read().strip():
+                    os.remove(file)
+
+
 def pre_stage():
     """
     command: pre-stage
@@ -166,6 +183,8 @@ if __name__ == "__main__":
         run_tests()
     elif args.command == "pre-stage":
         pre_stage()
+    elif args.command == "clean-unused-files":
+        clean_unused_files()
     elif args.command == "help":
         help()
     else:

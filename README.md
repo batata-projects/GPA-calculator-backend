@@ -29,6 +29,7 @@ pip install -r requirements.txt
 ### Run backend server
 
 Run the fastapi backend server
+
 ```bash
 python cli.py run
 ```
@@ -36,6 +37,7 @@ python cli.py run
 ### Clean the code (necessary before creating a pull request)
 
 Clean up the code
+
 ```bash
 python cli.py clean
 ```
@@ -62,6 +64,14 @@ This command runs all the tests in the `tests` directory.
 
 ```bash
 python cli.py run-tests
+```
+
+### Clean unused tests and fixtures
+
+This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
+
+```bash
+python cli.py clean-unused-tests
 ```
 
 ### Run pre-stage command
