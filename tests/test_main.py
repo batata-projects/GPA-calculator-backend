@@ -1,9 +1,9 @@
-from src.config import config
+from src.config import Config
 from src.main import app
 
 
 class TestMain:
     def test_main_successful(self):
-        assert app.title == config.APP.TITLE
-        assert app.description == config.APP.DESCRIPTION
-        assert app.version == config.APP.VERSION
+        assert app.title == Config.APP.TITLE
+        assert app.description == Config.APP.DESCRIPTION
+        assert app.version == Config.APP.VERSION

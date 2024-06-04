@@ -3,14 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.auth.router import router as auth_router
 from src.common.responses import APIResponse
-from src.config import config
+from src.config import Config
 from src.controller.status import router as status_router
 from src.controller.terms.router import router as terms_router
 
 app = FastAPI(
-    title=config.APP.TITLE,
-    description=config.APP.DESCRIPTION,
-    version=config.APP.VERSION,
+    title=Config.APP.TITLE,
+    description=Config.APP.DESCRIPTION,
+    version=Config.APP.VERSION,
 )
 
 app.add_middleware(

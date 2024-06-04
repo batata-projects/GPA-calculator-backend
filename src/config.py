@@ -17,6 +17,3 @@ class Config:
 
     class RANDOM:
         SEED = 0
-
-
-config = Config()
