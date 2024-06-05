@@ -63,7 +63,7 @@ class TestUser:
         assert user.credits == credits
         assert user.counted_credits == counted_credits
         assert user.grade == grade
-    
+
     def test_user_invalid_id(self):
         user_id = "invalid"
         email = "rmf40@mail.aub.edu"

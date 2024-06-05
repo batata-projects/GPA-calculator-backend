@@ -45,7 +45,7 @@ class TestCourse:
         assert course.user_id == user_id
         assert course.grade == grade
         assert course.passed == passed
-    
+
     def test_course_invalid_id(self, uuid4: Mock):
         course_id = "invalid"
         available_course_id = str(uuid4())

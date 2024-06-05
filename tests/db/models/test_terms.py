@@ -27,7 +27,7 @@ class TestTerm:
 
         assert term.id is None
         assert term.name == name
-    
+
     def test_term_invalid_id(self):
         term_id = "invalid"
         name = "Fall 2022 - 2023"
