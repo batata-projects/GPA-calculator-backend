@@ -1,9 +1,15 @@
 from typing import Optional
 
 from gotrue.types import User as SupabaseUser  # type: ignore
-from pydantic import BaseModel, NonNegativeFloat, NonNegativeInt
+from pydantic import (
+    BaseModel,
+    EmailStr,
+    NonNegativeFloat,
+    NonNegativeInt,
+    field_validator,
+)
 
-from src.db.models.utils import EmailStr, UsernameStr, UuidStr
+from src.db.models.utils import UsernameStr, UuidStr, validate_email_domain
 
 
 class User(BaseModel):
@@ -28,3 +34,7 @@ class User(BaseModel):
             counted_credits=user.user_metadata["counted_credits"],
             grade=user.user_metadata["grade"],
         )
+
+    @field_validator("email")
+    def validate_email_str(cls, v: str):
+        return validate_email_domain(v)
