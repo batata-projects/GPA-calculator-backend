@@ -56,7 +56,7 @@ class AvailableCourseDAO:
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .select("*")
-            .eq("terms_id", term_id)
+            .eq("term_id", term_id)
             .execute()
         )
         if not data.data:
