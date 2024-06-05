@@ -15,5 +15,6 @@ class Config:
         KEY = os.getenv("SUPABASE_KEY")
         URL = os.getenv("SUPABASE_URL")
 
-    class RANDOM:
-        SEED = 0
+    class Testing:
+        class RANDOM:
+            SEED = 0
