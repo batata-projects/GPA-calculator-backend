@@ -45,6 +45,22 @@ class TestCourse:
         assert course.user_id == user_id
         assert course.grade == grade
         assert course.passed == passed
+    
+    def test_course_invalid_id(self, uuid4: Mock):
+        course_id = "invalid"
+        available_course_id = str(uuid4())
+        user_id = str(uuid4())
+        grade = 4.0
+        passed = True
+
+        with pytest.raises(ValueError):
+            Course(
+                id=course_id,
+                available_course_id=available_course_id,
+                user_id=user_id,
+                grade=grade,
+                passed=passed,
+            )
 
     @pytest.mark.parametrize(
         "available_course_id, user_id, grade, passed",
