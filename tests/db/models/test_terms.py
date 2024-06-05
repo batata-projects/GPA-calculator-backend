@@ -28,6 +28,16 @@ class TestTerm:
         assert term.id is None
         assert term.name == name
 
+    def test_term_invalid_id(self):
+        term_id = "invalid"
+        name = "Fall 2022 - 2023"
+
+        with pytest.raises(ValueError):
+            Term(
+                id=term_id,
+                name=name,
+            )
+
     def test_term_invalid_str(self):
         name = "Fall 2022-2023"
 

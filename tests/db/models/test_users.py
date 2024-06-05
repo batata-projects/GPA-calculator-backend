@@ -64,6 +64,28 @@ class TestUser:
         assert user.counted_credits == counted_credits
         assert user.grade == grade
 
+    def test_user_invalid_id(self):
+        user_id = "invalid"
+        email = "rmf40@mail.aub.edu"
+        username = "Rio"
+        first_name = "Rayan"
+        last_name = "Fakhreddine"
+        credits = 0
+        counted_credits = 0
+        grade = 0.0
+
+        with pytest.raises(ValueError):
+            User(
+                id=user_id,
+                email=email,
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                credits=credits,
+                counted_credits=counted_credits,
+                grade=grade,
+            )
+
     @pytest.mark.parametrize(
         "email, username, first_name, last_name, credits, counted_credits, grade",
         [
