@@ -8,7 +8,6 @@ from src.db.dao.term_dao import TermDAO
 from src.db.dao.user_dao import UserDAO
 
 
-# ! Check if this is a good approach for auth/unauth
 def get_available_course_dao(
     client: Client = Depends(get_authenticated_client),
 ) -> AvailableCourseDAO:
