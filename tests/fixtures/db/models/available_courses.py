@@ -10,7 +10,7 @@ def available_courses(uuid4: Mock) -> list[AvailableCourse]:
     return [
         AvailableCourse(
             id=str(uuid4()),
-            terms_id=str(uuid4()),
+            term_id=str(uuid4()),
             name="PHYS",
             code="210L",
             credits=1,
@@ -18,7 +18,7 @@ def available_courses(uuid4: Mock) -> list[AvailableCourse]:
         ),
         AvailableCourse(
             id=str(uuid4()),
-            terms_id=str(uuid4()),
+            term_id=str(uuid4()),
             name="FEAA",
             code="200",
             credits=3,
@@ -47,7 +47,7 @@ def available_courses_same_credits(
 def available_courses_same_terms(
     available_courses: list[AvailableCourse],
 ) -> list[AvailableCourse]:
-    available_courses[1].terms_id = available_courses[0].terms_id
+    available_courses[1].term_id = available_courses[0].term_id
     return available_courses
 
 

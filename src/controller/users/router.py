@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, Path, Query, status
+from typing import Any
+
+from fastapi import APIRouter, Body, Depends, Path, Query, status
 from pydantic import EmailStr
 
 from src.common.responses import APIResponse
@@ -132,9 +134,7 @@ async def create_user(
 )
 async def update_user(
     user_id: UuidStr = Path(..., description="User ID"),
-    user_data: dict = Query(
-        ..., description="User data"
-    ),  # ! Check if this is the right way to do it
+    user_data: dict[str, Any] = Body(..., description="User data"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:

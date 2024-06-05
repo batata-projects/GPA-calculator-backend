@@ -16,7 +16,7 @@ class TestAvailableCourse:
 
         availableCourse = AvailableCourse(
             id=available_course_id,
-            terms_id=terms_id,
+            term_id=terms_id,
             name=name,
             code=code,
             credits=credits,
@@ -24,7 +24,7 @@ class TestAvailableCourse:
         )
 
         assert availableCourse.id == available_course_id
-        assert availableCourse.terms_id == terms_id
+        assert availableCourse.term_id == terms_id
         assert availableCourse.name == name
         assert availableCourse.code == code
         assert availableCourse.credits == credits
@@ -38,11 +38,11 @@ class TestAvailableCourse:
         graded = True
 
         availableCourse = AvailableCourse(
-            terms_id=terms_id, name=name, code=code, credits=credits, graded=graded
+            term_id=terms_id, name=name, code=code, credits=credits, graded=graded
         )
 
         assert availableCourse.id is None
-        assert availableCourse.terms_id == terms_id
+        assert availableCourse.term_id == terms_id
         assert availableCourse.name == name
         assert availableCourse.code == code
         assert availableCourse.credits == credits
@@ -65,7 +65,7 @@ class TestAvailableCourse:
             terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
             AvailableCourse(
-                terms_id=terms_id, name=name, code=code, credits=credits, graded=graded
+                term_id=terms_id, name=name, code=code, credits=credits, graded=graded
             )
 
     @pytest.mark.parametrize(
@@ -85,5 +85,5 @@ class TestAvailableCourse:
             terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
             AvailableCourse(
-                terms_id=terms_id, name=name, code=code, credits=credits, graded=graded
+                term_id=terms_id, name=name, code=code, credits=credits, graded=graded
             )

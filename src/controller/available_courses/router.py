@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, Path, Query, status
+from typing import Any
+
+from fastapi import APIRouter, Body, Depends, Path, Query, status
 from pydantic import PositiveInt
 
 from src.common.responses import APIResponse
@@ -95,7 +97,7 @@ async def get_available_courses_by_terms_id(
     term_id: UuidStr = Query(..., description="Term ID"),
     available_course_dao: AvailableCourseDAO = Depends(get_available_course_dao),
 ) -> APIResponse[AvailableCourseResponse]:
-    available_courses = available_course_dao.get_available_courses_by_terms_id(term_id)
+    available_courses = available_course_dao.get_available_courses_by_term_id(term_id)
     try:
         if available_courses:
             return APIResponse[AvailableCourseResponse](
@@ -167,7 +169,9 @@ async def create_available_course(
 )
 async def update_available_course(
     available_course_id: UuidStr = Query(..., description="Available Course ID"),
-    available_course_data: dict = Query(..., description="Available Course Data"),
+    available_course_data: dict[str, Any] = Body(
+        ..., description="Available Course Data"
+    ),
     available_course_dao: AvailableCourseDAO = Depends(get_available_course_dao),
 ) -> APIResponse[AvailableCourseResponse]:
     available_course = available_course_dao.update_available_course(
