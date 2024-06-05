@@ -14,16 +14,6 @@ def validate_uuid(v: Optional[str] = None) -> Optional[str]:
     return v
 
 
-def validate_email_domain(v: str) -> str:
-    try:
-        domain = v.split("@")[1]
-        if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-            raise ValueError
-    except ValueError:
-        raise ValueError(f"{v} is an invalid email")
-    return v
-
-
 def validate_term_str(v: Optional[str] = None) -> Optional[str]:
     if not v:
         return None

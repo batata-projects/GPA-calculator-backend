@@ -9,7 +9,7 @@ from pydantic import (
     field_validator,
 )
 
-from src.db.models.utils import UsernameStr, UuidStr, validate_email_domain
+from src.db.models.utils import UsernameStr, UuidStr
 
 
 class User(BaseModel):
@@ -36,5 +36,11 @@ class User(BaseModel):
         )
 
     @field_validator("email")
-    def validate_email_str(cls, v: str):
-        return validate_email_domain(v)
+    def validate_email_domain(cls, v: str) -> str:
+        try:
+            domain = v.split("@")[1]
+            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
+                raise ValueError
+        except ValueError:
+            raise ValueError(f"{v} is an invalid email")
+        return v

@@ -2,7 +2,7 @@ from pydantic import EmailStr
 from supabase import Client
 
 from src.db.models.users import User
-from src.db.models.utils import UuidStr, validate_email_domain
+from src.db.models.utils import UuidStr
 from src.db.tables import SupabaseTables
 
 
@@ -45,8 +45,6 @@ class UserDAO:
 
     def create_user(self, user_data: dict):
         User.model_validate(user_data)
-        if user_data.get("email"):
-            user_data["email"] = validate_email_domain(user_data["email"])
         data = self.client.table(SupabaseTables.USERS).insert(user_data).execute()
         if not data.data:
             return None
@@ -54,8 +52,6 @@ class UserDAO:
 
     def update_user(self, user_id: UuidStr, user_data: dict):
         User.model_validate(user_data)
-        if user_data.get("email"):
-            user_data["email"] = validate_email_domain(user_data["email"])
         data = (
             self.client.table(SupabaseTables.USERS)
             .update(user_data)
