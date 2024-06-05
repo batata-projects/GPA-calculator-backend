@@ -100,16 +100,8 @@ class TestUser:
     @pytest.mark.parametrize(
         "email, username, first_name, last_name, credits, counted_credits, grade",
         [
-            ("jaadshaker@gmail.com", "Rio", "Rayan", "Fakhreddine", 0, 0, 0.0),
-            (
-                "rmf40@mail.aub.edu",
-                "Invalid Username",
-                "Rayan",
-                "Fakhreddine",
-                0,
-                0,
-                0.0,
-            ),
+            ("jaadshaker@gmail.com", "jss", "Jad", "Shaker", 0, 0, 0.0),
+            ("rmf40@mail.aub.edu", "Invalid Username", "Rayan", "Fakhreddine", 0, 0, 0),
             ("rmf40@mail.aub.edu", "Rio", 123, "Fakhreddine", 0, 0, 0.0),
             ("rmf40@mail.aub.edu", "Rio", "Rayan", 123, 0, 0, 0.0),
             ("rmf40@mail.aub.edu", "Rio", "Rayan", "Fakhreddine", -1, 0, 0.0),
