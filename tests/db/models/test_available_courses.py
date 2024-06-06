@@ -1,3 +1,4 @@
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -87,3 +88,14 @@ class TestAvailableCourse:
             AvailableCourse(
                 term_id=terms_id, name=name, code=code, credits=credits, graded=graded
             )
+
+    def test_model_validate_partial(self, available_courses_data: list[dict[str, Any]]):
+        for data in available_courses_data:
+            AvailableCourse.model_validate_partial(data)
+
+    def test_model_validate_partial_invalid(
+        self, invalid_available_course_data: list[dict[str, Any]]
+    ):
+        for data in invalid_available_course_data:
+            with pytest.raises(Exception):
+                AvailableCourse.model_validate_partial(data)

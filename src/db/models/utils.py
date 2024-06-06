@@ -63,6 +63,30 @@ def validate_course_code(v: Optional[str] = None) -> Optional[str]:
         raise ValueError(f"{v} is an invalid course code")
 
 
+def validate_non_negative_int(v: Optional[int] = None) -> Optional[int]:
+    if not v:
+        return None
+    if v < 0:
+        raise ValueError(f"{v} is a negative integer")
+    return v
+
+
+def validate_non_negative_float(v: Optional[float] = None) -> Optional[float]:
+    if not v:
+        return None
+    if v < 0:
+        raise ValueError(f"{v} is a negative float")
+    return v
+
+
+def validate_bool(v: Optional[bool] = None) -> Optional[bool]:
+    if not v:
+        return None
+    if not isinstance(v, bool):
+        raise ValueError(f"{v} is not a boolean")
+    return v
+
+
 UuidStr = Annotated[str, BeforeValidator(validate_uuid)]
 TermStr = Annotated[str, BeforeValidator(validate_term_str)]
 UsernameStr = Annotated[str, BeforeValidator(validate_username_str)]

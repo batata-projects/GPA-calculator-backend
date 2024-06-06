@@ -94,7 +94,7 @@ class AvailableCourseDAO:
     def update_available_course(
         self, available_course_id: str, available_course_data: dict
     ):
-        AvailableCourse.model_validate(available_course_data) # ! Check if required in all files
+        AvailableCourse.model_validate_partial(available_course_data)
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .update(available_course_data)
