@@ -20,6 +20,7 @@ class User(BaseModel):
 
     @classmethod
     def validate_supabase_user(cls, user: SupabaseUser) -> "User":
+        print(user)
         return cls(
             id=user.id,
             username=user.user_metadata["username"],
