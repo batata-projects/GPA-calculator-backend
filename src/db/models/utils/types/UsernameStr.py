@@ -7,7 +7,7 @@ def validate_username_str(v: Optional[str] = None) -> Optional[str]:
     if not v:
         return None
     try:
-        if not v.isalnum():
+        if not v.isalnum() or " " in v:
             raise ValueError
         return v
     except ValueError:
