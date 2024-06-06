@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, Body, Depends, Path, Query, status
 from pydantic import PositiveInt
@@ -7,7 +7,7 @@ from src.common.responses import APIResponse
 from src.controller.available_courses.schemas import AvailableCourseResponse
 from src.db.dao.available_course_dao import AvailableCourseDAO
 from src.db.dependencies import get_available_course_dao
-from src.db.models.utils import CourseNameStr, UuidStr
+from src.db.models.utils import CourseNameStr, UuidStr, CourseCodeStr
 
 router = APIRouter(prefix="/available-courses", tags=["available-courses"])
 
@@ -87,7 +87,6 @@ async def get_available_courses_by_credit(
     except Exception as e:
         return APIResponse(status=status.HTTP_500_INTERNAL_SERVER_ERROR, message=str(e))
 
-
 @router.get(
     "/term/",
     response_model=APIResponse[AvailableCourseResponse],
@@ -142,11 +141,15 @@ async def get_available_courses_by_graded(
     response_description="Create available course",
 )
 async def create_available_course(
-    available_course_data: dict,
+    term_id: UuidStr = Query(..., description="Term ID"),
+    name: CourseNameStr = Query(..., description="Course name"),
+    code: CourseCodeStr = Query(..., description="Course code"),
+    credits: PositiveInt = Query(..., description="Credit"),
+    graded: bool = Query(..., description="Graded"),
     available_course_dao: AvailableCourseDAO = Depends(get_available_course_dao),
 ) -> APIResponse[AvailableCourseResponse]:
     available_course = available_course_dao.create_available_course(
-        available_course_data
+        {"term_id": term_id, "name": name, "code": code, "credits": credits, "graded": graded}
     )
     try:
         if available_course:
@@ -169,11 +172,24 @@ async def create_available_course(
 )
 async def update_available_course(
     available_course_id: UuidStr = Query(..., description="Available Course ID"),
-    available_course_data: dict[str, Any] = Body(
-        ..., description="Available Course Data"
-    ),
+    term_id: Optional[UuidStr] = Query(None, description="Term ID"),
+    name: Optional[CourseNameStr] = Query(None, description="Course name"),
+    code: Optional[CourseCodeStr] = Query(None, description="Course code"),
+    credits: Optional[PositiveInt] = Query(None, description="Credit"),
+    graded: Optional[bool] = Query(None, description="Graded"),
     available_course_dao: AvailableCourseDAO = Depends(get_available_course_dao),
 ) -> APIResponse[AvailableCourseResponse]:
+    
+    # Create a dictionary of the fields to update, excluding None values
+    available_course_data = {
+        "term_id": term_id,
+        "name": name,
+        "code": code,
+        "credits": credits,
+        "graded": graded
+    }
+    available_course_data = {k: v for k, v in available_course_data.items() if v is not None}
+    
     available_course = available_course_dao.update_available_course(
         available_course_id, available_course_data
     )
@@ -192,7 +208,7 @@ async def update_available_course(
 
 
 @router.delete(
-    "/",
+    "/{available_course_id}",
     response_model=APIResponse[AvailableCourseResponse],
     response_description="Delete available course",
 )
