@@ -1,13 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, PositiveFloat
+from pydantic import NonNegativeFloat
 
-from src.db.models.utils import UuidStr
+from src.db.models.utils import BaseModelCustomized, UuidStr
 
 
-class Course(BaseModel):
+class Course(BaseModelCustomized):
     id: Optional[UuidStr] = None
     available_course_id: UuidStr
     user_id: UuidStr
-    grade: Optional[PositiveFloat] = None
+    grade: Optional[NonNegativeFloat] = None
     passed: Optional[bool] = None

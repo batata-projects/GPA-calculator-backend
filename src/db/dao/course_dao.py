@@ -64,7 +64,7 @@ class CourseDAO:
         return Course.model_validate(data.data[0])
 
     def update_course(self, course_id: UuidStr, course_data: dict):
-        Course.model_validate(course_data)
+        Course.model_validate_partial(course_data)
         data = (
             self.client.table(SupabaseTables.COURSES)
             .update(course_data)

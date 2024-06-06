@@ -39,7 +39,7 @@ class TermDAO:
         return Term.model_validate(data.data[0])
 
     def update_term(self, term_id: UuidStr, term_data: dict):
-        Term.model_validate(term_data)
+        Term.model_validate_partial(term_data)
         data = (
             self.client.table(SupabaseTables.TERMS)
             .update(term_data)
