@@ -1,13 +1,12 @@
-from typing import Any
-
-from fastapi import APIRouter, Body, Depends, Path, Query, status
-from pydantic import EmailStr
+from fastapi import APIRouter, Depends, Path, Query, status
+from pydantic import EmailStr, PositiveFloat, PositiveInt
 
 from src.common.responses import APIResponse
 from src.controller.users.schemas import UserResponse
 from src.db.dao.user_dao import UserDAO
 from src.db.dependencies import get_user_dao
-from src.db.models.utils import UsernameStr, UuidStr
+from src.db.models.utils.types.UsernameStr import UsernameStr
+from src.db.models.utils.types.UuidStr import UuidStr
 
 router = APIRouter(
     prefix="/users",
@@ -44,12 +43,12 @@ async def get_user_by_id(
 
 
 @router.get(
-    "/email/",
+    "/{email}",
     response_model=APIResponse[UserResponse],
     response_description="Get user by email",
 )
 async def get_user_by_email(
-    email: EmailStr = Query(..., description="User email"),
+    email: EmailStr = Path(..., description="User email"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:
@@ -72,12 +71,12 @@ async def get_user_by_email(
 
 
 @router.get(
-    "/username/",
+    "/{username}",
     response_model=APIResponse[UserResponse],
     response_description="Get user by username",
 )
 async def get_user_by_username(
-    username: UsernameStr = Query(..., description="User username"),
+    username: UsernameStr = Path(..., description="User username"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:
@@ -105,11 +104,27 @@ async def get_user_by_username(
     response_description="Create a new user",
 )
 async def create_user(
-    user_data: dict,
+    username: UsernameStr = Query(..., description="User username"),
+    email: EmailStr = Query(..., description="User email"),
+    first_name: str = Query(..., description="User first name"),
+    last_name: str = Query(..., description="User last name"),
+    credits: PositiveInt = Query(..., description="User credits"),
+    counted_credits: PositiveInt = Query(..., description="User counted credits"),
+    grade: PositiveFloat = Query(..., description="User grade"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:
-        user = user_dao.create_user(user_data)
+        user = user_dao.create_user(
+            {
+                "username": username,
+                "email": email,
+                "first_name": first_name,
+                "last_name": last_name,
+                "credits": credits,
+                "counted_credits": counted_credits,
+                "grade": grade,
+            }
+        )
         if user:
             return APIResponse[UserResponse](
                 status=status.HTTP_200_OK,
@@ -134,10 +149,28 @@ async def create_user(
 )
 async def update_user(
     user_id: UuidStr = Path(..., description="User ID"),
-    user_data: dict[str, Any] = Body(..., description="User data"),
+    username: UsernameStr = Query(None, description="User username"),
+    email: EmailStr = Query(None, description="User email"),
+    first_name: str = Query(None, description="User first name"),
+    last_name: str = Query(None, description="User last name"),
+    credits: PositiveInt = Query(None, description="User credits"),
+    counted_credits: PositiveInt = Query(None, description="User counted credits"),
+    grade: PositiveFloat = Query(None, description="User grade"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:
+        user_data = {
+            "username": username,
+            "email": email,
+            "first_name": first_name,
+            "last_name": last_name,
+            "credits": credits,
+            "counted_credits": counted_credits,
+            "grade": grade,
+        }
+
+        user_data = {k: v for k, v in user_data.items() if v is not None}
+
         user = user_dao.update_user(user_id, user_data)
         if user:
             return APIResponse[UserResponse](

@@ -2,7 +2,7 @@ from typing import Any
 
 from pydantic import BaseModel as PydanticBaseModel
 
-from src.db.models.utils.data.ValidData import valid_data
+from src.db.models.utils.data.ValidData import ValidData
 
 
 class BaseModel(PydanticBaseModel):
@@ -11,7 +11,7 @@ class BaseModel(PydanticBaseModel):
         _data = {}
         for field in cls.model_fields:
             if field not in data:
-                _data[field] = valid_data[f"{cls.__name__}.{field}"]
+                _data[field] = ValidData.__dict__[f"{cls.__name__}.{field}"]
             else:
                 _data[field] = data[field]
         cls.model_validate(_data)

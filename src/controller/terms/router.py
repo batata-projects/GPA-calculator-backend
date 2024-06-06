@@ -4,7 +4,8 @@ from src.common.responses import APIResponse
 from src.controller.terms.schemas import TermResponse
 from src.db.dao.term_dao import TermDAO
 from src.db.dependencies import get_term_dao
-from src.db.models.utils import TermStr, UuidStr
+from src.db.models.utils.types.TermStr import TermStr
+from src.db.models.utils.types.UuidStr import UuidStr
 
 router = APIRouter(
     prefix="/terms",
@@ -41,12 +42,12 @@ async def get_term_by_id(
 
 
 @router.get(
-    "/term/",
+    "/{term_name}",
     response_model=APIResponse[TermResponse],
     response_description="Get term by name",
 )
 async def get_term_by_name(
-    term_name: TermStr = Query(..., description="Term name"),
+    term_name: TermStr = Path(..., description="Term name"),
     term_dao: TermDAO = Depends(get_term_dao),
 ) -> APIResponse[TermResponse]:
     try:
@@ -74,7 +75,7 @@ async def get_term_by_name(
     response_description="Create a new term",
 )
 async def create_term(
-    term_name: str = Query(..., description="Term name"),
+    term_name: TermStr = Query(..., description="Term name"),
     term_dao: TermDAO = Depends(get_term_dao),
 ) -> APIResponse[TermResponse]:
     try:

@@ -1,7 +1,9 @@
 from supabase import Client
 
 from src.db.models.available_courses import AvailableCourse
-from src.db.models.utils import CourseNameStr, UuidStr
+from src.db.models.utils.models.BaseModel import BaseModel
+from src.db.models.utils.types.CourseNameStr import CourseNameStr
+from src.db.models.utils.types.UuidStr import UuidStr
 from src.db.tables import SupabaseTables
 
 
@@ -18,7 +20,7 @@ class AvailableCourseDAO:
         )
         if not data.data:
             return None
-        return AvailableCourse.model_validate(data.data[0])
+        return BaseModel.model_validate_partial(data.data[0])
 
     def get_available_courses_by_course_name(
         self, course_name: CourseNameStr
@@ -32,7 +34,7 @@ class AvailableCourseDAO:
         if not data.data:
             return []
         return [
-            AvailableCourse.model_validate(available_course)
+            BaseModel.model_validate_partial(available_course)
             for available_course in data.data
         ]
 
@@ -46,7 +48,7 @@ class AvailableCourseDAO:
         if not data.data:
             return []
         return [
-            AvailableCourse.model_validate(available_course)
+            BaseModel.model_validate_partial(available_course)
             for available_course in data.data
         ]
 
@@ -62,7 +64,7 @@ class AvailableCourseDAO:
         if not data.data:
             return []
         return [
-            AvailableCourse.model_validate(available_course)
+            BaseModel.model_validate_partial(available_course)
             for available_course in data.data
         ]
 
@@ -76,12 +78,12 @@ class AvailableCourseDAO:
         if not data.data:
             return []
         return [
-            AvailableCourse.model_validate(available_course)
+            BaseModel.model_validate_partial(available_course)
             for available_course in data.data
         ]
 
     def create_available_course(self, available_course_data: dict):
-        AvailableCourse.model_validate(available_course_data)
+        BaseModel.model_validate_partial(available_course_data)
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .insert(available_course_data)
@@ -89,12 +91,12 @@ class AvailableCourseDAO:
         )
         if not data.data:
             return None
-        return AvailableCourse.model_validate(data.data[0])
+        return BaseModel.model_validate_partial(data.data[0])
 
     def update_available_course(
         self, available_course_id: str, available_course_data: dict
     ):
-        AvailableCourse.model_validate_partial(available_course_data)
+        BaseModel.model_validate_partial(available_course_data)
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .update(available_course_data)
@@ -103,7 +105,7 @@ class AvailableCourseDAO:
         )
         if not data.data:
             return None
-        return AvailableCourse.model_validate(data.data[0])
+        return BaseModel.model_validate_partial(data.data[0])
 
     def delete_available_course(self, available_course_id: UuidStr):
         data = (
@@ -114,13 +116,13 @@ class AvailableCourseDAO:
         )
         if not data.data:
             return None
-        return AvailableCourse.model_validate(data.data[0])
+        return BaseModel.model_validate_partial(data.data[0])
 
     def get_all_available_courses(self) -> list[AvailableCourse]:
         data = self.client.table(SupabaseTables.AVAILABLE_COURSES).select("*").execute()
         if not data.data:
             return []
         return [
-            AvailableCourse.model_validate(available_course)
+            BaseModel.model_validate_partial(available_course)
             for available_course in data.data
         ]

@@ -3,10 +3,12 @@ from typing import Optional
 from gotrue.types import User as SupabaseUser  # type: ignore
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt, field_validator
 
-from src.db.models.utils import BaseModelCustomized, UsernameStr, UuidStr
+from src.db.models.utils.models.BaseModel import BaseModel
+from src.db.models.utils.types.UsernameStr import UsernameStr
+from src.db.models.utils.types.UuidStr import UuidStr
 
 
-class User(BaseModelCustomized):
+class User(BaseModel):
     id: Optional[UuidStr] = None
     email: EmailStr
     username: UsernameStr
