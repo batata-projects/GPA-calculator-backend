@@ -23,9 +23,11 @@ def get_course_dao(client: Client = Depends(get_authenticated_client)) -> Course
     return CourseDAO(client)
 
 
-def get_user_dao(
-    client: Client = Depends(get_unauthenticated_client), authenticated: bool = False
+def get_user_dao(client: Client = Depends(get_authenticated_client)) -> UserDAO:
+    return UserDAO(client)
+
+
+def get_user_dao_unauthenticated(
+    client: Client = Depends(get_unauthenticated_client),
 ) -> UserDAO:
-    if authenticated:
-        client = Depends(get_authenticated_client)
     return UserDAO(client)
