@@ -9,8 +9,8 @@ from src.common.utils.types.UsernameStr import UsernameStr
 class RegisterRequest(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
+    email: EmailStr
     username: Optional[UsernameStr] = None
-    email: Optional[EmailStr] = None
     password: PasswordStr
 
     @field_validator("first_name", "last_name")
@@ -56,3 +56,9 @@ class LoginRequest(BaseModel):
         except ValueError:
             raise ValueError(f"{v} is an invalid email")
         return v
+
+    def auth_model_dump(self):
+        return {
+            "email": self.email,
+            "password": self.password,
+        }
