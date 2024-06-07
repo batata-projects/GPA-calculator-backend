@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
-from src.auth.auth import register, login
-from src.auth.schemas import RegisterRequest, LoginRequest
+from src.auth.auth import login, register
+from src.auth.schemas import LoginRequest, RegisterRequest
 from src.common.responses import APIResponse, AuthResponse
 from src.db.dao.user_dao import UserDAO
 from src.db.dependencies import get_user_dao_unauthenticated
@@ -39,5 +39,5 @@ async def login_route(
     return APIResponse(
         message="Login successful",
         status=status.HTTP_200_OK,
-        data=login(request, user_dao)
+        data=login(request, user_dao),
     )

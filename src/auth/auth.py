@@ -1,8 +1,8 @@
 from fastapi import HTTPException, status
-from gotrue.errors import AuthApiError  # type: ignore
 from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
+from gotrue.errors import AuthApiError  # type: ignore
 
-from src.auth.schemas import RegisterRequest, LoginRequest
+from src.auth.schemas import LoginRequest, RegisterRequest
 from src.common.responses import AuthResponse
 from src.db.dao.user_dao import UserDAO
 from src.db.models.users import User
@@ -62,13 +62,15 @@ def login(request: LoginRequest, user_dao: UserDAO) -> AuthResponse:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User not found",
             )
-        result: GoTrueAuthResponse = user_dao.client.auth.sign_in_with_password(request.email, request.password)
+        result: GoTrueAuthResponse = user_dao.client.auth.sign_in_with_password(
+            request.email, request.password
+        )
         user = User.validate_supabase_user(result.user)
         return AuthResponse(
             user=user,
             session=result.session,
         )
-    except AuthApiError as e:
+    except AuthApiError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Login failed, please check your credentials",

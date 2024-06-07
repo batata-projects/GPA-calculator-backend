@@ -43,5 +43,3 @@ class User(BaseModel):
         except ValueError:
             raise ValueError(f"{v} is an invalid email")
         return v
-
-
