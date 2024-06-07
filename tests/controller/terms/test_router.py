@@ -3,7 +3,14 @@ from unittest.mock import Mock
 import pytest
 from fastapi import status
 
-from src.controller.terms.router import create_term, delete_term, get_all_terms, get_term_by_id, get_term_by_name, update_term
+from src.controller.terms.router import (
+    create_term,
+    delete_term,
+    get_all_terms,
+    get_term_by_id,
+    get_term_by_name,
+    update_term,
+)
 from src.controller.terms.schemas import TermResponse
 from src.db.dao.term_dao import TermDAO
 from src.db.models.terms import Term
@@ -62,7 +69,9 @@ class TestGetTermByName:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_name.return_value = None
 
-        response = await get_term_by_name(term_name="Fall 2023 - 2024", term_dao=term_dao)
+        response = await get_term_by_name(
+            term_name="Fall 2023 - 2024", term_dao=term_dao
+        )
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Term not found"
@@ -72,7 +81,9 @@ class TestGetTermByName:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_name.side_effect = Exception("Error")
 
-        response = await get_term_by_name(term_name="Fall 2023 - 2024", term_dao=term_dao)
+        response = await get_term_by_name(
+            term_name="Fall 2023 - 2024", term_dao=term_dao
+        )
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
@@ -84,7 +95,7 @@ class TestCreateTerm:
     async def test_create_term_successful(self, term1: Term):
         term_dao = Mock(spec=TermDAO)
         term_dao.create_term.return_value = term1
-        
+
         assert term1.name is not None
 
         response = await create_term(term_name=term1.name, term_dao=term_dao)
@@ -113,16 +124,19 @@ class TestCreateTerm:
         assert response.message == "Error"
         assert response.data is None
 
-    
 
 @pytest.mark.asyncio
-class TestUpdateTerm: 
+class TestUpdateTerm:
     async def test_update_term_successful(self, term1: Term):
         term_dao = Mock(spec=TermDAO)
         term1.name = "Fall 2026 - 2027"
         term_dao.update_term.return_value = term1
 
-        response = await update_term(term_id=term1.id, term_name="Fall 2026 - 2027", term_dao=term_dao)
+        assert term1.id is not None
+
+        response = await update_term(
+            term_id=term1.id, term_name="Fall 2026 - 2027", term_dao=term_dao
+        )
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Term updated"
@@ -132,7 +146,9 @@ class TestUpdateTerm:
         term_dao = Mock(spec=TermDAO)
         term_dao.update_term.return_value = None
 
-        response = await update_term(term_id=str(uuid4()), term_name=term1.name, term_dao=term_dao)
+        response = await update_term(
+            term_id=str(uuid4()), term_name=term1.name, term_dao=term_dao
+        )
 
         assert response.status == status.HTTP_400_BAD_REQUEST
         assert response.message == "Failed to update term"
@@ -142,17 +158,24 @@ class TestUpdateTerm:
         term_dao = Mock(spec=TermDAO)
         term_dao.update_term.side_effect = Exception("Failed to update term")
 
-        response = await update_term(term_id=term1.id, term_name=term2.name, term_dao=term_dao)
+        assert term1.id is not None
+
+        response = await update_term(
+            term_id=term1.id, term_name=term2.name, term_dao=term_dao
+        )
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Failed to update term"
         assert response.data is None
+
 
 @pytest.mark.asyncio
 class TestDeleteTerm:
     async def test_delete_term_successful(self, term1: Term):
         term_dao = Mock(spec=TermDAO)
         term_dao.delete_term.return_value = term1
+
+        assert term1.id is not None
 
         response = await delete_term(term_id=term1.id, term_dao=term_dao)
 
@@ -179,6 +202,8 @@ class TestDeleteTerm:
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
         assert response.data is None
+
+
 @pytest.mark.asyncio
 class TestGetAllTerms:
     async def test_get_all_terms_successful(self, terms: list[Term]):
