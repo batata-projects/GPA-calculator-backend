@@ -32,12 +32,24 @@ def register(credentials: Credentials, user_dao: UserDAO) -> AuthResponse:
                     detail="Username already in use",
                 )
         result = user_dao.client.auth.sign_up(credentials.auth_model_dump())
+        print(result)
         user = User.validate_supabase_user(result.user)
         return AuthResponse(
             user=user,
             session=result.session,
         )
-    except AuthApiError:
+    except AuthApiError as e:
+        print(e)
+        if "Password" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
+            )
+        if "Email rate limit exceeded" in str(e):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Email rate limit exceeded, please try again later",
+            )
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Registration failed, please check your credentials",
