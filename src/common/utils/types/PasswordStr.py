@@ -1,4 +1,5 @@
-from typing import Optional, Annotated
+from typing import Annotated, Optional
+
 from pydantic.functional_validators import BeforeValidator
 
 
@@ -18,5 +19,6 @@ def validate_password_str(v: Optional[str] = None) -> Optional[str]:
         raise ValueError(
             f"{v} is an invalid password, must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number"
         )
+
 
 PasswordStr = Annotated[str, BeforeValidator(validate_password_str)]
