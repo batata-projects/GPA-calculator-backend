@@ -1,7 +1,8 @@
 from supabase import Client
 
+from src.common.utils.types.CourseNameStr import CourseNameStr
+from src.common.utils.types.UuidStr import UuidStr
 from src.db.models.available_courses import AvailableCourse
-from src.db.models.utils import CourseNameStr, UuidStr
 from src.db.tables import SupabaseTables
 
 
@@ -50,13 +51,13 @@ class AvailableCourseDAO:
             for available_course in data.data
         ]
 
-    def get_available_courses_by_terms_id(
+    def get_available_courses_by_term_id(
         self, term_id: UuidStr
     ) -> list[AvailableCourse]:
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .select("*")
-            .eq("terms_id", term_id)
+            .eq("term_id", term_id)
             .execute()
         )
         if not data.data:
@@ -94,7 +95,7 @@ class AvailableCourseDAO:
     def update_available_course(
         self, available_course_id: str, available_course_data: dict
     ):
-        AvailableCourse.model_validate(available_course_data)
+        AvailableCourse.model_validate_partial(available_course_data)
         data = (
             self.client.table(SupabaseTables.AVAILABLE_COURSES)
             .update(available_course_data)

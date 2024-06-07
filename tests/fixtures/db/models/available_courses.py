@@ -1,3 +1,4 @@
+from typing import Any
 from unittest.mock import Mock
 
 import pytest
@@ -10,7 +11,7 @@ def available_courses(uuid4: Mock) -> list[AvailableCourse]:
     return [
         AvailableCourse(
             id=str(uuid4()),
-            terms_id=str(uuid4()),
+            term_id=str(uuid4()),
             name="PHYS",
             code="210L",
             credits=1,
@@ -18,7 +19,7 @@ def available_courses(uuid4: Mock) -> list[AvailableCourse]:
         ),
         AvailableCourse(
             id=str(uuid4()),
-            terms_id=str(uuid4()),
+            term_id=str(uuid4()),
             name="FEAA",
             code="200",
             credits=3,
@@ -47,7 +48,7 @@ def available_courses_same_credits(
 def available_courses_same_terms(
     available_courses: list[AvailableCourse],
 ) -> list[AvailableCourse]:
-    available_courses[1].terms_id = available_courses[0].terms_id
+    available_courses[1].term_id = available_courses[0].term_id
     return available_courses
 
 
@@ -57,3 +58,48 @@ def available_courses_same_graded(
 ) -> list[AvailableCourse]:
     available_courses[1].graded = available_courses[0].graded
     return available_courses
+
+
+@pytest.fixture
+def available_courses_data(uuid4: Mock) -> list[dict[str, Any]]:
+    return [
+        {
+            "id": str(uuid4()),
+            "term_id": str(uuid4()),
+            "name": "PHYS",
+        },
+        {
+            "code": "200",
+            "credits": 3,
+            "graded": False,
+        },
+        {
+            "term_id": str(uuid4()),
+            "credits": 1,
+        },
+    ]
+
+
+@pytest.fixture
+def invalid_available_course_data(uuid4: Mock) -> list[dict[str, Any]]:
+    return [
+        {
+            "id": str(uuid4()),
+            "term_id": 123,
+            "name": "PHYS",
+        },
+        {
+            "name": "PHYS",
+            "code": "20",
+            "credits": 3,
+            "graded": False,
+        },
+        {
+            "id": str(uuid4()),
+            "term_id": str(uuid4()),
+            "name": "PHYS",
+            "code": "200",
+            "credits": 3,
+            "graded": -1,
+        },
+    ]

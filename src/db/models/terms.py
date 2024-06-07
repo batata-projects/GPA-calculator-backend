@@ -1,8 +1,8 @@
 from typing import Optional
 
-from pydantic import BaseModel
-
-from src.db.models.utils import TermStr, UuidStr
+from src.common.utils.models.BaseModel import BaseModel
+from src.common.utils.types.TermStr import TermStr
+from src.common.utils.types.UuidStr import UuidStr
 
 
 class Term(BaseModel):

@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from pydantic import BaseModel as PydanticBaseModel
 
 from src.db.models.courses import Course
 
 
-class CourseResponse(BaseModel):
+class CourseResponse(PydanticBaseModel):
     courses: list[Course] = []

@@ -1,9 +1,26 @@
+from .fixtures.common.utils.types.CourseCodeStr import (
+    invalid_course_code,
+    valid_course_code,
+)
+from .fixtures.common.utils.types.CourseNameStr import (
+    invalid_course_name,
+    valid_course_name,
+)
+from .fixtures.common.utils.types.TermStr import invalid_term, valid_term
+from .fixtures.common.utils.types.UsernameStr import (
+    invalid_username1,
+    invalid_username2,
+    valid_username,
+)
+from .fixtures.common.utils.types.UuidStr import invalid_uuid, valid_uuid
 from .fixtures.db.models.available_courses import (
     available_courses,
+    available_courses_data,
     available_courses_same_course_name,
     available_courses_same_credits,
     available_courses_same_graded,
     available_courses_same_terms,
+    invalid_available_course_data,
 )
 from .fixtures.db.models.courses import (
     course1,
@@ -23,18 +40,5 @@ from .fixtures.db.models.users import (
     users_same_first_name,
     users_same_grade,
     users_same_last_name,
-)
-from .fixtures.db.models.utils import (
-    invalid_course_code,
-    invalid_course_name,
-    invalid_domain,
-    invalid_email,
-    invalid_term,
-    invalid_uuid,
-    valid_course_code,
-    valid_course_name,
-    valid_email,
-    valid_term,
-    valid_uuid,
 )
 from .fixtures.uuid import uuid4

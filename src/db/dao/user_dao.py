@@ -1,8 +1,8 @@
 from pydantic import EmailStr
 from supabase import Client
 
+from src.common.utils.types.UuidStr import UuidStr
 from src.db.models.users import User
-from src.db.models.utils import UuidStr
 from src.db.tables import SupabaseTables
 
 
@@ -51,7 +51,7 @@ class UserDAO:
         return User.model_validate(data.data[0])
 
     def update_user(self, user_id: UuidStr, user_data: dict):
-        User.model_validate(user_data)
+        User.model_validate_partial(user_data)
         data = (
             self.client.table(SupabaseTables.USERS)
             .update(user_data)
