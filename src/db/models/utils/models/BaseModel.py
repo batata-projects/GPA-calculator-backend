@@ -11,7 +11,7 @@ class BaseModel(PydanticBaseModel):
         _data = {}
         for field in cls.model_fields:
             if field not in data:
-                _data[field] = ValidData.__dict__[f"{cls.__name__}.{field}"]
+                _data[field] = ValidData.__dict__[cls.__name__].__dict__[field]
             else:
                 _data[field] = data[field]
         cls.model_validate(_data)

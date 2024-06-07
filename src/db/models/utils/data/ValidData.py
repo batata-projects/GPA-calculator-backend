@@ -28,6 +28,7 @@ class ValidData:
 
     class Term:
         id = ValidItems.UuidStr
+        name = ValidItems.TermStr
 
     class User:
         id = ValidItems.UuidStr
