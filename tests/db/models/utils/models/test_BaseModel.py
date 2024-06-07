@@ -1,11 +1,9 @@
-from typing import Any
-
 import pytest
+
 from src.db.models.available_courses import AvailableCourse
 from src.db.models.courses import Course
 from src.db.models.terms import Term
 from src.db.models.users import User
-from src.db.models.utils.data.ValidData import ValidData
 from src.db.models.utils.models.BaseModel import BaseModel
 
 
@@ -20,7 +18,9 @@ class TestBaseModel:
             (User, "users"),
         ],
     )
-    def test_model_validate_partial(self, _class: BaseModel, data, request: pytest.FixtureRequest):
+    def test_model_validate_partial(
+        self, _class: BaseModel, data, request: pytest.FixtureRequest
+    ):
         item: BaseModel = request.getfixturevalue(data)[0]
         data = item.model_dump()
         for key in data:

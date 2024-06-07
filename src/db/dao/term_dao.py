@@ -1,7 +1,6 @@
 from supabase import Client
 
 from src.db.models.terms import Term
-from src.db.models.utils.models.BaseModel import BaseModel
 from src.db.models.utils.types.TermStr import TermStr
 from src.db.models.utils.types.UuidStr import UuidStr
 from src.db.tables import SupabaseTables
