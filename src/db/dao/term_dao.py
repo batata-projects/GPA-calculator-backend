@@ -20,7 +20,7 @@ class TermDAO:
         )
         if not data.data:
             return None
-        return BaseModel.model_validate_partial(data.data[0])
+        return Term.model_validate_partial(data.data[0])
 
     def get_term_by_name(self, name: TermStr):
         data = (
@@ -31,17 +31,17 @@ class TermDAO:
         )
         if not data.data:
             return None
-        return BaseModel.model_validate_partial(data.data[0])
+        return Term.model_validate_partial(data.data[0])
 
     def create_term(self, term_data: dict):
-        BaseModel.model_validate_partial(term_data)
+        Term.model_validate_partial(term_data)
         data = self.client.table(SupabaseTables.TERMS).insert(term_data).execute()
         if not data.data:
             return None
-        return BaseModel.model_validate_partial(data.data[0])
+        return Term.model_validate_partial(data.data[0])
 
     def update_term(self, term_id: UuidStr, term_data: dict):
-        BaseModel.model_validate_partial(term_data)
+        Term.model_validate_partial(term_data)
         data = (
             self.client.table(SupabaseTables.TERMS)
             .update(term_data)
@@ -50,7 +50,7 @@ class TermDAO:
         )
         if not data.data:
             return None
-        return BaseModel.model_validate_partial(data.data[0])
+        return Term.model_validate_partial(data.data[0])
 
     def delete_term(self, term_id: UuidStr):
         data = (
@@ -58,10 +58,10 @@ class TermDAO:
         )
         if not data.data:
             return None
-        return BaseModel.model_validate_partial(data.data[0])
+        return Term.model_validate_partial(data.data[0])
 
     def get_all_terms(self) -> list[Term]:
         data = self.client.table(SupabaseTables.TERMS).select("*").execute()
         if not data.data:
             return []
-        return [BaseModel.model_validate_partial(term) for term in data.data]
+        return [Term.model_validate_partial(term) for term in data.data]

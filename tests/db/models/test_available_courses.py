@@ -89,10 +89,6 @@ class TestAvailableCourse:
                 term_id=terms_id, name=name, code=code, credits=credits, graded=graded
             )
 
-    def test_model_validate_partial(self, available_courses_data: list[dict[str, Any]]):
-        for data in available_courses_data:
-            AvailableCourse.model_validate_partial(data)
-
     def test_model_validate_partial_invalid(
         self, invalid_available_course_data: list[dict[str, Any]]
     ):

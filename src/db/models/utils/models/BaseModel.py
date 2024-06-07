@@ -15,3 +15,4 @@ class BaseModel(PydanticBaseModel):
             else:
                 _data[field] = data[field]
         cls.model_validate(_data)
+        return cls(**_data)
