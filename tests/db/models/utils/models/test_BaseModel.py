@@ -8,23 +8,25 @@ from src.db.models.users import User
 from src.db.models.utils.data.ValidData import ValidData
 
 class TestBaseModel:
+    # TODO: Add test for model_validate_partial
     @pytest.mark.parametrize(
-        "_class, partial_data",
+        "_class, method_name, method_args",
         [
-            (AvailableCourse, {"name": ValidData.AvailableCourse.name}),
-            (Course, {"grade": ValidData.Course.grade, "passed": ValidData.Course.passed}),
-            (Term, {}),
-            (User, {"email": ValidData.User.email, "username": ValidData.User.username}),
+            ("AvailableCourse", "model_validate_partial", "{'name': ValidData.AvailableCourse.name}"),
+            ("Course", "model_validate_partial", "{'grade': ValidData.Course.grade, 'passed': ValidData.Course.passed}"),
+            ("Term", "model_validate_partial", "{'id': ValidData.Term.id}"),
+            ("User", "model_validate_partial", "{'username': ValidData.User.username}"),
         ],
     )
-    def test_model_validate_partial(self, _class, partial_data, request: pytest.FixtureRequest):
-        _class = getattr(_class, "__name__")
-        validated_data = _class.model_validate_partial(request.getfixturevalue(partial_data))
-        
-        # assert that the attributes that aren't in partial_data are set to their values in ValidData
-        # assert that the attributes that are in partial_data are set to their values in partial_data
-        for field in _class.model_fields:
-            if field not in partial_data:
-                assert getattr(validated_data, field) == getattr(ValidData.__dict__[f"{_class}.{field}"], field)
+    def test_model_validate_partial(self, _class, method_name, method_args):
+        cls = globals()[_class]
+        method = getattr(cls, method_name)
+        method_args = eval(method_args)
+        validated_data = method(method_args)
+        # assert that the validated_data returned is correct
+        # i.e. the data that was not provided in the method_args should be the default value
+        for field in cls.model_fields.keys():
+            if field in method_args:
+                assert validated_data.__dict__[field] == method_args[field]
             else:
-                assert getattr(validated_data, field) == partial_data[field]
+                assert validated_data.__dict__[field] == ValidData.__dict__[f"{_class}.{field}"]
