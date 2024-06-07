@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr, field_validator
 from src.db.models.utils import PasswordStr, UsernameStr
 
 
-class Credentials(BaseModel):
+class RegisterRequest(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
     username: Optional[UsernameStr] = None
@@ -32,9 +32,26 @@ class Credentials(BaseModel):
         return {
             "email": self.email,
             "password": self.password,
-            "user_metadata": {
-                "username": self.username,
-                "first_name": self.first_name,
-                "last_name": self.last_name,
+            "options": {
+                "data": {
+                    "username": self.username,
+                    "first_name": self.first_name,
+                    "last_name": self.last_name,
+                }
             },
         }
+
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: PasswordStr
+
+    @field_validator("email")
+    def validate_email_domain(cls, v: EmailStr) -> EmailStr:
+        try:
+            domain = v.split("@")[1]
+            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
+                raise ValueError
+        except ValueError:
+            raise ValueError(f"{v} is an invalid email")
+        return v
