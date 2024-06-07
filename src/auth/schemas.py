@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr, field_validator
 
-from src.db.models.utils import UsernameStr
+from src.db.models.utils import PasswordStr, UsernameStr
 
 
 class Credentials(BaseModel):
@@ -10,7 +10,7 @@ class Credentials(BaseModel):
     last_name: Optional[str] = None
     username: Optional[UsernameStr] = None
     email: Optional[EmailStr] = None
-    password: str
+    password: PasswordStr
 
     @field_validator("first_name", "last_name")
     def name_validator(cls, v: str) -> str:
@@ -32,7 +32,7 @@ class Credentials(BaseModel):
         return {
             "email": self.email,
             "password": self.password,
-            "options": {
+            "user_metadata": {
                 "username": self.username,
                 "first_name": self.first_name,
                 "last_name": self.last_name,
