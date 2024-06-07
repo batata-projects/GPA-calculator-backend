@@ -10,6 +10,7 @@ from src.db.models.utils.models.BaseModel import BaseModel
 
 
 class TestBaseModel:
+    # TODO: Add test for model_validate_partial
     @pytest.mark.parametrize(
         "_class, data",
         [
