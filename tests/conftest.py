@@ -6,13 +6,8 @@ from .fixtures.common.utils.types.CourseNameStr import (
     invalid_course_name,
     valid_course_name,
 )
-from .fixtures.common.utils.types.EmailStr import (
-    invalid_domain,
-    invalid_email,
-    valid_email,
-)
 from .fixtures.common.utils.types.TermStr import invalid_term, valid_term
-from .fixtures.common.utils.types.Username import (
+from .fixtures.common.utils.types.UsernameStr import (
     invalid_username1,
     invalid_username2,
     valid_username,

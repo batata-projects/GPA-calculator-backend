@@ -8,7 +8,6 @@ from src.db.models.users import User
 
 
 class TestBaseModel:
-    # TODO: Add test for model_validate_partial
     @pytest.mark.parametrize(
         "_class, data",
         [
