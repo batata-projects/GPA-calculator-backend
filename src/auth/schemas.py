@@ -2,7 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr, field_validator
 
-from src.db.models.utils import PasswordStr, UsernameStr
+from src.common.utils.types.PasswordStr import PasswordStr
+from src.common.utils.types.UsernameStr import UsernameStr
 
 
 class RegisterRequest(BaseModel):
