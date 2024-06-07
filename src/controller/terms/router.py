@@ -110,8 +110,7 @@ async def update_term(
 ) -> APIResponse[TermResponse]:
     try:
         term_data = {"name": term_name}
-        term_dao.update_term(term_id, term_data)
-        term = term_dao.get_term_by_id(term_id)
+        term = term_dao.update_term(term_id, term_data)
         if term:
             return APIResponse[TermResponse](
                 status=status.HTTP_200_OK,
