@@ -1,7 +1,6 @@
 from supabase import Client
 
 from src.db.models.courses import Course
-from src.db.models.utils.models.BaseModel import BaseModel
 from src.db.models.utils.types.UuidStr import UuidStr
 from src.db.tables import SupabaseTables
 

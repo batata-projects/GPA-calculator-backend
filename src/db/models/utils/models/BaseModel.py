@@ -14,5 +14,4 @@ class BaseModel(PydanticBaseModel):
                 _data[field] = ValidData.__dict__[cls.__name__].__dict__[field]
             else:
                 _data[field] = data[field]
-        cls.model_validate(_data)
-        return cls(**_data)
+        return cls.model_validate(_data)

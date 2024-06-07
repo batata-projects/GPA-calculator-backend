@@ -2,7 +2,6 @@ from pydantic import EmailStr
 from supabase import Client
 
 from src.db.models.users import User
-from src.db.models.utils.models.BaseModel import BaseModel
 from src.db.models.utils.types.UuidStr import UuidStr
 from src.db.tables import SupabaseTables
 
