@@ -1,8 +1,7 @@
 from typing import Generic, Optional, TypeVar
 
+from gotrue.types import Session as SupabaseSession  # type: ignore
 from pydantic import BaseModel as PydanticBaseModel
-
-from gotrue.types import Session as SupabaseSession
 
 from src.db.models.users import User
 
