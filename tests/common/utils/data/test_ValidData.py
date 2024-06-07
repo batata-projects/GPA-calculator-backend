@@ -1,4 +1,4 @@
-from src.db.models.utils.data.ValidData import ValidData, ValidItems
+from src.common.utils.data.ValidData import ValidData, ValidItems
 
 
 class TestValidItems:

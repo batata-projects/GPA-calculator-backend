@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, Path, Query, status
 from pydantic import EmailStr, PositiveFloat, PositiveInt
 
 from src.common.responses import APIResponse
+from src.common.utils.types.UsernameStr import UsernameStr
+from src.common.utils.types.UuidStr import UuidStr
 from src.controller.users.schemas import UserResponse
 from src.db.dao.user_dao import UserDAO
 from src.db.dependencies import get_user_dao
-from src.db.models.utils.types.UsernameStr import UsernameStr
-from src.db.models.utils.types.UuidStr import UuidStr
 
 router = APIRouter(
     prefix="/users",

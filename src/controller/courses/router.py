@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, Path, Query, status
 from pydantic import PositiveFloat
 
 from src.common.responses import APIResponse
+from src.common.utils.types.UuidStr import UuidStr
 from src.controller.courses.schemas import CourseResponse
 from src.db.dao.course_dao import CourseDAO
 from src.db.dependencies import get_course_dao
-from src.db.models.utils.types.UuidStr import UuidStr
 
 router = APIRouter(
     prefix="/courses",

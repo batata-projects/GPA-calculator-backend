@@ -1,8 +1,8 @@
 from supabase import Client
 
+from src.common.utils.types.CourseNameStr import CourseNameStr
+from src.common.utils.types.UuidStr import UuidStr
 from src.db.models.available_courses import AvailableCourse
-from src.db.models.utils.types.CourseNameStr import CourseNameStr
-from src.db.models.utils.types.UuidStr import UuidStr
 from src.db.tables import SupabaseTables
 
 

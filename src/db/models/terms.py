@@ -1,8 +1,8 @@
 from typing import Optional
 
-from src.db.models.utils.models.BaseModel import BaseModel
-from src.db.models.utils.types.TermStr import TermStr
-from src.db.models.utils.types.UuidStr import UuidStr
+from src.common.utils.models.BaseModel import BaseModel
+from src.common.utils.types.TermStr import TermStr
+from src.common.utils.types.UuidStr import UuidStr
 
 
 class Term(BaseModel):

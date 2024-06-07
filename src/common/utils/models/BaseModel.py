@@ -2,7 +2,7 @@ from typing import Any
 
 from pydantic import BaseModel as PydanticBaseModel
 
-from src.db.models.utils.data.ValidData import ValidData
+from src.common.utils.data.ValidData import ValidData
 
 
 class BaseModel(PydanticBaseModel):

@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, Path, Query, status
 
 from src.common.responses import APIResponse
+from src.common.utils.types.TermStr import TermStr
+from src.common.utils.types.UuidStr import UuidStr
 from src.controller.terms.schemas import TermResponse
 from src.db.dao.term_dao import TermDAO
 from src.db.dependencies import get_term_dao
-from src.db.models.utils.types.TermStr import TermStr
-from src.db.models.utils.types.UuidStr import UuidStr
 
 router = APIRouter(
     prefix="/terms",

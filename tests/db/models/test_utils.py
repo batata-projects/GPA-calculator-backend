@@ -1,9 +1,9 @@
 import pytest
 
-from src.db.models.utils.types.CourseCodeStr import validate_course_code  # noqa: F401
-from src.db.models.utils.types.CourseNameStr import validate_course_name  # noqa: F401
-from src.db.models.utils.types.TermStr import validate_term_str  # noqa: F401
-from src.db.models.utils.types.UuidStr import validate_uuid  # noqa: F401
+from src.common.utils.types.CourseCodeStr import validate_course_code  # noqa: F401
+from src.common.utils.types.CourseNameStr import validate_course_name  # noqa: F401
+from src.common.utils.types.TermStr import validate_term_str  # noqa: F401
+from src.common.utils.types.UuidStr import validate_uuid  # noqa: F401
 
 
 class TestUtils:
