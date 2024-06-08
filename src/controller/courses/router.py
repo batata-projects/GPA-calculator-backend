@@ -151,7 +151,7 @@ async def create_course(
         )
         if course:
             return APIResponse[CourseResponse](
-                status=status.HTTP_200_OK,
+                status=status.HTTP_201_CREATED,
                 message="Course created",
                 data=CourseResponse(courses=[course]),
             )

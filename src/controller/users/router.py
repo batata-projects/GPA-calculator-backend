@@ -129,7 +129,7 @@ async def create_user(
         )
         if user:
             return APIResponse[UserResponse](
-                status=status.HTTP_200_OK,
+                status=status.HTTP_201_CREATED,
                 message="User created",
                 data=UserResponse(users=[user]),
             )

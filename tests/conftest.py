@@ -14,6 +14,8 @@ from .fixtures.common.utils.types.UsernameStr import (
 )
 from .fixtures.common.utils.types.UuidStr import invalid_uuid, valid_uuid
 from .fixtures.db.models.available_courses import (
+    available_course1,
+    available_course2,
     available_courses,
     available_courses_data,
     available_courses_same_course_name,
