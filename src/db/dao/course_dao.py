@@ -1,3 +1,6 @@
+from typing import Optional, Union
+
+from pydantic import NonNegativeFloat
 from supabase import Client
 
 from src.common.utils.types.UuidStr import UuidStr
@@ -6,10 +9,10 @@ from src.db.tables import SupabaseTables
 
 
 class CourseDAO:
-    def __init__(self, client: Client):
+    def __init__(self, client: Client) -> None:
         self.client = client
 
-    def get_course_by_id(self, course_id: UuidStr):
+    def get_course_by_id(self, course_id: UuidStr) -> Optional[Course]:
         data = (
             (self.client.table(SupabaseTables.COURSES))
             .select("*")
@@ -56,14 +59,20 @@ class CourseDAO:
             return []
         return [Course.model_validate(course) for course in data.data]
 
-    def create_course(self, course_data: dict):
+    def create_course(
+        self, course_data: dict[str, Union[UuidStr, NonNegativeFloat, bool, None]]
+    ) -> Optional[Course]:
         Course.model_validate(course_data)
         data = (self.client.table(SupabaseTables.COURSES)).insert(course_data).execute()
         if not data.data:
             return None
         return Course.model_validate(data.data[0])
 
-    def update_course(self, course_id: UuidStr, course_data: dict):
+    def update_course(
+        self,
+        course_id: UuidStr,
+        course_data: dict[str, Union[UuidStr, NonNegativeFloat, bool, None]],
+    ) -> Optional[Course]:
         Course.model_validate_partial(course_data)
         data = (
             self.client.table(SupabaseTables.COURSES)
@@ -75,7 +84,7 @@ class CourseDAO:
             return None
         return Course.model_validate(data.data[0])
 
-    def delete_course(self, course_id: UuidStr):
+    def delete_course(self, course_id: UuidStr) -> Optional[Course]:
         data = (
             self.client.table(SupabaseTables.COURSES)
             .delete()

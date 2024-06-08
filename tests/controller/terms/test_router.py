@@ -18,7 +18,7 @@ from src.db.models.terms import Term
 
 @pytest.mark.asyncio
 class TestGetTermById:
-    async def test_get_term_by_id_successful(self, term1: Term):
+    async def test_get_term_by_id_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_id.return_value = term1
 
@@ -30,7 +30,7 @@ class TestGetTermById:
         assert response.message == "Term found"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_get_term_by_id_not_found(self, uuid4: Mock):
+    async def test_get_term_by_id_not_found(self, uuid4: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_id.return_value = None
 
@@ -40,7 +40,7 @@ class TestGetTermById:
         assert response.message == "Term not found"
         assert response.data is None
 
-    async def test_get_term_by_id_error(self, uuid4: Mock):
+    async def test_get_term_by_id_error(self, uuid4: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_id.side_effect = Exception("Error")
 
@@ -53,7 +53,7 @@ class TestGetTermById:
 
 @pytest.mark.asyncio
 class TestGetTermByName:
-    async def test_get_term_by_name_successful(self, term1: Term):
+    async def test_get_term_by_name_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_name.return_value = term1
 
@@ -65,7 +65,7 @@ class TestGetTermByName:
         assert response.message == "Term found"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_get_term_by_name_not_found(self):
+    async def test_get_term_by_name_not_found(self) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_name.return_value = None
 
@@ -77,7 +77,7 @@ class TestGetTermByName:
         assert response.message == "Term not found"
         assert response.data is None
 
-    async def test_get_term_by_name_error(self):
+    async def test_get_term_by_name_error(self) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_name.side_effect = Exception("Error")
 
@@ -92,7 +92,7 @@ class TestGetTermByName:
 
 @pytest.mark.asyncio
 class TestCreateTerm:
-    async def test_create_term_successful(self, term1: Term):
+    async def test_create_term_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.create_term.return_value = term1
 
@@ -104,7 +104,7 @@ class TestCreateTerm:
         assert response.message == "Term created"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_create_term_duplicate(self):
+    async def test_create_term_duplicate(self) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.create_term.side_effect = Exception("Failed to create term")
 
@@ -114,7 +114,7 @@ class TestCreateTerm:
         assert response.message == "Failed to create term"
         assert response.data is None
 
-    async def test_create_term_error(self):
+    async def test_create_term_error(self) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.create_term.side_effect = Exception("Error")
 
@@ -127,7 +127,7 @@ class TestCreateTerm:
 
 @pytest.mark.asyncio
 class TestUpdateTerm:
-    async def test_update_term_successful(self, term1: Term):
+    async def test_update_term_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term1.name = "Fall 2026 - 2027"
         term_dao.update_term.return_value = term1
@@ -142,7 +142,7 @@ class TestUpdateTerm:
         assert response.message == "Term updated"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_update_term_not_found(self, uuid4: Mock, term1: Term):
+    async def test_update_term_not_found(self, uuid4: Mock, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.update_term.return_value = None
 
@@ -154,7 +154,7 @@ class TestUpdateTerm:
         assert response.message == "Failed to update term"
         assert response.data is None
 
-    async def test_update_term_duplicate(self, term1: Term, term2: Term):
+    async def test_update_term_duplicate(self, term1: Term, term2: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.update_term.side_effect = Exception("Failed to update term")
 
@@ -171,7 +171,7 @@ class TestUpdateTerm:
 
 @pytest.mark.asyncio
 class TestDeleteTerm:
-    async def test_delete_term_successful(self, term1: Term):
+    async def test_delete_term_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.delete_term.return_value = term1
 
@@ -183,7 +183,7 @@ class TestDeleteTerm:
         assert response.message == "Term deleted"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_delete_term_not_found(self, uuid4: Mock):
+    async def test_delete_term_not_found(self, uuid4: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.delete_term.return_value = None
 
@@ -193,7 +193,7 @@ class TestDeleteTerm:
         assert response.message == "Failed to delete term"
         assert response.data is None
 
-    async def test_delete_term_error(self, uuid4: Mock):
+    async def test_delete_term_error(self, uuid4: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.delete_term.side_effect = Exception("Error")
 
@@ -206,7 +206,7 @@ class TestDeleteTerm:
 
 @pytest.mark.asyncio
 class TestGetAllTerms:
-    async def test_get_all_terms_successful(self, terms: list[Term]):
+    async def test_get_all_terms_successful(self, terms: list[Term]) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_all_terms.return_value = terms
 
@@ -216,7 +216,7 @@ class TestGetAllTerms:
         assert response.message == "Terms found"
         assert response.data == TermResponse(terms=terms)
 
-    async def test_get_all_terms_unsuccessful(self):
+    async def test_get_all_terms_unsuccessful(self) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_all_terms.return_value = []
 
@@ -226,7 +226,7 @@ class TestGetAllTerms:
         assert response.message == "No terms found"
         assert response.data is None
 
-    async def test_get_all_terms_error(self):
+    async def test_get_all_terms_error(self) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_all_terms.side_effect = Exception("Error")
 

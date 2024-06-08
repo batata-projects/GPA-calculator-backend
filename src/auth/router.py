@@ -18,8 +18,8 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 async def register_route(
     request: RegisterRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
-):
-    return APIResponse(
+) -> APIResponse[AuthResponse]:
+    return APIResponse[AuthResponse](
         message="Registration successful",
         status=status.HTTP_200_OK,
         data=register(request, user_dao),
@@ -35,8 +35,8 @@ async def register_route(
 async def login_route(
     request: LoginRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
-):
-    return APIResponse(
+) -> APIResponse[AuthResponse]:
+    return APIResponse[AuthResponse](
         message="Login successful",
         status=status.HTTP_200_OK,
         data=login(request, user_dao),

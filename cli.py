@@ -1,13 +1,21 @@
-import argparse
 import os
 import subprocess
+
+from tap import Tap
 
 FILES_TO_CLEAN = ["src", "tests", "cli.py"]
 
 SEP = os.path.sep
 
 
-def run():
+class ArgumentParser(Tap):
+    command: str
+
+    def configure(self) -> None:
+        self.add_argument("command", type=str, help="Command to run")
+
+
+def run() -> None:
     """
     command: run
     Run the fastapi backend server
@@ -15,7 +23,7 @@ def run():
     subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
-def clean():
+def clean() -> None:
     """
     command: clean
     Clean up the code
@@ -23,20 +31,26 @@ def clean():
     subprocess.run(
         [
             "autoflake",
+            "-r",
+            "--exclude=__init__.py, conftest.py",
             "--remove-all-unused-imports",
             "--remove-unused-variables",
-            "--recursive",
-            *FILES_TO_CLEAN,
             "-i",
-            "--exclude=__init__.py, conftest.py",
+            *FILES_TO_CLEAN,
         ]
     )
     subprocess.run(["isort", *FILES_TO_CLEAN, "--profile", "black"])
     subprocess.run(["black", *FILES_TO_CLEAN])
-    subprocess.run(["mypy", *FILES_TO_CLEAN, "--check-untyped-defs"])
+    subprocess.run(
+        [
+            "mypy",
+            "--strict",
+            *FILES_TO_CLEAN,
+        ]
+    )
 
 
-def generate_test_files():
+def generate_test_files() -> None:
     """
     command: generate-test-files
     Generate empty test files in the `tests` and `tests/fixtures`
@@ -73,7 +87,7 @@ def generate_test_files():
                 open(fixture_file, "a").close()
 
 
-def import_fixtures():
+def import_fixtures() -> None:
     """
     command: import-fixtures
     This command imports all the fixtures in the
@@ -102,7 +116,7 @@ def import_fixtures():
     conftest.close()
 
 
-def run_tests():
+def run_tests() -> None:
     """
     command: run-tests
     This command runs all the tests in the `tests` directory.
@@ -110,7 +124,7 @@ def run_tests():
     subprocess.run(["pytest", "tests"])
 
 
-def clean_unused_files():
+def clean_unused_files() -> None:
     """
     command: clean-unused-files
     This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
@@ -127,7 +141,7 @@ def clean_unused_files():
                     os.remove(file)
 
 
-def pre_stage():
+def pre_stage() -> None:
     """
     command: pre-stage
     This command runs the `import-fixtures`,
@@ -138,7 +152,7 @@ def pre_stage():
     run_tests()
 
 
-def help():
+def help() -> None:
     """
     command: help
     Show help
@@ -168,9 +182,8 @@ def help():
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("command", type=str, help="Command to run")
-    args = parser.parse_args()
+    args = ArgumentParser().parse_args()
+
     if args.command == "clean":
         clean()
     elif args.command == "run":

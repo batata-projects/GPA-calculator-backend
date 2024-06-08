@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, Path, Query, status
 from pydantic import EmailStr, PositiveFloat, PositiveInt
 
@@ -149,13 +151,15 @@ async def create_user(
 )
 async def update_user(
     user_id: UuidStr = Path(..., description="User ID"),
-    username: UsernameStr = Query(None, description="User username"),
-    email: EmailStr = Query(None, description="User email"),
-    first_name: str = Query(None, description="User first name"),
-    last_name: str = Query(None, description="User last name"),
-    credits: PositiveInt = Query(None, description="User credits"),
-    counted_credits: PositiveInt = Query(None, description="User counted credits"),
-    grade: PositiveFloat = Query(None, description="User grade"),
+    username: Optional[UsernameStr] = Query(None, description="User username"),
+    email: Optional[EmailStr] = Query(None, description="User email"),
+    first_name: Optional[str] = Query(None, description="User first name"),
+    last_name: Optional[str] = Query(None, description="User last name"),
+    credits: Optional[PositiveInt] = Query(None, description="User credits"),
+    counted_credits: Optional[PositiveInt] = Query(
+        None, description="User counted credits"
+    ),
+    grade: Optional[PositiveFloat] = Query(None, description="User grade"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:

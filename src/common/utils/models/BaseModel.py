@@ -7,7 +7,7 @@ from src.common.utils.data.ValidData import ValidData
 
 class BaseModel(PydanticBaseModel):
     @classmethod
-    def model_validate_partial(cls, data: dict[str, Any]):
+    def model_validate_partial(cls, data: dict[str, Any]) -> "BaseModel":
         _data = {}
         for field in cls.model_fields:
             if field not in data:

@@ -2,12 +2,16 @@ from typing import Any
 from unittest.mock import Mock
 
 import pytest
+from pydantic import NonNegativeInt
 
+from src.common.utils.types.CourseCodeStr import CourseCodeStr
+from src.common.utils.types.CourseNameStr import CourseNameStr
+from src.common.utils.types.UuidStr import UuidStr
 from src.db.models.available_courses import AvailableCourse
 
 
 class TestAvailableCourse:
-    def test_available_course_successful(self, uuid4: Mock):
+    def test_available_course_successful(self, uuid4: Mock) -> None:
         available_course_id = str(uuid4())
         terms_id = str(uuid4())
         name = "EECE"
@@ -31,7 +35,7 @@ class TestAvailableCourse:
         assert availableCourse.credits == credits
         assert availableCourse.graded == graded
 
-    def test_available_course_no_id(self, uuid4: Mock):
+    def test_available_course_no_id(self, uuid4: Mock) -> None:
         terms_id = str(uuid4())
         name = "EECE"
         code = "230"
@@ -60,8 +64,14 @@ class TestAvailableCourse:
         ],
     )
     def test_available_course_none_attribute(
-        self, terms_id, name, code, credits, graded, request: pytest.FixtureRequest
-    ):
+        self,
+        terms_id: UuidStr,
+        name: CourseNameStr,
+        code: CourseCodeStr,
+        credits: NonNegativeInt,
+        graded: bool,
+        request: pytest.FixtureRequest,
+    ) -> None:
         if terms_id is not None:
             terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
@@ -80,8 +90,14 @@ class TestAvailableCourse:
         ],
     )
     def test_available_course_invalid_attribute(
-        self, terms_id, name, code, credits, graded, request: pytest.FixtureRequest
-    ):
+        self,
+        terms_id: UuidStr,
+        name: CourseNameStr,
+        code: CourseCodeStr,
+        credits: NonNegativeInt,
+        graded: bool,
+        request: pytest.FixtureRequest,
+    ) -> None:
         if terms_id == "uuid4":
             terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
@@ -91,7 +107,7 @@ class TestAvailableCourse:
 
     def test_model_validate_partial_invalid(
         self, invalid_available_course_data: list[dict[str, Any]]
-    ):
+    ) -> None:
         for data in invalid_available_course_data:
             with pytest.raises(Exception):
                 AvailableCourse.model_validate_partial(data)

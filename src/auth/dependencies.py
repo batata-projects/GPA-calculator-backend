@@ -5,15 +5,16 @@ from jwt import InvalidTokenError, decode
 from src.config import Config
 
 
-def decode_jwt(token: str) -> dict:
+def decode_jwt(token: str) -> dict[str, str]:
     if Config.JWT.SECRET is None:
         raise ValueError("JWT_SECRET must be set in the environment")
-    return decode(
+    decoded_data: dict[str, str] = decode(
         token,
         key=Config.JWT.SECRET,
         algorithms=[Config.JWT.ALGORITHM],
         audience=Config.JWT.AUDIENCE,
     )
+    return decoded_data
 
 
 async def get_access_token(

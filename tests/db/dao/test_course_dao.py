@@ -10,7 +10,7 @@ from src.db.tables import SupabaseTables
 
 
 class TestCourseDAO:
-    def test_get_course_by_id_successful(self, course1: Course):
+    def test_get_course_by_id_successful(self, course1: Course) -> None:
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 
@@ -24,7 +24,7 @@ class TestCourseDAO:
 
         assert result == course1
 
-    def test_create_course_successful(self, course1: Course):
+    def test_create_course_successful(self, course1: Course) -> None:
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 
@@ -38,7 +38,7 @@ class TestCourseDAO:
 
         assert result == course1
 
-    def test_update_course_successful(self, course1: Course):
+    def test_update_course_successful(self, course1: Course) -> None:
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 
@@ -52,7 +52,7 @@ class TestCourseDAO:
 
         assert result == course1
 
-    def test_delete_course_successful(self, course1: Course):
+    def test_delete_course_successful(self, course1: Course) -> None:
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 
@@ -94,13 +94,13 @@ class TestCourseDAO:
     )
     def test_get_courses_by_attribute_successful(
         self,
-        method,
-        method_arg,
-        query_methods,
-        query_return,
-        attribute_name,
+        method: str,
+        method_arg: list[str],
+        query_methods: list[str],
+        query_return: str,
+        attribute_name: str,
         request: pytest.FixtureRequest,
-    ):
+    ) -> None:
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 
@@ -127,7 +127,7 @@ class TestCourseDAO:
                 results[0], attribute_name
             )
 
-    def test_get_all_courses_successful(self, courses: list[Course]):
+    def test_get_all_courses_successful(self, courses: list[Course]) -> None:
         mock_client = Mock(spec=Client)
         course_dao = CourseDAO(mock_client)
 

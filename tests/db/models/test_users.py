@@ -1,12 +1,15 @@
 from unittest.mock import Mock
 
 import pytest
+from gotrue.types import User as SupabaseUser  # type: ignore
+from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 
+from src.common.utils.types.UsernameStr import UsernameStr
 from src.db.models.users import User
 
 
 class TestUser:
-    def test_user_successful(self, uuid4: Mock):
+    def test_user_successful(self, uuid4: Mock) -> None:
         user_id = str(uuid4())
         email = "rmf40@mail.aub.edu"
         username = "Rio"
@@ -36,7 +39,7 @@ class TestUser:
         assert user.counted_credits == counted_credits
         assert user.grade == grade
 
-    def test_user_no_id(self):
+    def test_user_no_id(self) -> None:
         email = "rmf40@mail.aub.edu"
         username = "Rio"
         first_name = "Rayan"
@@ -64,7 +67,7 @@ class TestUser:
         assert user.counted_credits == counted_credits
         assert user.grade == grade
 
-    def test_user_invalid_id(self):
+    def test_user_invalid_id(self) -> None:
         user_id = "invalid"
         email = "rmf40@mail.aub.edu"
         username = "Rio"
@@ -100,14 +103,14 @@ class TestUser:
     )
     def test_user_none_attribute(
         self,
-        email,
-        username,
-        first_name,
-        last_name,
-        credits,
-        counted_credits,
-        grade,
-    ):
+        email: EmailStr,
+        username: UsernameStr,
+        first_name: str,
+        last_name: str,
+        credits: NonNegativeInt,
+        counted_credits: NonNegativeInt,
+        grade: NonNegativeFloat,
+    ) -> None:
         with pytest.raises(ValueError):
             User(
                 email=email,
@@ -133,14 +136,14 @@ class TestUser:
     )
     def test_user_invalid_attribute(
         self,
-        email,
-        username,
-        first_name,
-        last_name,
-        credits,
-        counted_credits,
-        grade,
-    ):
+        email: EmailStr,
+        username: UsernameStr,
+        first_name: str,
+        last_name: str,
+        credits: NonNegativeInt,
+        counted_credits: NonNegativeInt,
+        grade: NonNegativeFloat,
+    ) -> None:
         with pytest.raises(ValueError):
             User(
                 email=email,

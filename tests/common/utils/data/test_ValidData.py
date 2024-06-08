@@ -2,7 +2,7 @@ from src.common.utils.data.ValidData import ValidData, ValidItems
 
 
 class TestValidItems:
-    def test_ValidItems(self):
+    def test_ValidItems(self) -> None:
         assert ValidItems.UuidStr == "00000000-0000-0000-0000-000000000000"
         assert ValidItems.TermStr == "Fall 2023 - 2024"
         assert ValidItems.UsernameStr == "username"
@@ -15,7 +15,7 @@ class TestValidItems:
 
 
 class TestValidData:
-    def test_available_course_valid_data(self):
+    def test_available_course_valid_data(self) -> None:
         assert ValidData.AvailableCourse.id == ValidItems.UuidStr
         assert ValidData.AvailableCourse.term_id == ValidItems.UuidStr
         assert ValidData.AvailableCourse.name == ValidItems.CourseNameStr
@@ -23,18 +23,18 @@ class TestValidData:
         assert ValidData.AvailableCourse.credits == ValidItems.NonNegativeInt
         assert ValidData.AvailableCourse.graded == ValidItems.Bool
 
-    def test_course_valid_data(self):
+    def test_course_valid_data(self) -> None:
         assert ValidData.Course.id == ValidItems.UuidStr
         assert ValidData.Course.available_course_id == ValidItems.UuidStr
         assert ValidData.Course.user_id == ValidItems.UuidStr
         assert ValidData.Course.grade == ValidItems.NonNegativeFloat
         assert ValidData.Course.passed == ValidItems.Bool
 
-    def test_term_valid_data(self):
+    def test_term_valid_data(self) -> None:
         assert ValidData.Term.id == ValidItems.UuidStr
         assert ValidData.Term.name == ValidItems.TermStr
 
-    def test_user_valid_data(self):
+    def test_user_valid_data(self) -> None:
         assert ValidData.User.id == ValidItems.UuidStr
         assert ValidData.User.email == ValidItems.EmailStr
         assert ValidData.User.username == ValidItems.UsernameStr

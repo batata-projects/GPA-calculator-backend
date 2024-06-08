@@ -4,9 +4,9 @@ from src.common.utils.types.TermStr import TermStr, validate_term_str
 
 
 class TestTermStr:
-    def test_term_str_successful(self, valid_term: TermStr):
+    def test_term_str_successful(self, valid_term: TermStr) -> None:
         assert validate_term_str(valid_term) == valid_term
 
-    def test_term_str_invalid(self, invalid_term: TermStr):
+    def test_term_str_invalid(self, invalid_term: TermStr) -> None:
         with pytest.raises(ValueError):
             validate_term_str(invalid_term)

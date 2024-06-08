@@ -1,3 +1,5 @@
+from typing import Optional, Union
+
 from supabase import Client
 
 from src.common.utils.types.TermStr import TermStr
@@ -7,10 +9,10 @@ from src.db.tables import SupabaseTables
 
 
 class TermDAO:
-    def __init__(self, client: Client):
+    def __init__(self, client: Client) -> None:
         self.client = client
 
-    def get_term_by_id(self, term_id: UuidStr):
+    def get_term_by_id(self, term_id: UuidStr) -> Optional[Term]:
         data = (
             self.client.table(SupabaseTables.TERMS)
             .select("*")
@@ -21,7 +23,7 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def get_term_by_name(self, name: TermStr):
+    def get_term_by_name(self, name: TermStr) -> Optional[Term]:
         data = (
             self.client.table(SupabaseTables.TERMS)
             .select("*")
@@ -32,14 +34,18 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def create_term(self, term_data: dict):
+    def create_term(
+        self, term_data: dict[str, Union[UuidStr, TermStr]]
+    ) -> Optional[Term]:
         Term.model_validate(term_data)
         data = self.client.table(SupabaseTables.TERMS).insert(term_data).execute()
         if not data.data:
             return None
         return Term.model_validate(data.data[0])
 
-    def update_term(self, term_id: UuidStr, term_data: dict):
+    def update_term(
+        self, term_id: UuidStr, term_data: dict[str, Union[UuidStr, TermStr]]
+    ) -> Optional[Term]:
         Term.model_validate_partial(term_data)
         data = (
             self.client.table(SupabaseTables.TERMS)
@@ -51,7 +57,7 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def delete_term(self, term_id: UuidStr):
+    def delete_term(self, term_id: UuidStr) -> Optional[Term]:
         data = (
             self.client.table(SupabaseTables.TERMS).delete().eq("id", term_id).execute()
         )

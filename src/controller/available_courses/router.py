@@ -198,6 +198,7 @@ async def update_available_course(
             "credits": credits,
             "graded": graded,
         }
+
         available_course_data = {
             k: v for k, v in available_course_data.items() if v is not None
         }

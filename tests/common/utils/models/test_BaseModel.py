@@ -9,7 +9,7 @@ from src.db.models.users import User
 
 class TestBaseModel:
     @pytest.mark.parametrize(
-        "_class, data",
+        "_class, model",
         [
             (AvailableCourse, "available_courses"),
             (Course, "courses"),
@@ -18,9 +18,9 @@ class TestBaseModel:
         ],
     )
     def test_model_validate_partial(
-        self, _class: BaseModel, data, request: pytest.FixtureRequest
-    ):
-        item: BaseModel = request.getfixturevalue(data)[0]
+        self, _class: BaseModel, model: str, request: pytest.FixtureRequest
+    ) -> None:
+        item: BaseModel = request.getfixturevalue(model)[0]
         data = item.model_dump()
         for key in data:
             _data = data.copy()

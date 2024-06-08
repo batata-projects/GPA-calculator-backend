@@ -10,7 +10,7 @@ from src.db.tables import SupabaseTables
 
 
 class TestUserDAO:
-    def test_get_user_by_id_successful(self, users: list[User]):
+    def test_get_user_by_id_successful(self, users: list[User]) -> None:
         user = users[0]
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
@@ -46,13 +46,13 @@ class TestUserDAO:
     )
     def test_get_user_by_attribute_successful(
         self,
-        method,
-        method_arg,
-        query_methods,
-        query_return,
-        attribute_name,
+        method: str,
+        method_arg: list[str],
+        query_methods: list[str],
+        query_return: str,
+        attribute_name: str,
         request: pytest.FixtureRequest,
-    ):
+    ) -> None:
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
 
@@ -70,7 +70,7 @@ class TestUserDAO:
 
         assert result == request.getfixturevalue(query_return)
 
-    def test_get_all_users_successful(self, users: list[User]):
+    def test_get_all_users_successful(self, users: list[User]) -> None:
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
 
@@ -82,7 +82,7 @@ class TestUserDAO:
 
         assert result == users
 
-    def test_create_user_successful(self, users: list[User]):
+    def test_create_user_successful(self, users: list[User]) -> None:
         user = users[0]
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
@@ -95,7 +95,7 @@ class TestUserDAO:
 
         assert result == user
 
-    def test_update_user_successful(self, users: list[User]):
+    def test_update_user_successful(self, users: list[User]) -> None:
         user = users[0]
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
@@ -110,7 +110,7 @@ class TestUserDAO:
 
         assert result == user
 
-    def test_delete_user_successful(self, users: list[User]):
+    def test_delete_user_successful(self, users: list[User]) -> None:
         user = users[0]
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)

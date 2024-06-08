@@ -7,5 +7,5 @@ class SupabaseTables(str, Enum):
     TERMS = "terms"
     USERS = "users"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.value

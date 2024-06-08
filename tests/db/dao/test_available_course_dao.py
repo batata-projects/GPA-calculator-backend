@@ -12,7 +12,7 @@ from src.db.tables import SupabaseTables
 class TestAvailableCourseDAO:
     def test_get_available_course_by_id_successful(
         self, available_courses: list[AvailableCourse]
-    ):
+    ) -> None:
         available_course = available_courses[0]
         mock_client = Mock(spec=Client)
         available_course_dao = AvailableCourseDAO(mock_client)
@@ -64,13 +64,13 @@ class TestAvailableCourseDAO:
     )
     def test_get_available_courses_by_attribute_successful(
         self,
-        method,
-        method_arg,
-        query_methods,
-        query_return,
-        attribute_name,
+        method: str,
+        method_arg: list[str],
+        query_methods: list[str],
+        query_return: str,
+        attribute_name: str,
         request: pytest.FixtureRequest,
-    ):
+    ) -> None:
         mock_client = Mock(spec=Client)
         available_course_dao = AvailableCourseDAO(mock_client)
 
@@ -100,7 +100,7 @@ class TestAvailableCourseDAO:
 
     def test_get_all_available_courses_successful(
         self, available_courses: list[AvailableCourse]
-    ):
+    ) -> None:
         mock_client = Mock(spec=Client)
         available_course_dao = AvailableCourseDAO(mock_client)
 
@@ -119,7 +119,7 @@ class TestAvailableCourseDAO:
 
     def test_create_available_course_successful(
         self, available_courses: list[AvailableCourse]
-    ):
+    ) -> None:
         available_course = available_courses[0]
         mock_client = Mock(spec=Client)
         available_course_dao = AvailableCourseDAO(mock_client)
@@ -138,7 +138,7 @@ class TestAvailableCourseDAO:
 
     def test_update_available_course_successful(
         self, available_courses: list[AvailableCourse]
-    ):
+    ) -> None:
         available_course = available_courses[0]
         mock_client = Mock(spec=Client)
         available_course_dao = AvailableCourseDAO(mock_client)
@@ -159,7 +159,7 @@ class TestAvailableCourseDAO:
 
     def test_delete_available_course_successful(
         self, available_courses: list[AvailableCourse]
-    ):
+    ) -> None:
         available_course = available_courses[0]
         mock_client = Mock(spec=Client)
         available_course_dao = AvailableCourseDAO(mock_client)

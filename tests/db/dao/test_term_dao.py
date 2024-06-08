@@ -9,7 +9,7 @@ from src.db.tables import SupabaseTables
 
 
 class TestTermDAO:
-    def test_get_term_by_id_successful(self, terms: list[Term]):
+    def test_get_term_by_id_successful(self, terms: list[Term]) -> None:
         term = terms[0]
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
@@ -24,7 +24,7 @@ class TestTermDAO:
 
         assert result == term
 
-    def test_get_term_by_name_successful(self, terms: list[Term]):
+    def test_get_term_by_name_successful(self, terms: list[Term]) -> None:
         term = terms[0]
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
@@ -39,7 +39,7 @@ class TestTermDAO:
 
         assert result == term
 
-    def test_get_all_terms_successful(self, terms: list[Term]):
+    def test_get_all_terms_successful(self, terms: list[Term]) -> None:
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
 
@@ -51,7 +51,7 @@ class TestTermDAO:
 
         assert result == terms
 
-    def test_create_term_successful(self, terms: list[Term]):
+    def test_create_term_successful(self, terms: list[Term]) -> None:
         term = terms[0]
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
@@ -64,7 +64,7 @@ class TestTermDAO:
 
         assert result == term
 
-    def test_update_term_successful(self, terms: list[Term]):
+    def test_update_term_successful(self, terms: list[Term]) -> None:
         term = terms[0]
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)
@@ -79,7 +79,7 @@ class TestTermDAO:
 
         assert result == term
 
-    def test_delete_term_successful(self, terms: list[Term]):
+    def test_delete_term_successful(self, terms: list[Term]) -> None:
         term = terms[0]
         mock_client = Mock(spec=Client)
         term_dao = TermDAO(mock_client)

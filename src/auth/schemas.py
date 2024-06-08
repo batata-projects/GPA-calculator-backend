@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel, EmailStr, field_validator
 
@@ -29,7 +29,9 @@ class RegisterRequest(BaseModel):
             raise ValueError(f"{v} is an invalid email")
         return v
 
-    def auth_model_dump(self):
+    def auth_model_dump(
+        self,
+    ) -> dict[str, Union[str, dict[str, dict[str, Optional[str]]]]]:
         return {
             "email": self.email,
             "password": self.password,
@@ -57,7 +59,7 @@ class LoginRequest(BaseModel):
             raise ValueError(f"{v} is an invalid email")
         return v
 
-    def auth_model_dump(self):
+    def auth_model_dump(self) -> dict[str, str]:
         return {
             "email": self.email,
             "password": self.password,

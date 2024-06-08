@@ -12,7 +12,7 @@ def validate_term_str(v: Optional[str] = None) -> Optional[str]:
             raise ValueError
         if not 2010 <= int(start) + 1 == int(end) <= 2100:
             raise ValueError
-        if not _ == "-":
+        if not str(_) == "-":
             raise ValueError
         return v
     except ValueError:

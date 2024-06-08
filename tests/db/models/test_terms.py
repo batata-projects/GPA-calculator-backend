@@ -6,7 +6,7 @@ from src.db.models.terms import Term
 
 
 class TestTerm:
-    def test_term_successful(self, uuid4: Mock):
+    def test_term_successful(self, uuid4: Mock) -> None:
         term_id = str(uuid4())
         name = "Fall 2022 - 2023"
 
@@ -18,7 +18,7 @@ class TestTerm:
         assert term.id == term_id
         assert term.name == name
 
-    def test_term_no_id(self):
+    def test_term_no_id(self) -> None:
         name = "Fall 2022 - 2023"
 
         term = Term(
@@ -28,7 +28,7 @@ class TestTerm:
         assert term.id is None
         assert term.name == name
 
-    def test_term_invalid_id(self):
+    def test_term_invalid_id(self) -> None:
         term_id = "invalid"
         name = "Fall 2022 - 2023"
 
@@ -38,7 +38,7 @@ class TestTerm:
                 name=name,
             )
 
-    def test_term_invalid_str(self):
+    def test_term_invalid_str(self) -> None:
         name = "Fall 2022-2023"
 
         with pytest.raises(ValueError):
@@ -46,7 +46,7 @@ class TestTerm:
                 name=name,
             )
 
-    def test_term_invalid_attribute(self):
+    def test_term_invalid_attribute(self) -> None:
         with pytest.raises(ValueError):
             Term(
                 name=None,  # type: ignore
