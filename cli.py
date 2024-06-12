@@ -3,8 +3,6 @@ import subprocess
 
 from tap import Tap
 
-# TODO: Create pre-merge command
-
 SEP = os.path.sep
 
 
