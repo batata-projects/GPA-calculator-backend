@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-from gotrue.types import User as SupabaseUser  # type: ignore
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 
 from src.common.utils.types.UsernameStr import UsernameStr

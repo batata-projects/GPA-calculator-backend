@@ -3,8 +3,6 @@ import subprocess
 
 from tap import Tap
 
-FILES_TO_CLEAN = ["src", "tests", "cli.py"]
-
 SEP = os.path.sep
 
 
@@ -23,7 +21,7 @@ def run() -> None:
     subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
-def clean() -> None:
+def clean(files: list[str] = ["src", "tests", "cli.py"]) -> None:
     """
     command: clean
     Clean up the code
@@ -36,18 +34,12 @@ def clean() -> None:
             "--remove-all-unused-imports",
             "--remove-unused-variables",
             "-i",
-            *FILES_TO_CLEAN,
+            *files,
         ]
     )
-    subprocess.run(["isort", *FILES_TO_CLEAN, "--profile", "black"])
-    subprocess.run(["black", *FILES_TO_CLEAN])
-    subprocess.run(
-        [
-            "mypy",
-            "--strict",
-            *FILES_TO_CLEAN,
-        ]
-    )
+    subprocess.run(["isort", *files, "--profile", "black"])
+    subprocess.run(["black", *files])
+    subprocess.run(["mypy", "--strict", *files])
 
 
 def generate_test_files() -> None:
@@ -103,7 +95,7 @@ def import_fixtures() -> None:
                 function_names = []
                 while i < len(lines):
                     line = lines[i]
-                    if "@pytest.fixture" in line:
+                    if "@pytest.fixture" == line[:15]:
                         line = lines[i + 1]
                         function_names.append(line.split("def ")[1].split("(")[0])
                     i += 1
@@ -114,6 +106,7 @@ def import_fixtures() -> None:
                         path = path.replace("..", ".")
                     conftest.write(f"from {path} import {', '.join(function_names)}\n")
     conftest.close()
+    clean(["tests/conftest.py"])
 
 
 def run_tests() -> None:
