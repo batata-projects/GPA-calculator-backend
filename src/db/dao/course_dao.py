@@ -100,3 +100,5 @@ class CourseDAO:
         if not data.data:
             return []
         return [Course.model_validate(course) for course in data.data]
+
+

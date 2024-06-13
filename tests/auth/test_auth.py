@@ -6,12 +6,13 @@ from unittest.mock import Mock
 import pytest
 from fastapi import HTTPException
 from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
-from gotrue import User as GoTrueUser
-from gotrue.types import Session as SupabaseSession  # type: ignore
+from gotrue.types import Session as GoTrueSession  # type: ignore
+from gotrue.types import User as GoTrueUser
 from pydantic import EmailStr
 
 from src.auth.auth import login, register
 from src.auth.schemas import LoginRequest, RegisterRequest
+from src.common.responses import Session
 from src.common.utils.types.PasswordStr import PasswordStr
 from src.db.models.users import User
 
@@ -20,26 +21,12 @@ from src.db.models.users import User
 @pytest.mark.asyncio
 class TestRegister:
     async def test_register_successful(
-        self, register_request: RegisterRequest, user1: User
+        self, register_request: RegisterRequest, user1: User, gotrue_user: GoTrueUser
     ) -> None:
         user_dao = Mock()
         user_dao.get_user_by_email.return_value = None
         user_dao.client.auth.sign_up.return_value = GoTrueAuthResponse(
-            user=GoTrueUser(
-                id=user1.id,
-                email=user1.email,
-                user_metadata={
-                    "username": user1.username,
-                    "first_name": user1.first_name,
-                    "last_name": user1.last_name,
-                    "credits": user1.credits,
-                    "counted_credits": user1.counted_credits,
-                    "grade": user1.grade,
-                },
-                aud="authenticated",
-                app_metadata={},
-                created_at="2021-10-10T10:10:10.000Z",
-            ),
+            user=gotrue_user,
             session=None,
         )
 
@@ -162,27 +149,17 @@ class TestRegister:
 @pytest.mark.asyncio
 class TestLogin:
     async def test_login_successful(
-        self, login_request: LoginRequest, user1: User
+        self,
+        login_request: LoginRequest,
+        user1: User,
+        session: Session,
+        gotrue_user: GoTrueUser,
+        gotrue_session: GoTrueSession,
     ) -> None:
         user_dao = Mock()
         user_dao.get_user_by_email.return_value = user1
         user_dao.client.auth.sign_in_with_password.return_value = GoTrueAuthResponse(
-            user=GoTrueUser(
-                id=user1.id,
-                email=user1.email,
-                user_metadata={
-                    "username": user1.username,
-                    "first_name": user1.first_name,
-                    "last_name": user1.last_name,
-                    "credits": user1.credits,
-                    "counted_credits": user1.counted_credits,
-                    "grade": user1.grade,
-                },
-                aud="authenticated",
-                app_metadata={},
-                created_at="2021-10-10T10:10:10.000Z",
-            ),
-            session=Mock(spec=SupabaseSession),
+            user=gotrue_user, session=gotrue_session
         )
 
         response = login(login_request, user_dao)
@@ -191,7 +168,7 @@ class TestLogin:
         assert user_dao.client.auth.sign_in_with_password.called
 
         assert response.user == user1
-        assert response.session is None
+        assert response.session == session
 
     async def test_login_user_not_found(self, login_request: LoginRequest) -> None:
         user_dao = Mock()

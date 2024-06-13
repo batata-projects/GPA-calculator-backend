@@ -1,4 +1,5 @@
 from .fixtures.auth.schemas import login_request, register_request
+from .fixtures.common.responses import session
 from .fixtures.common.utils.types.CourseCodeStr import (
     invalid_course_code,
     valid_course_code,
@@ -44,4 +45,5 @@ from .fixtures.db.models.users import (
     users_same_grade,
     users_same_last_name,
 )
+from .fixtures.gotrue import gotrue_session, gotrue_user
 from .fixtures.uuid import uuid4

@@ -1,6 +1,6 @@
 from typing import Generic, Optional, TypeVar
 
-from gotrue.types import Session as SupabaseSession  # type: ignore
+from gotrue.types import Session as GoTrueSession  # type: ignore
 from pydantic import BaseModel as PydanticBaseModel
 
 from src.db.models.users import User
@@ -14,7 +14,7 @@ class Session(PydanticBaseModel):
     expires_in: int
 
     @classmethod
-    def validate_supabase_session(cls, session: SupabaseSession) -> "Session":
+    def validate_supabase_session(cls, session: GoTrueSession) -> "Session":
         return cls(
             access_token=session.access_token,
             refresh_token=session.refresh_token,
