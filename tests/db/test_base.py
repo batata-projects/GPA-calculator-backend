@@ -13,7 +13,7 @@ from src.db.base import get_authenticated_client, get_unauthenticated_client
 class TestGetClient:
     async def test_get_authenticated_client_success(
         mock_config, mocker, mock_access_token, mock_refresh_token
-    ):
+    ) -> None:
         # mocker.patch("src.auth.dependencies.get_access_token", return_value=mock_access_token)
         # mocker.patch("src.auth.dependencies.get_refresh_token", return_value=mock_refresh_token)
 
@@ -68,7 +68,7 @@ class TestGetClient:
         )
         assert client == mock_client
 
-    def test_get_authenticated_client_missing_key(mocker):
+    def test_get_authenticated_client_missing_key(mocker) -> None:
         mocker.patch.object(Config.SUPABASE, "KEY", None)
         mocker.patch.object(Config.SUPABASE, "URL", "http://mock_url")
 
@@ -78,7 +78,7 @@ class TestGetClient:
         ):
             get_authenticated_client()
 
-    def test_get_authenticated_client_missing_url(mocker):
+    def test_get_authenticated_client_missing_url(mocker) -> None:
         mocker.patch.object(Config.SUPABASE, "KEY", "mock_key")
         mocker.patch.object(Config.SUPABASE, "URL", None)
 
@@ -88,7 +88,7 @@ class TestGetClient:
         ):
             get_authenticated_client()
 
-    def test_get_unauthenticated_client_success(mock_config, mocker):
+    def test_get_unauthenticated_client_success(mock_config, mocker) -> None:
         mock_create_client = mocker.patch("supabase.create_client", autospec=True)
         mock_client = Mock()
         mock_create_client.return_value = mock_client
@@ -101,7 +101,7 @@ class TestGetClient:
         )
         assert client == mock_client
 
-    def test_get_unauthenticated_client_missing_key(mocker):
+    def test_get_unauthenticated_client_missing_key(mocker) -> None:
         mocker.patch.object(Config.SUPABASE, "KEY", None)
         mocker.patch.object(Config.SUPABASE, "URL", "http://mock_url")
 
@@ -111,7 +111,7 @@ class TestGetClient:
         ):
             get_unauthenticated_client()
 
-    def test_get_unauthenticated_client_missing_url(mocker):
+    def test_get_unauthenticated_client_missing_url(mocker) -> None:
         mocker.patch.object(Config.SUPABASE, "KEY", "mock_key")
         mocker.patch.object(Config.SUPABASE, "URL", None)
 
