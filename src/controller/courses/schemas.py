@@ -8,8 +8,8 @@ from src.db.models.courses import Course
 class CourseRequest(PydanticBaseModel):
     available_course_id: UuidStr = Field(..., description="Available course ID")
     user_id: UuidStr = Field(..., description="User ID")
-    grade: NonNegativeFloat = Field(..., description="Grade")
-    passed: bool = Field(..., description="Passed")
+    grade: NonNegativeFloat = Field(None, description="Grade")
+    passed: bool = Field(None, description="Passed")
 
 
 class CourseResponse(PydanticBaseModel):

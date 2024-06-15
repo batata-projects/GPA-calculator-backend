@@ -11,8 +11,8 @@ class UserRequest(PydanticBaseModel):
     username: UsernameStr = Field(..., description="Username")
     first_name: str = Field(..., description="First name")
     last_name: str = Field(..., description="Last name")
-    credits: NonNegativeInt = Field(..., description="Credits")
-    grade: NonNegativeFloat = Field(..., description="Grade")
+    credits: NonNegativeInt = Field(None, description="Credits")
+    grade: NonNegativeFloat = Field(None, description="Grade")
 
 
 class UserResponse(PydanticBaseModel):
