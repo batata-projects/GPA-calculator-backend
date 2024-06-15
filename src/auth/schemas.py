@@ -4,6 +4,7 @@ from pydantic import BaseModel, EmailStr, Field, field_validator
 
 from src.common.utils.types.PasswordStr import PasswordStr
 from src.common.utils.types.UsernameStr import UsernameStr
+from src.common.utils.validators.EmailValidator import validate_email_domain
 
 
 class RegisterRequest(BaseModel):
@@ -25,14 +26,8 @@ class RegisterRequest(BaseModel):
         return v
 
     @field_validator("email")
-    def validate_email_domain(cls, v: EmailStr) -> EmailStr:
-        try:
-            domain = v.split("@")[1]
-            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-                raise ValueError
-        except ValueError:
-            raise ValueError(f"{v} is an invalid email")
-        return v
+    def email_validator(cls, v: EmailStr) -> EmailStr:
+        return validate_email_domain(v)
 
     def auth_model_dump(
         self,
@@ -60,14 +55,8 @@ class LoginRequest(BaseModel):
     )
 
     @field_validator("email")
-    def validate_email_domain(cls, v: EmailStr) -> EmailStr:
-        try:
-            domain = v.split("@")[1]
-            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-                raise ValueError
-        except ValueError:
-            raise ValueError(f"{v} is an invalid email")
-        return v
+    def email_validator(cls, v: EmailStr) -> EmailStr:
+        return validate_email_domain(v)
 
     def auth_model_dump(self) -> dict[str, str]:
         return {

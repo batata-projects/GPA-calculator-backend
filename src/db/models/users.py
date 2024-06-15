@@ -6,6 +6,7 @@ from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt, field_validator
 from src.common.utils.models.BaseModel import BaseModel
 from src.common.utils.types.UsernameStr import UsernameStr
 from src.common.utils.types.UuidStr import UuidStr
+from src.common.utils.validators.EmailValidator import validate_email_domain
 
 
 class User(BaseModel):
@@ -35,11 +36,5 @@ class User(BaseModel):
         )
 
     @field_validator("email")
-    def validate_email_domain(cls, v: str) -> str:
-        try:
-            domain = v.split("@")[1]
-            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-                raise ValueError
-        except ValueError:
-            raise ValueError(f"{v} is an invalid email")
-        return v
+    def email_validator(cls, v: str) -> str:
+        return validate_email_domain(v)
