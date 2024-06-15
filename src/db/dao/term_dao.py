@@ -23,17 +23,6 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def get_term_by_name(self, name: TermStr) -> Optional[Term]:
-        data = (
-            self.client.table(SupabaseTables.TERMS)
-            .select("*")
-            .eq("name", name)
-            .execute()
-        )
-        if not data.data:
-            return None
-        return Term.model_validate(data.data[0])
-
     def create_term(
         self, term_data: dict[str, Union[UuidStr, TermStr]]
     ) -> Optional[Term]:
@@ -65,8 +54,17 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def get_all_terms(self) -> list[Term]:
-        data = self.client.table(SupabaseTables.TERMS).select("*").execute()
+    def get_terms_by_query(
+        self,
+        id: UuidStr,
+        name: TermStr,
+    ) -> list[Term]:
+        queries = self.client.table(SupabaseTables.TERMS).select("*")
+        if id:
+            queries = queries.eq("id", id)
+        if name:
+            queries = queries.eq("name", name)
+        data = queries.execute()
         if not data.data:
             return []
         return [Term.model_validate(term) for term in data.data]

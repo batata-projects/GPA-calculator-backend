@@ -96,8 +96,32 @@ class UserDAO:
             return None
         return User.model_validate(data.data[0])
 
-    def get_all_users(self) -> list[User]:
-        data = self.client.table(SupabaseTables.USERS).select("*").execute()
+    def get_users_by_query(
+        self,
+        id: Optional[UuidStr],
+        username: Optional[UsernameStr],
+        email: Optional[EmailStr],
+        first_name: Optional[str],
+        last_name: Optional[str],
+        credits: Optional[NonNegativeInt],
+        grade: Optional[NonNegativeFloat],
+    ) -> list[User]:
+        queries = self.client.table(SupabaseTables.USERS).select("*")
+        if id:
+            queries = queries.eq("id", id)
+        if username:
+            queries = queries.eq("username", username)
+        if email:
+            queries = queries.eq("email", email)
+        if first_name:
+            queries = queries.eq("first_name", first_name)
+        if last_name:
+            queries = queries.eq("last_name", last_name)
+        if credits:
+            queries = queries.eq("credits", credits)
+        if grade:
+            queries = queries.eq("grade", grade)
+        data = queries.execute()
         if not data.data:
             return []
         return [User.model_validate(user) for user in data.data]
