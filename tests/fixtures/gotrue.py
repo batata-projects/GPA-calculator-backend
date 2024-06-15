@@ -2,8 +2,8 @@ import pytest
 from gotrue.types import Session as GoTrueSession  # type: ignore
 from gotrue.types import User as GoTrueUser
 
-from src.common.responses import Session
-from src.db.models.users import User
+from src.common.session import Session
+from src.db.models import User
 
 
 @pytest.fixture

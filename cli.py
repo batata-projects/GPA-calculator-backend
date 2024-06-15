@@ -153,14 +153,16 @@ def help() -> None:
     print("Usage: python cli.py [command]")
     print("Commands:")
     commands: list[dict[str, str]] = []
-    for name, func in globals().items():
-        if callable(func):
-            if type(func.__doc__) != str:
+    for name, obj in globals().items():
+        if obj.__class__.__name__ == "type":
+            continue
+        if callable(obj):
+            if type(obj.__doc__) != str:
                 continue
             commands.append(
                 {
-                    "command": func.__doc__.split("\n")[1].split(":")[1].strip(),
-                    "description": "\n".join(func.__doc__.split("\n")[2:-1]),
+                    "command": obj.__doc__.split("\n")[1].split(":")[1].strip(),
+                    "description": "\n".join(obj.__doc__.split("\n")[2:-1]),
                 }
             )
     max_command_length = max([len(command["command"]) for command in commands])

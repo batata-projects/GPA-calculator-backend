@@ -1,8 +1,8 @@
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import Field
 
-from src.common.utils.types.TermStr import TermStr
-from src.db.models.terms import Term
+from src.common.utils.types import TermStr
+from src.db.models import Term
 
 
 class TermRequest(PydanticBaseModel):

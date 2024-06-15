@@ -4,10 +4,8 @@ from unittest.mock import Mock
 import pytest
 from pydantic import NonNegativeInt
 
-from src.common.utils.types.CourseCodeStr import CourseCodeStr
-from src.common.utils.types.CourseNameStr import CourseNameStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.available_courses import AvailableCourse
+from src.common.utils.types import CourseCodeStr, CourseNameStr, UuidStr
+from src.db.models import AvailableCourse
 
 
 class TestAvailableCourse:

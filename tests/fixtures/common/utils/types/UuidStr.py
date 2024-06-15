@@ -1,6 +1,6 @@
 import pytest
 
-from src.common.utils.types.UuidStr import UuidStr
+from src.common.utils.types import UuidStr
 
 
 @pytest.fixture

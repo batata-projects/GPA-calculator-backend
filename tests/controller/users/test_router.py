@@ -3,18 +3,16 @@ from unittest.mock import Mock
 import pytest
 from fastapi import status
 
+from src.controller.users import UserRequest, UserResponse
 from src.controller.users.router import (
     create_user,
     delete_user,
-    get_all_users,
-    get_user_by_email,
     get_user_by_id,
-    get_user_by_username,
+    get_users_by_query,
     update_user,
 )
-from src.controller.users.schemas import UserResponse
-from src.db.dao.user_dao import UserDAO
-from src.db.models.users import User
+from src.db.dao import UserDAO
+from src.db.models import User
 
 
 @pytest.mark.asyncio
@@ -53,106 +51,34 @@ class TestGetUserById:
 
 
 @pytest.mark.asyncio
-class TestGetUserByEmail:
-    async def test_get_user_by_email_successful(self, user1: User) -> None:
+class TestGetUsersByQuery:
+    async def test_get_users_by_query_successful(
+        self, user1: User, user2: User
+    ) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_email.return_value = user1
+        user_dao.get_users_by_query.return_value = [user1, user2]
 
-        assert user1.email is not None
-
-        response = await get_user_by_email(email=user1.email, user_dao=user_dao)
-
-        assert response.status == status.HTTP_200_OK
-        assert response.message == "User found"
-        assert response.data == UserResponse(users=[user1])
-
-    async def test_get_user_by_email_not_found(self) -> None:
-        user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_email.return_value = None
-
-        response = await get_user_by_email(email="eg@mail.aub.edu", user_dao=user_dao)
-
-        assert response.status == status.HTTP_404_NOT_FOUND
-        assert response.message == "User not found"
-        assert response.data is None
-
-    async def test_get_user_by_email_error(self) -> None:
-        user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_email.side_effect = Exception("Error")
-
-        response = await get_user_by_email(
-            email="rmf40@mail.aub.edu", user_dao=user_dao
-        )
-
-        assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert response.message == "Error"
-        assert response.data is None
-
-
-@pytest.mark.asyncio
-class TestGetUserByUsername:
-    async def test_get_user_by_username_successful(self, user1: User) -> None:
-        user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_username.return_value = user1
-
-        assert user1.username is not None
-
-        response = await get_user_by_username(
-            username=user1.username, user_dao=user_dao
-        )
-
-        assert response.status == status.HTTP_200_OK
-        assert response.message == "User found"
-        assert response.data == UserResponse(users=[user1])
-
-    async def test_get_user_by_username_not_found(self) -> None:
-        user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_username.return_value = None
-
-        response = await get_user_by_username(username="rmf40", user_dao=user_dao)
-
-        assert response.status == status.HTTP_404_NOT_FOUND
-        assert response.message == "User not found"
-        assert response.data is None
-
-    async def test_get_user_by_username_error(self) -> None:
-        user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_username.side_effect = Exception("Error")
-
-        response = await get_user_by_username(username="rmf40", user_dao=user_dao)
-
-        assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert response.message == "Error"
-        assert response.data is None
-
-
-@pytest.mark.asyncio
-class TestGetAllUsers:
-    async def test_get_all_users_successful(self, user1: User, user2: User) -> None:
-        user_dao = Mock(spec=UserDAO)
-        user_dao.get_all_users.return_value = [user1, user2]
-
-        response = await get_all_users(user_dao=user_dao)
+        response = await get_users_by_query(user_dao=user_dao)
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Users found"
         assert response.data == UserResponse(users=[user1, user2])
 
-    async def test_get_all_users_not_found(self) -> None:
+    async def test_get_users_by_query_not_found(self) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_all_users.return_value = []
+        user_dao.get_users_by_query.return_value = []
 
-        response = await get_all_users(user_dao=user_dao)
+        response = await get_users_by_query(user_dao=user_dao)
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Users not found"
         assert response.data is None
 
-    async def test_get_all_users_error(self) -> None:
+    async def test_get_users_by_query_error(self) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_all_users.side_effect = Exception("Error")
+        user_dao.get_users_by_query.side_effect = Exception("Error")
 
-        response = await get_all_users(user_dao=user_dao)
+        response = await get_users_by_query(user_dao=user_dao)
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
@@ -161,58 +87,33 @@ class TestGetAllUsers:
 
 @pytest.mark.asyncio
 class TestCreateUser:
-    async def test_create_user_successful(self, user1: User) -> None:
+    async def test_create_user_successful(
+        self, user1: User, user_request: UserRequest
+    ) -> None:
         user_dao = Mock(spec=UserDAO)
         user_dao.create_user.return_value = user1
 
-        response = await create_user(
-            username=user1.username,
-            email=user1.email,
-            first_name=user1.first_name,
-            last_name=user1.last_name,
-            credits=user1.credits,
-            counted_credits=user1.counted_credits,
-            grade=user1.grade,
-            user_dao=user_dao,
-        )
+        response = await create_user(user_request, user_dao)
 
         assert response.status == status.HTTP_201_CREATED
         assert response.message == "User created"
         assert response.data == UserResponse(users=[user1])
 
-    async def test_create_user_duplicate(self, user1: User, user2: User) -> None:
+    async def test_create_user_fail(self, user_request: UserRequest) -> None:
         user_dao = Mock(spec=UserDAO)
         user_dao.create_user.return_value = None
 
-        response = await create_user(
-            username=user1.username,
-            email=user1.email,
-            first_name=user1.first_name,
-            last_name=user1.last_name,
-            credits=user1.credits,
-            counted_credits=user1.counted_credits,
-            grade=user1.grade,
-            user_dao=user_dao,
-        )
+        response = await create_user(user_request, user_dao)
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "User not created"
         assert response.data is None
 
-    async def test_create_user_error(self, user1: User) -> None:
+    async def test_create_user_error(self, user_request: UserRequest) -> None:
         user_dao = Mock(spec=UserDAO)
         user_dao.create_user.side_effect = Exception("Error")
 
-        response = await create_user(
-            username=user1.username,
-            email=user1.email,
-            first_name=user1.first_name,
-            last_name=user1.last_name,
-            credits=user1.credits,
-            counted_credits=user1.counted_credits,
-            grade=user1.grade,
-            user_dao=user_dao,
-        )
+        response = await create_user(user_request, user_dao)
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
         assert response.data is None

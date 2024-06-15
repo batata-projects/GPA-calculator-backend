@@ -1,10 +1,7 @@
 import pytest
 
-from src.common.utils.models.BaseModel import BaseModel
-from src.db.models.available_courses import AvailableCourse
-from src.db.models.courses import Course
-from src.db.models.terms import Term
-from src.db.models.users import User
+from src.common.utils.models import BaseModel
+from src.db.models import AvailableCourse, Course, Term, User
 
 
 class TestBaseModel:

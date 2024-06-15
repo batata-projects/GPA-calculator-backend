@@ -1,7 +1,7 @@
 import pytest
 
-from src.controller.courses.schemas import CourseResponse
-from src.db.models.courses import Course
+from src.controller.courses import CourseResponse
+from src.db.models import Course
 
 
 class TestCourseResponse:

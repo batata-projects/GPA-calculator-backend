@@ -1,6 +1,6 @@
 import pytest
 
-from src.common.responses import Session
+from src.common.session import Session
 
 
 @pytest.fixture

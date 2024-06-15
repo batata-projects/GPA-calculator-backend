@@ -3,8 +3,8 @@ from unittest.mock import Mock
 import pytest
 from pydantic import NonNegativeFloat
 
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.courses import Course
+from src.common.utils.types import UuidStr
+from src.db.models import Course
 
 
 class TestCourse:

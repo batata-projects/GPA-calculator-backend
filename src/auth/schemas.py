@@ -2,9 +2,8 @@ from typing import Optional, Union
 
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from src.common.utils.types.PasswordStr import PasswordStr
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.common.utils.validators.EmailValidator import validate_email_domain
+from src.common.utils.types import PasswordStr, UsernameStr
+from src.common.utils.validators import validate_email, validate_name
 
 
 class RegisterRequest(BaseModel):
@@ -21,13 +20,11 @@ class RegisterRequest(BaseModel):
 
     @field_validator("first_name", "last_name")
     def name_validator(cls, v: str) -> str:
-        if v:
-            return v.title()
-        return v
+        return validate_name(v)
 
     @field_validator("email")
     def email_validator(cls, v: EmailStr) -> EmailStr:
-        return validate_email_domain(v)
+        return validate_email(v)
 
     def auth_model_dump(
         self,
@@ -56,7 +53,7 @@ class LoginRequest(BaseModel):
 
     @field_validator("email")
     def email_validator(cls, v: EmailStr) -> EmailStr:
-        return validate_email_domain(v)
+        return validate_email(v)
 
     def auth_model_dump(self) -> dict[str, str]:
         return {

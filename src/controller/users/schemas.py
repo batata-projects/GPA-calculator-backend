@@ -1,9 +1,11 @@
+from typing import Optional
+
 from gotrue.types import User as GoTrueUser  # type: ignore
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import EmailStr, Field, NonNegativeFloat, NonNegativeInt
 
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.db.models.users import User
+from src.common.utils.types import UsernameStr
+from src.db.models import User
 
 
 class UserRequest(PydanticBaseModel):
@@ -11,8 +13,8 @@ class UserRequest(PydanticBaseModel):
     username: UsernameStr = Field(..., description="Username")
     first_name: str = Field(..., description="First name")
     last_name: str = Field(..., description="Last name")
-    credits: NonNegativeInt = Field(None, description="Credits")
-    grade: NonNegativeFloat = Field(None, description="Grade")
+    credits: Optional[NonNegativeInt] = Field(None, description="Credits")
+    grade: Optional[NonNegativeFloat] = Field(None, description="Grade")
 
 
 class UserResponse(PydanticBaseModel):

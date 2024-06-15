@@ -47,7 +47,7 @@ python cli.py clean
 Generate empty test files in the `tests` and `tests/fixtures` directories for all the files in the `src` directory.
 
 ```bash
-python cli.py generate-empty-tests
+python cli.py generate-test-files
 ```
 
 ### Import fixtures to `conftest.py`

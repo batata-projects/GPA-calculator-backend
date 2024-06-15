@@ -3,8 +3,8 @@ from unittest.mock import Mock
 import pytest
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.db.models.users import User
+from src.common.utils.types import UsernameStr
+from src.db.models import User
 
 
 class TestUser:
@@ -124,7 +124,7 @@ class TestUser:
     @pytest.mark.parametrize(
         "email, username, first_name, last_name, credits, counted_credits, grade",
         [
-            ("jaadshaker@gmail.com", "jss", "Jad", "Shaker", 0, 0, 0.0),
+            ("jaadshaker@hotmail.com", "jss", "Jad", "Shaker", 0, 0, 0.0),
             ("rmf40@mail.aub.edu", "Invalid Username", "Rayan", "Fakhreddine", 0, 0, 0),
             ("rmf40@mail.aub.edu", "Rio", 123, "Fakhreddine", 0, 0, 0.0),
             ("rmf40@mail.aub.edu", "Rio", "Rayan", 123, 0, 0, 0.0),

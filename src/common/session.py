@@ -1,17 +1,12 @@
-from typing import Generic, Optional, TypeVar
-
 from gotrue.types import Session as GoTrueSession  # type: ignore
 from pydantic import BaseModel as PydanticBaseModel
-
-from src.db.models.users import User
-
-T = TypeVar("T")
+from pydantic import NonNegativeInt
 
 
 class Session(PydanticBaseModel):
     access_token: str
     refresh_token: str
-    expires_in: int
+    expires_in: NonNegativeInt
 
     @classmethod
     def validate_supabase_session(cls, session: GoTrueSession) -> "Session":
@@ -20,14 +15,3 @@ class Session(PydanticBaseModel):
             refresh_token=session.refresh_token,
             expires_in=session.expires_in,
         )
-
-
-class APIResponse(PydanticBaseModel, Generic[T]):
-    status: int
-    message: str
-    data: Optional[T] = None
-
-
-class AuthResponse(PydanticBaseModel):
-    user: Optional[User] = None
-    session: Optional[Session] = None

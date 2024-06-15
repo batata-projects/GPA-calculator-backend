@@ -1,6 +1,3 @@
-# implement test method for login_route and register_route
-
-# Solution
 from unittest.mock import Mock
 
 import pytest
@@ -12,12 +9,11 @@ from pydantic import EmailStr
 
 from src.auth.auth import login, register
 from src.auth.schemas import LoginRequest, RegisterRequest
-from src.common.responses import Session
-from src.common.utils.types.PasswordStr import PasswordStr
-from src.db.models.users import User
+from src.common.session import Session
+from src.common.utils.types import PasswordStr
+from src.db.models import User
 
 
-# test register route and login route
 @pytest.mark.asyncio
 class TestRegister:
     async def test_register_successful(

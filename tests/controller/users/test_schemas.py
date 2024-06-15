@@ -1,7 +1,7 @@
 import pytest
 
-from src.controller.users.schemas import UserResponse
-from src.db.models.users import User
+from src.controller.users import UserResponse
+from src.db.models import User
 
 
 class TestUserResponse:

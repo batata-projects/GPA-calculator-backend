@@ -2,9 +2,8 @@ from typing import Optional, Union
 
 from supabase import Client
 
-from src.common.utils.types.TermStr import TermStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.terms import Term
+from src.common.utils.types import TermStr, UuidStr
+from src.db.models import Term
 from src.db.tables import SupabaseTables
 
 
@@ -56,8 +55,8 @@ class TermDAO:
 
     def get_terms_by_query(
         self,
-        id: UuidStr,
-        name: TermStr,
+        id: Optional[UuidStr] = None,
+        name: Optional[TermStr] = None,
     ) -> list[Term]:
         queries = self.client.table(SupabaseTables.TERMS).select("*")
         if id:

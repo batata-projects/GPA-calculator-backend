@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.db.models.terms import Term
+from src.db.models import Term
 
 
 @pytest.fixture

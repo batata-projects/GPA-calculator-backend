@@ -3,19 +3,16 @@ from unittest.mock import Mock
 import pytest
 from fastapi import status
 
+from src.controller.courses import CourseRequest, CourseResponse
 from src.controller.courses.router import (
     create_course,
     delete_course,
-    get_all_courses,
     get_course_by_id,
-    get_courses_by_available_courses_id,
-    get_courses_by_grade,
-    get_courses_by_user_id,
+    get_courses_by_query,
     update_course,
 )
-from src.controller.courses.schemas import CourseResponse
-from src.db.dao.course_dao import CourseDAO
-from src.db.models.courses import Course
+from src.db.dao import CourseDAO
+from src.db.models import Course
 
 
 @pytest.mark.asyncio
@@ -54,155 +51,32 @@ class TestGetCourseById:
 
 
 @pytest.mark.asyncio
-class TestGetCoursesByUserId:
-    async def test_get_courses_by_user_id_successful(self, course1: Course) -> None:
+class TestGetCoursesByQuery:
+    async def test_get_courses_by_query_successful(self, course1: Course) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_user_id.return_value = [course1]
+        course_dao.get_courses_by_query.return_value = [course1]
 
-        assert course1.user_id is not None
-
-        response = await get_courses_by_user_id(
-            user_id=course1.user_id, course_dao=course_dao
-        )
+        response = await get_courses_by_query(course_dao=course_dao)
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Courses found"
         assert response.data == CourseResponse(courses=[course1])
 
-    async def test_get_courses_by_user_id_not_found(self, uuid4: Mock) -> None:
+    async def test_get_courses_by_query_not_found(self) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_user_id.return_value = []
+        course_dao.get_courses_by_query.return_value = []
 
-        response = await get_courses_by_user_id(
-            user_id=str(uuid4()), course_dao=course_dao
-        )
+        response = await get_courses_by_query(course_dao=course_dao)
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Courses not found"
         assert response.data is None
 
-    async def test_get_courses_by_user_id_error(self, uuid4: Mock) -> None:
+    async def test_get_courses_by_query_error(self) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_user_id.side_effect = Exception("Error")
+        course_dao.get_courses_by_query.side_effect = Exception("Error")
 
-        response = await get_courses_by_user_id(
-            user_id=str(uuid4()), course_dao=course_dao
-        )
-
-        assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert response.message == "Error"
-        assert response.data is None
-
-
-@pytest.mark.asyncio
-class TestGetCoursesByAvailableCoursesId:
-    async def test_get_courses_by_available_courses_id_successful(
-        self, course1: Course
-    ) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_available_courses_id.return_value = [course1]
-
-        assert course1.available_course_id is not None
-
-        response = await get_courses_by_available_courses_id(
-            available_course_id=course1.available_course_id, course_dao=course_dao
-        )
-
-        assert response.status == status.HTTP_200_OK
-        assert response.message == "Courses found"
-        assert response.data == CourseResponse(courses=[course1])
-
-    async def test_get_courses_by_available_courses_id_not_found(
-        self, uuid4: Mock
-    ) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_available_courses_id.return_value = []
-
-        response = await get_courses_by_available_courses_id(
-            available_course_id=str(uuid4()), course_dao=course_dao
-        )
-
-        assert response.status == status.HTTP_404_NOT_FOUND
-        assert response.message == "Courses not found"
-        assert response.data is None
-
-    async def test_get_courses_by_available_courses_id_error(self, uuid4: Mock) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_available_courses_id.side_effect = Exception("Error")
-
-        response = await get_courses_by_available_courses_id(
-            available_course_id=str(uuid4()), course_dao=course_dao
-        )
-
-        assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert response.message == "Error"
-        assert response.data is None
-
-
-@pytest.mark.asyncio
-class TestGetCoursesByGrade:
-    async def test_get_courses_by_grade_successful(self, course1: Course) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_grade.return_value = [course1]
-
-        assert course1.grade is not None
-
-        response = await get_courses_by_grade(
-            grade=course1.grade, course_dao=course_dao
-        )
-
-        assert response.status == status.HTTP_200_OK
-        assert response.message == "Courses found"
-        assert response.data == CourseResponse(courses=[course1])
-
-    async def test_get_courses_by_grade_not_found(self) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_grade.return_value = []
-
-        response = await get_courses_by_grade(grade=12, course_dao=course_dao)
-
-        assert response.status == status.HTTP_404_NOT_FOUND
-        assert response.message == "Courses not found"
-        assert response.data is None
-
-    async def test_get_courses_by_grade_error(self) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_grade.side_effect = Exception("Error")
-
-        response = await get_courses_by_grade(grade=12, course_dao=course_dao)
-
-        assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
-        assert response.message == "Error"
-        assert response.data is None
-
-
-@pytest.mark.asyncio
-class TestGetAllCourses:
-    async def test_get_all_courses_successful(self, course1: Course) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_all_courses.return_value = [course1]
-
-        response = await get_all_courses(course_dao=course_dao)
-
-        assert response.status == status.HTTP_200_OK
-        assert response.message == "Courses found"
-        assert response.data == CourseResponse(courses=[course1])
-
-    async def test_get_all_courses_not_found(self) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_all_courses.return_value = []
-
-        response = await get_all_courses(course_dao=course_dao)
-
-        assert response.status == status.HTTP_404_NOT_FOUND
-        assert response.message == "Courses not found"
-        assert response.data is None
-
-    async def test_get_all_courses_error(self) -> None:
-        course_dao = Mock(spec=CourseDAO)
-        course_dao.get_all_courses.side_effect = Exception("Error")
-
-        response = await get_all_courses(course_dao=course_dao)
+        response = await get_courses_by_query(course_dao=course_dao)
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
@@ -211,15 +85,14 @@ class TestGetAllCourses:
 
 @pytest.mark.asyncio
 class TestCreateCourse:
-    async def test_create_course_successful(self, course1: Course) -> None:
+    async def test_create_course_successful(
+        self, course_request: CourseRequest, course1: Course
+    ) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.create_course.return_value = course1
 
         response = await create_course(
-            course1.available_course_id,
-            course1.user_id,
-            course1.grade,
-            course1.passed,
+            course_request,
             course_dao,
         )
 
@@ -227,15 +100,12 @@ class TestCreateCourse:
         assert response.message == "Course created"
         assert response.data == CourseResponse(courses=[course1])
 
-    async def test_create_course_error(self, course1: Course) -> None:
+    async def test_create_course_error(self, course_request: CourseRequest) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.create_course.side_effect = Exception("Error")
 
         response = await create_course(
-            course1.available_course_id,
-            course1.user_id,
-            course1.grade,
-            course1.passed,
+            course_request,
             course_dao,
         )
 

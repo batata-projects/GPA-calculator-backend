@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.db.models.available_courses import AvailableCourse
+from src.db.models import AvailableCourse
 
 
 @pytest.fixture

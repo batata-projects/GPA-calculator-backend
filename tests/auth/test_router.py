@@ -10,7 +10,6 @@ from src.auth.schemas import LoginRequest, RegisterRequest
 from src.common.responses import AuthResponse
 
 
-# test register route and login route
 @pytest.mark.asyncio
 class TestRegisterRoute:
     async def test_register_route_successful(

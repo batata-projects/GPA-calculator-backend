@@ -3,10 +3,9 @@ from typing import Optional
 from gotrue.types import User as GoTrueUser  # type: ignore
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt, field_validator
 
-from src.common.utils.models.BaseModel import BaseModel
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.common.utils.validators.EmailValidator import validate_email_domain
+from src.common.utils.models import BaseModel
+from src.common.utils.types import UsernameStr, UuidStr
+from src.common.utils.validators.EmailValidator import validate_email
 
 
 class User(BaseModel):
@@ -37,4 +36,4 @@ class User(BaseModel):
 
     @field_validator("email")
     def email_validator(cls, v: str) -> str:
-        return validate_email_domain(v)
+        return validate_email(v)

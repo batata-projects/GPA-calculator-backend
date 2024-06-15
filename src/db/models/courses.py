@@ -2,8 +2,8 @@ from typing import Optional
 
 from pydantic import NonNegativeFloat
 
-from src.common.utils.models.BaseModel import BaseModel
-from src.common.utils.types.UuidStr import UuidStr
+from src.common.utils.models import BaseModel
+from src.common.utils.types import UuidStr
 
 
 class Course(BaseModel):

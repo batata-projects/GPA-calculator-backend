@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.db.models.courses import Course
+from src.db.models import Course
 
 
 @pytest.fixture

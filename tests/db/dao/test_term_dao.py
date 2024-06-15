@@ -3,8 +3,8 @@ from unittest.mock import Mock
 from postgrest.base_request_builder import APIResponse
 from supabase import Client
 
-from src.db.dao.term_dao import TermDAO
-from src.db.models.terms import Term
+from src.db.dao import TermDAO
+from src.db.models import Term
 from src.db.tables import SupabaseTables
 
 
@@ -23,33 +23,6 @@ class TestTermDAO:
         result = term_dao.get_term_by_id(term.id)
 
         assert result == term
-
-    def test_get_term_by_name_successful(self, terms: list[Term]) -> None:
-        term = terms[0]
-        mock_client = Mock(spec=Client)
-        term_dao = TermDAO(mock_client)
-
-        mock_client.table(SupabaseTables.TERMS).select("*").eq(
-            "name", term.name
-        ).execute.return_value = APIResponse(data=[term.model_dump()], count=None)
-
-        assert term.name is not None
-
-        result = term_dao.get_term_by_name(term.name)
-
-        assert result == term
-
-    def test_get_all_terms_successful(self, terms: list[Term]) -> None:
-        mock_client = Mock(spec=Client)
-        term_dao = TermDAO(mock_client)
-
-        mock_client.table(SupabaseTables.TERMS).select("*").execute.return_value = (
-            APIResponse(data=[term.model_dump() for term in terms], count=len(terms))
-        )
-
-        result = term_dao.get_all_terms()
-
-        assert result == terms
 
     def test_create_term_successful(self, terms: list[Term]) -> None:
         term = terms[0]
@@ -93,3 +66,18 @@ class TestTermDAO:
         result = term_dao.delete_term(term.id)
 
         assert result == term
+
+    def test_get_term_by_query_successful(self, terms: list[Term]) -> None:
+        term = terms[0]
+        mock_client = Mock(spec=Client)
+        term_dao = TermDAO(mock_client)
+
+        mock_client.table(SupabaseTables.TERMS).select("*").eq("id", term.id).eq(
+            "name", term.name
+        ).execute.return_value = APIResponse(data=[term.model_dump()], count=None)
+
+        assert term.id is not None
+
+        result = term_dao.get_terms_by_query(term.id, term.name)
+
+        assert result == [term]

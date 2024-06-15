@@ -1,6 +1,6 @@
 import pytest
 
-from src.common.utils.types.UsernameStr import UsernameStr
+from src.common.utils.types import UsernameStr
 
 
 @pytest.fixture

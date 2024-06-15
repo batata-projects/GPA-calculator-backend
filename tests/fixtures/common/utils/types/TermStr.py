@@ -1,6 +1,6 @@
 import pytest
 
-from src.common.utils.types.TermStr import TermStr
+from src.common.utils.types import TermStr
 
 
 @pytest.fixture

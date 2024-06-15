@@ -1,7 +1,4 @@
-from src.db.dao.available_course_dao import AvailableCourseDAO
-from src.db.dao.course_dao import CourseDAO
-from src.db.dao.term_dao import TermDAO
-from src.db.dao.user_dao import UserDAO
+from src.db.dao import AvailableCourseDAO, CourseDAO, TermDAO, UserDAO
 from src.db.dependencies import (
     get_available_course_dao,
     get_course_dao,

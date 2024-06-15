@@ -3,9 +3,8 @@ from typing import Optional, Union
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 from supabase import Client
 
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.users import User
+from src.common.utils.types import UsernameStr, UuidStr
+from src.db.models import User
 from src.db.tables import SupabaseTables
 
 
@@ -98,13 +97,13 @@ class UserDAO:
 
     def get_users_by_query(
         self,
-        id: Optional[UuidStr],
-        username: Optional[UsernameStr],
-        email: Optional[EmailStr],
-        first_name: Optional[str],
-        last_name: Optional[str],
-        credits: Optional[NonNegativeInt],
-        grade: Optional[NonNegativeFloat],
+        id: Optional[UuidStr] = None,
+        username: Optional[UsernameStr] = None,
+        email: Optional[EmailStr] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        credits: Optional[NonNegativeInt] = None,
+        grade: Optional[NonNegativeFloat] = None,
     ) -> list[User]:
         queries = self.client.table(SupabaseTables.USERS).select("*")
         if id:

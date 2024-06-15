@@ -3,10 +3,8 @@ from typing import Optional, Union
 from pydantic import NonNegativeInt
 from supabase import Client
 
-from src.common.utils.types.CourseCodeStr import CourseCodeStr
-from src.common.utils.types.CourseNameStr import CourseNameStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.available_courses import AvailableCourse
+from src.common.utils.types import CourseCodeStr, CourseNameStr, UuidStr
+from src.db.models import AvailableCourse
 from src.db.tables import SupabaseTables
 
 
@@ -77,19 +75,19 @@ class AvailableCourseDAO:
 
     def get_available_courses_by_query(
         self,
-        term_id: Optional[UuidStr],
-        course_name: Optional[CourseNameStr],
-        course_code: Optional[CourseCodeStr],
-        credit: Optional[NonNegativeInt],
-        graded: Optional[bool],
+        term_id: Optional[UuidStr] = None,
+        name: Optional[CourseNameStr] = None,
+        code: Optional[CourseCodeStr] = None,
+        credit: Optional[NonNegativeInt] = None,
+        graded: Optional[bool] = None,
     ) -> list[AvailableCourse]:
         queries = self.client.table(SupabaseTables.AVAILABLE_COURSES).select("*")
         if term_id:
             queries = queries.eq("term_id", term_id)
-        if course_name:
-            queries = queries.eq("name", course_name)
-        if course_code:
-            queries = queries.eq("code", course_code)
+        if name:
+            queries = queries.eq("name", name)
+        if code:
+            queries = queries.eq("code", code)
         if credit:
             queries = queries.eq("credits", credit)
         if graded:
