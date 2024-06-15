@@ -1,5 +1,6 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from fastapi.security.api_key import APIKeyHeader
 from jwt import InvalidTokenError, decode
 
 from src.config import Config
@@ -18,7 +19,7 @@ def decode_jwt(token: str) -> dict[str, str]:
 
 
 async def get_access_token(
-    bearer: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+    bearer: HTTPAuthorizationCredentials = Depends(HTTPBearer(scheme_name="Bearer")),
 ) -> str:
     try:
         decode_jwt(bearer.credentials)
@@ -30,12 +31,6 @@ async def get_access_token(
 
 
 async def get_refresh_token(
-    bearer: HTTPAuthorizationCredentials = Depends(HTTPBearer()),
+    token: str = Depends(APIKeyHeader(name="refresh-token")),
 ) -> str:
-    try:
-        decode_jwt(bearer.credentials)
-    except InvalidTokenError as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Invalid token: {e}"
-        )
-    return bearer.credentials
+    return token

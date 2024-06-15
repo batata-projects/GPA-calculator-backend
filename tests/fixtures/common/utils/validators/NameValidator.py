@@ -7,5 +7,5 @@ def valid_name() -> str:
 
 
 @pytest.fixture
-def invalid_name() -> None:
+def invalid_name() -> int:
     return 123
