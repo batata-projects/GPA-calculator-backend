@@ -12,10 +12,7 @@ from src.controller.available_courses import (
 from src.db.dao import AvailableCourseDAO
 from src.db.dependencies import get_available_course_dao
 
-router = APIRouter(
-    prefix="/available-courses",
-    tags=["Available Courses"]
-    )
+router = APIRouter(prefix="/available-courses", tags=["Available Courses"])
 
 
 @router.get(

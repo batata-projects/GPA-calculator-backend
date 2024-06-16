@@ -6,10 +6,7 @@ from src.common.responses import APIResponse, AuthResponse
 from src.db.dao import UserDAO
 from src.db.dependencies import get_user_dao_unauthenticated
 
-router = APIRouter(
-    prefix="/auth",
-    tags=["Authentication"]
-)
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post(
