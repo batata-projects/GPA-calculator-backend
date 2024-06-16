@@ -121,6 +121,7 @@ def clean_unused_files() -> None:
     """
     command: clean-unused-files
     This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
+    This command also deletes the test files in the `tests` directory that do not have a corresponding file in the `src` directory.
     """
     for dirpath, dirnames, filenames in os.walk("tests"):
         if "__pycache__" in dirpath:
@@ -154,6 +155,7 @@ def clean_unused_files() -> None:
                     continue
                 if not open(file).read().strip():
                     os.remove(file)
+
 
 def pre_stage() -> None:
     """
