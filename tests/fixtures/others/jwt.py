@@ -10,6 +10,11 @@ def valid_signature() -> str:
 
 
 @pytest.fixture
+def invalid_signature() -> str:
+    return "invalid-signature"
+
+
+@pytest.fixture
 def valid_jwt(valid_signature: str) -> str:
     return jwt.encode(
         {

@@ -57,7 +57,12 @@ from .fixtures.db.models.users import (
     users_same_last_name,
 )
 from .fixtures.others.gotrue import gotrue_session, gotrue_user
-from .fixtures.others.jwt import invalid_jwt, valid_jwt, valid_signature
+from .fixtures.others.jwt import (
+    invalid_jwt,
+    invalid_signature,
+    valid_jwt,
+    valid_signature,
+)
 from .fixtures.others.tokens import (
     invalid_access_token,
     invalid_refresh_token,

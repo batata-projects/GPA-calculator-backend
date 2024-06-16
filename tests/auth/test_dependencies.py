@@ -4,13 +4,13 @@ from unittest.mock import Mock, patch
 import pytest
 from fastapi import HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
-from jwt import InvalidSignatureError
+from jwt import ExpiredSignatureError, InvalidSignatureError
 
 from src.auth.dependencies import decode_jwt, get_access_token, get_refresh_token
 
 
+@patch("src.auth.dependencies.Config")
 class TestDecodeJwt:
-    @patch("src.auth.dependencies.Config")
     def test_decode_jwt(
         self, mock_config: Mock, valid_jwt: str, valid_signature: str
     ) -> None:
@@ -22,9 +22,22 @@ class TestDecodeJwt:
         assert int(decoded_data["exp"]) > int(time.time())
         assert int(decoded_data["iat"]) <= int(time.time())
 
-    def test_decode_jwt_invalid(self, invalid_jwt: str) -> None:
-
+    def test_decode_jwt_invalid(
+        self, mock_config: Mock, invalid_signature: str, invalid_jwt: str
+    ) -> None:
+        mock_config.JWT.SECRET = invalid_signature
+        mock_config.JWT.ALGORITHM = "HS256"
+        mock_config.JWT.AUDIENCE = "authenticated"
         with pytest.raises(InvalidSignatureError):
+            decode_jwt(invalid_jwt)
+
+    def test_decode_jwt_expired(
+        self, mock_config: Mock, valid_signature: str, invalid_jwt: str
+    ) -> None:
+        mock_config.JWT.SECRET = valid_signature
+        mock_config.JWT.ALGORITHM = "HS256"
+        mock_config.JWT.AUDIENCE = "authenticated"
+        with pytest.raises(ExpiredSignatureError):
             decode_jwt(invalid_jwt)
 
 
