@@ -4,7 +4,7 @@ from src.common.responses import APIResponse
 
 router = APIRouter(
     prefix="/status",
-    tags=["status"],
+    tags=["Status"],
 )
 
 

@@ -8,7 +8,7 @@ from src.db.dependencies import get_term_dao
 
 router = APIRouter(
     prefix="/terms",
-    tags=["terms"],
+    tags=["Terms"],
 )
 
 
