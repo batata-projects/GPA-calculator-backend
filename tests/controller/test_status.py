@@ -1,4 +1,3 @@
-# test status in tests/controller/test_status.py:
 import pytest
 from fastapi import status
 

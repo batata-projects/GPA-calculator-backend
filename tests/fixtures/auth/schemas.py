@@ -1,7 +1,3 @@
-# create fixtures for auth schemas
-#
-# Path: tests/fixtures/auth/schemas.py
-#
 from typing import Any
 
 import pytest
