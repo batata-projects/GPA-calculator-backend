@@ -149,6 +149,11 @@ def clean_unused_files() -> None:
                 file = file.replace("tests/fixtures", "src")
                 if not os.path.exists(file):
                     os.remove(os.path.join(dirpath, filename))
+                file = os.path.join(dirpath, filename)
+                if file.endswith("__init__.py"):
+                    continue
+                if not open(file).read().strip():
+                    os.remove(file)
 
 def pre_stage() -> None:
     """
