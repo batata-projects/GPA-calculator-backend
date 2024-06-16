@@ -125,16 +125,6 @@ def clean_unused_files() -> None:
     for dirpath, dirnames, filenames in os.walk("tests"):
         if "__pycache__" in dirpath:
             continue
-        for filename in filenames:
-            if filename.endswith(".py"):
-                if filename == "__init__.py":
-                    continue
-                file = os.path.join(dirpath, filename)
-                if not open(file).read().strip():
-                    os.remove(file)
-    for dirpath, dirnames, filenames in os.walk("tests"):
-        if "__pycache__" in dirpath:
-            continue
         if "fixtures" in dirpath:
             continue
         if "conftest.py" in filenames:
