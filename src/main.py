@@ -27,10 +27,10 @@ app.add_middleware(
 )
 
 
+app.include_router(status_router)
 app.include_router(auth_router)
 app.include_router(available_courses_router)
 app.include_router(courses_router)
-app.include_router(status_router)
 app.include_router(terms_router)
 app.include_router(users_router)
 

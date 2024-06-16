@@ -10,7 +10,7 @@ from src.db.dependencies import get_course_dao
 
 router = APIRouter(
     prefix="/courses",
-    tags=["courses"],
+    tags=["Courses"],
 )
 
 

@@ -11,7 +11,7 @@ from src.db.dependencies import get_user_dao
 
 router = APIRouter(
     prefix="/users",
-    tags=["users"],
+    tags=["Users"],
 )
 
 
