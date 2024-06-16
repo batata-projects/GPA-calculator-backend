@@ -43,7 +43,7 @@ class RegisterRequest(PydanticBaseModel):
         }
 
 
-class LoginRequest(BaseModel):
+class LoginRequest(PydanticBaseModel):
     email: EmailStr = Field(
         default="username@mail.aub.edu", description="Email must be an AUB email"
     )
