@@ -1,12 +1,13 @@
 from typing import Optional, Union
 
-from pydantic import BaseModel, EmailStr, Field, field_validator
+from pydantic import EmailStr, Field, field_validator
+from pydantic import BaseModel as PydanticBaseModel
 
 from src.common.utils.types import PasswordStr, UsernameStr
 from src.common.utils.validators import validate_email, validate_name
 
 
-class RegisterRequest(BaseModel):
+class RegisterRequest(PydanticBaseModel):
     first_name: Optional[str] = Field(default="First Name", description="First Name")
     last_name: Optional[str] = Field(default="Last Name", description="Last Name")
     email: EmailStr = Field(
