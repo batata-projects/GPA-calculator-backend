@@ -6,19 +6,19 @@ from src.db.models import Course
 
 
 @pytest.fixture
-def courses(uuid4: Mock) -> list[Course]:
+def courses(valid_uuid: Mock) -> list[Course]:
     return [
         Course(
-            id=str(uuid4()),
-            available_course_id=str(uuid4()),
-            user_id=str(uuid4()),
+            id=str(valid_uuid),
+            available_course_id=str(valid_uuid),
+            user_id=str(valid_uuid),
             grade=4.0,
             passed=True,
         ),
         Course(
-            id=str(uuid4()),
-            available_course_id=str(uuid4()),
-            user_id=str(uuid4()),
+            id=str(valid_uuid),
+            available_course_id=str(valid_uuid),
+            user_id=str(valid_uuid),
             grade=2.0,
             passed=False,
         ),

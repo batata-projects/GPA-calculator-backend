@@ -6,8 +6,8 @@ from src.db.models import Term
 
 
 class TestTerm:
-    def test_term_successful(self, uuid4: Mock) -> None:
-        term_id = str(uuid4())
+    def test_term_successful(self, valid_uuid: Mock) -> None:
+        term_id = str(valid_uuid)
         name = "Fall 2022 - 2023"
 
         term = Term(

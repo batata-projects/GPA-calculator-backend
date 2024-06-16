@@ -29,21 +29,21 @@ class TestGetTermById:
         assert response.message == "Term found"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_get_term_by_id_not_found(self, uuid4: Mock) -> None:
+    async def test_get_term_by_id_not_found(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_id.return_value = None
 
-        response = await get_term_by_id(term_id=str(uuid4()), term_dao=term_dao)
+        response = await get_term_by_id(term_id=str(valid_uuid), term_dao=term_dao)
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Term not found"
         assert response.data is None
 
-    async def test_get_term_by_id_error(self, uuid4: Mock) -> None:
+    async def test_get_term_by_id_error(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.get_term_by_id.side_effect = Exception("Error")
 
-        response = await get_term_by_id(term_id=str(uuid4()), term_dao=term_dao)
+        response = await get_term_by_id(term_id=str(valid_uuid), term_dao=term_dao)
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
@@ -104,12 +104,12 @@ class TestUpdateTerm:
         assert response.message == "Term updated"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_update_term_not_found(self, uuid4: Mock, term1: Term) -> None:
+    async def test_update_term_not_found(self, valid_uuid: Mock, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.update_term.return_value = None
 
         response = await update_term(
-            term_id=str(uuid4()), term_name=term1.name, term_dao=term_dao
+            term_id=str(valid_uuid), term_name=term1.name, term_dao=term_dao
         )
 
         assert response.status == status.HTTP_400_BAD_REQUEST
@@ -145,21 +145,21 @@ class TestDeleteTerm:
         assert response.message == "Term deleted"
         assert response.data == TermResponse(terms=[term1])
 
-    async def test_delete_term_not_found(self, uuid4: Mock) -> None:
+    async def test_delete_term_not_found(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.delete_term.return_value = None
 
-        response = await delete_term(term_id=str(uuid4()), term_dao=term_dao)
+        response = await delete_term(term_id=str(valid_uuid), term_dao=term_dao)
 
         assert response.status == status.HTTP_400_BAD_REQUEST
         assert response.message == "Failed to delete term"
         assert response.data is None
 
-    async def test_delete_term_error(self, uuid4: Mock) -> None:
+    async def test_delete_term_error(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
         term_dao.delete_term.side_effect = Exception("Error")
 
-        response = await delete_term(term_id=str(uuid4()), term_dao=term_dao)
+        response = await delete_term(term_id=str(valid_uuid), term_dao=term_dao)
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"

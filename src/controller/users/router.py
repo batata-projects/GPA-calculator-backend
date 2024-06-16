@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Path, Query, status
-from pydantic import EmailStr, PositiveFloat, PositiveInt
+from pydantic import EmailStr, NonNegativeFloat, PositiveInt
 
 from src.common.responses import APIResponse
 from src.common.utils.types import UsernameStr, UuidStr
@@ -30,12 +30,19 @@ async def get_users_by_query(
     counted_credits: Optional[PositiveInt] = Query(
         None, description="User counted credits"
     ),
-    grade: Optional[PositiveFloat] = Query(None, description="User grade"),
+    grade: Optional[NonNegativeFloat] = Query(None, description="User grade"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:
         users = user_dao.get_users_by_query(
-            user_id, username, email, first_name, last_name, credits, grade
+            user_id,
+            username,
+            email,
+            first_name,
+            last_name,
+            credits,
+            counted_credits,
+            grade,
         )
         if users:
             return APIResponse[UserResponse](
@@ -125,7 +132,7 @@ async def update_user(
     counted_credits: Optional[PositiveInt] = Query(
         None, description="User counted credits"
     ),
-    grade: Optional[PositiveFloat] = Query(None, description="User grade"),
+    grade: Optional[NonNegativeFloat] = Query(None, description="User grade"),
     user_dao: UserDAO = Depends(get_user_dao),
 ) -> APIResponse[UserResponse]:
     try:

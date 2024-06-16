@@ -29,21 +29,21 @@ class TestGetUserById:
         assert response.message == "User found"
         assert response.data == UserResponse(users=[user1])
 
-    async def test_get_user_by_id_not_found(self, uuid4: Mock) -> None:
+    async def test_get_user_by_id_not_found(self, valid_uuid: Mock) -> None:
         user_dao = Mock(spec=UserDAO)
         user_dao.get_user_by_id.return_value = None
 
-        response = await get_user_by_id(user_id=str(uuid4()), user_dao=user_dao)
+        response = await get_user_by_id(user_id=str(valid_uuid), user_dao=user_dao)
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "User not found"
         assert response.data is None
 
-    async def test_get_user_by_id_error(self, uuid4: Mock) -> None:
+    async def test_get_user_by_id_error(self, valid_uuid: Mock) -> None:
         user_dao = Mock(spec=UserDAO)
         user_dao.get_user_by_id.side_effect = Exception("Error")
 
-        response = await get_user_by_id(user_id=str(uuid4()), user_dao=user_dao)
+        response = await get_user_by_id(user_id=str(valid_uuid), user_dao=user_dao)
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"

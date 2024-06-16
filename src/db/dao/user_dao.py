@@ -103,6 +103,7 @@ class UserDAO:
         first_name: Optional[str] = None,
         last_name: Optional[str] = None,
         credits: Optional[NonNegativeInt] = None,
+        counted_credits: Optional[NonNegativeInt] = None,
         grade: Optional[NonNegativeFloat] = None,
     ) -> list[User]:
         queries = self.client.table(SupabaseTables.USERS).select("*")
@@ -118,6 +119,8 @@ class UserDAO:
             queries = queries.eq("last_name", last_name)
         if credits:
             queries = queries.eq("credits", credits)
+        if counted_credits:
+            queries = queries.eq("counted_credits", counted_credits)
         if grade:
             queries = queries.eq("grade", grade)
         data = queries.execute()

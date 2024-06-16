@@ -4,6 +4,10 @@ from .fixtures.common.utils.types.CourseCodeStr import (
     invalid_course_code,
     valid_course_code,
 )
+from .fixtures.common.utils.types.CourseGradeFloat import (
+    invalid_course_grade_float,
+    valid_course_grade_float,
+)
 from .fixtures.common.utils.types.CourseNameStr import (
     invalid_course_name,
     valid_course_name,
@@ -52,5 +56,12 @@ from .fixtures.db.models.users import (
     users_same_grade,
     users_same_last_name,
 )
-from .fixtures.gotrue import gotrue_session, gotrue_user
-from .fixtures.uuid import uuid4
+from .fixtures.others.gotrue import gotrue_session, gotrue_user
+from .fixtures.others.jwt import invalid_jwt, valid_jwt, valid_signature
+from .fixtures.others.tokens import (
+    invalid_access_token,
+    invalid_refresh_token,
+    valid_access_token,
+    valid_refresh_token,
+)
+from .fixtures.others.uuid import uuid4

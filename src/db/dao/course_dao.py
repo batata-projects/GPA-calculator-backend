@@ -3,7 +3,7 @@ from typing import Optional, Union
 from pydantic import NonNegativeFloat
 from supabase import Client
 
-from src.common.utils.types import UuidStr
+from src.common.utils.types import CourseGradeFloat, UuidStr
 from src.db.models import Course
 from src.db.tables import SupabaseTables
 
@@ -63,7 +63,7 @@ class CourseDAO:
         self,
         available_course_id: Optional[UuidStr] = None,
         user_id: Optional[UuidStr] = None,
-        grade: Optional[NonNegativeFloat] = None,
+        grade: Optional[CourseGradeFloat] = None,
         passed: Optional[bool] = None,
     ) -> list[Course]:
         queries = self.client.table(SupabaseTables.COURSES).select("*")

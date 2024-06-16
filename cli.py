@@ -132,7 +132,33 @@ def clean_unused_files() -> None:
                 file = os.path.join(dirpath, filename)
                 if not open(file).read().strip():
                     os.remove(file)
-
+    for dirpath, dirnames, filenames in os.walk("tests"):
+        if "__pycache__" in dirpath:
+            continue
+        if "fixtures" in dirpath:
+            continue
+        if "conftest.py" in filenames:
+            filenames.remove("conftest.py")
+        for filename in filenames:
+            if filename.endswith(".py"):
+                if filename == "__init__.py":
+                    continue
+                file = os.path.join(dirpath, filename)
+                file = file.replace("test_", "")
+                file = file.replace("tests", "src")
+                if not os.path.exists(file):
+                    os.remove(os.path.join(dirpath, filename))
+    for dirpath, dirnames, filenames in os.walk("tests/fixtures"):
+        if "__pycache__" in dirpath:
+            continue
+        if "others" in dirpath:
+            continue
+        for filename in filenames:
+            if filename.endswith(".py"):
+                file = os.path.join(dirpath, filename)
+                file = file.replace("tests/fixtures", "src")
+                if not os.path.exists(file):
+                    os.remove(os.path.join(dirpath, filename))
 
 def pre_stage() -> None:
     """

@@ -29,21 +29,25 @@ class TestGetCourseById:
         assert response.message == "Course found"
         assert response.data == CourseResponse(courses=[course1])
 
-    async def test_get_course_by_id_not_found(self, uuid4: Mock) -> None:
+    async def test_get_course_by_id_not_found(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.get_course_by_id.return_value = None
 
-        response = await get_course_by_id(course_id=str(uuid4()), course_dao=course_dao)
+        response = await get_course_by_id(
+            course_id=str(valid_uuid), course_dao=course_dao
+        )
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Course not found"
         assert response.data is None
 
-    async def test_get_course_by_id_error(self, uuid4: Mock) -> None:
+    async def test_get_course_by_id_error(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.get_course_by_id.side_effect = Exception("Error")
 
-        response = await get_course_by_id(course_id=str(uuid4()), course_dao=course_dao)
+        response = await get_course_by_id(
+            course_id=str(valid_uuid), course_dao=course_dao
+        )
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"
@@ -135,24 +139,24 @@ class TestUpdateCourse:
         assert response.message == "Course updated"
         assert response.data == CourseResponse(courses=[course1])
 
-    async def test_update_course_not_found(self, uuid4: Mock) -> None:
+    async def test_update_course_not_found(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.update_course.return_value = None
 
         response = await update_course(
-            str(uuid4()), str(uuid4()), str(uuid4()), 12, True, course_dao
+            str(valid_uuid), str(valid_uuid), str(valid_uuid), 12, True, course_dao
         )
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Course not updated"
         assert response.data is None
 
-    async def test_update_course_error(self, uuid4: Mock) -> None:
+    async def test_update_course_error(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.update_course.side_effect = Exception("Error")
 
         response = await update_course(
-            str(uuid4()), str(uuid4()), str(uuid4()), 12, True, course_dao
+            str(valid_uuid), str(valid_uuid), str(valid_uuid), 12, True, course_dao
         )
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -174,21 +178,21 @@ class TestDeleteCourse:
         assert response.message == "Course deleted"
         assert response.data == CourseResponse(courses=[course1])
 
-    async def test_delete_course_not_found(self, uuid4: Mock) -> None:
+    async def test_delete_course_not_found(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.delete_course.return_value = None
 
-        response = await delete_course(course_id=str(uuid4()), course_dao=course_dao)
+        response = await delete_course(course_id=str(valid_uuid), course_dao=course_dao)
 
         assert response.status == status.HTTP_404_NOT_FOUND
         assert response.message == "Course not deleted"
         assert response.data is None
 
-    async def test_delete_course_error(self, uuid4: Mock) -> None:
+    async def test_delete_course_error(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
         course_dao.delete_course.side_effect = Exception("Error")
 
-        response = await delete_course(course_id=str(uuid4()), course_dao=course_dao)
+        response = await delete_course(course_id=str(valid_uuid), course_dao=course_dao)
 
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
         assert response.message == "Error"

@@ -1,10 +1,9 @@
 from typing import Optional
 
 from fastapi import APIRouter, Depends, Path, Query, status
-from pydantic import PositiveFloat
 
 from src.common.responses import APIResponse
-from src.common.utils.types import UuidStr
+from src.common.utils.types import CourseGradeFloat, UuidStr
 from src.controller.courses import CourseRequest, CourseResponse
 from src.db.dao import CourseDAO
 from src.db.dependencies import get_course_dao
@@ -25,7 +24,7 @@ async def get_courses_by_query(
         None, description="Available courses ID"
     ),
     user_id: Optional[UuidStr] = Query(None, description="User ID"),
-    grade: Optional[PositiveFloat] = Query(None, description="Grade"),
+    grade: Optional[CourseGradeFloat] = Query(None, description="Grade"),
     passed: Optional[bool] = Query(None, description="Passed"),
     course_dao: CourseDAO = Depends(get_course_dao),
 ) -> APIResponse[CourseResponse]:
@@ -117,7 +116,7 @@ async def update_course(
         None, description="Available courses ID"
     ),
     user_id: Optional[UuidStr] = Query(None, description="User ID"),
-    grade: Optional[PositiveFloat] = Query(None, description="Grade"),
+    grade: Optional[CourseGradeFloat] = Query(None, description="Grade"),
     passed: Optional[bool] = Query(None, description="Passed"),
     course_dao: CourseDAO = Depends(get_course_dao),
 ) -> APIResponse[CourseResponse]:

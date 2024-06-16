@@ -9,9 +9,9 @@ from src.db.models import AvailableCourse
 
 
 class TestAvailableCourse:
-    def test_available_course_successful(self, uuid4: Mock) -> None:
-        available_course_id = str(uuid4())
-        terms_id = str(uuid4())
+    def test_available_course_successful(self, valid_uuid: Mock) -> None:
+        available_course_id = str(valid_uuid)
+        terms_id = str(valid_uuid)
         name = "EECE"
         code = "230"
         credits = 3
@@ -33,8 +33,8 @@ class TestAvailableCourse:
         assert availableCourse.credits == credits
         assert availableCourse.graded == graded
 
-    def test_available_course_no_id(self, uuid4: Mock) -> None:
-        terms_id = str(uuid4())
+    def test_available_course_no_id(self, valid_uuid: Mock) -> None:
+        terms_id = str(valid_uuid)
         name = "EECE"
         code = "230"
         credits = 3

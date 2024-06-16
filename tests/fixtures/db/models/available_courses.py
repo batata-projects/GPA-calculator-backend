@@ -7,19 +7,19 @@ from src.db.models import AvailableCourse
 
 
 @pytest.fixture
-def available_courses(uuid4: Mock) -> list[AvailableCourse]:
+def available_courses(valid_uuid: Mock) -> list[AvailableCourse]:
     return [
         AvailableCourse(
-            id=str(uuid4()),
-            term_id=str(uuid4()),
+            id=str(valid_uuid),
+            term_id=str(valid_uuid),
             name="PHYS",
             code="210L",
             credits=1,
             graded=True,
         ),
         AvailableCourse(
-            id=str(uuid4()),
-            term_id=str(uuid4()),
+            id=str(valid_uuid),
+            term_id=str(valid_uuid),
             name="FEAA",
             code="200",
             credits=3,
@@ -71,11 +71,11 @@ def available_courses_same_graded(
 
 
 @pytest.fixture
-def available_courses_data(uuid4: Mock) -> list[dict[str, Any]]:
+def available_courses_data(valid_uuid: Mock) -> list[dict[str, Any]]:
     return [
         {
-            "id": str(uuid4()),
-            "term_id": str(uuid4()),
+            "id": str(valid_uuid),
+            "term_id": str(valid_uuid),
             "name": "PHYS",
         },
         {
@@ -84,17 +84,17 @@ def available_courses_data(uuid4: Mock) -> list[dict[str, Any]]:
             "graded": False,
         },
         {
-            "term_id": str(uuid4()),
+            "term_id": str(valid_uuid),
             "credits": 1,
         },
     ]
 
 
 @pytest.fixture
-def invalid_available_course_data(uuid4: Mock) -> list[dict[str, Any]]:
+def invalid_available_course_data(valid_uuid: Mock) -> list[dict[str, Any]]:
     return [
         {
-            "id": str(uuid4()),
+            "id": str(valid_uuid),
             "term_id": 123,
             "name": "PHYS",
         },
@@ -105,8 +105,8 @@ def invalid_available_course_data(uuid4: Mock) -> list[dict[str, Any]]:
             "graded": False,
         },
         {
-            "id": str(uuid4()),
-            "term_id": str(uuid4()),
+            "id": str(valid_uuid),
+            "term_id": str(valid_uuid),
             "name": "PHYS",
             "code": "200",
             "credits": 3,
