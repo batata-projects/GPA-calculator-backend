@@ -1,16 +1,15 @@
 from unittest.mock import Mock
 
 import pytest
-from gotrue.types import User as SupabaseUser  # type: ignore
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.db.models.users import User
+from src.common.utils.types import UsernameStr
+from src.db.models import User
 
 
 class TestUser:
-    def test_user_successful(self, uuid4: Mock) -> None:
-        user_id = str(uuid4())
+    def test_user_successful(self, valid_uuid: Mock) -> None:
+        user_id = str(valid_uuid)
         email = "rmf40@mail.aub.edu"
         username = "Rio"
         first_name = "Rayan"
@@ -125,7 +124,7 @@ class TestUser:
     @pytest.mark.parametrize(
         "email, username, first_name, last_name, credits, counted_credits, grade",
         [
-            ("jaadshaker@gmail.com", "jss", "Jad", "Shaker", 0, 0, 0.0),
+            ("jaadshaker@hotmail.com", "jss", "Jad", "Shaker", 0, 0, 0.0),
             ("rmf40@mail.aub.edu", "Invalid Username", "Rayan", "Fakhreddine", 0, 0, 0),
             ("rmf40@mail.aub.edu", "Rio", 123, "Fakhreddine", 0, 0, 0.0),
             ("rmf40@mail.aub.edu", "Rio", "Rayan", 123, 0, 0, 0.0),

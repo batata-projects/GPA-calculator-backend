@@ -1,0 +1,13 @@
+from typing import Annotated
+
+from pydantic import NonNegativeFloat
+from pydantic.functional_validators import BeforeValidator
+
+
+def validate_course_grade(v: float) -> float:
+    if v not in [0.0, 1, 1.3, 1.7, 2, 2.3, 2.7, 3, 3.3, 3.7, 4, 4.3]:
+        raise ValueError(f"{v} is an invalid grade")
+    return v
+
+
+CourseGradeFloat = Annotated[NonNegativeFloat, BeforeValidator(validate_course_grade)]

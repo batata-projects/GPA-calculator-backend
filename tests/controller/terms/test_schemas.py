@@ -1,7 +1,7 @@
 import pytest
 
-from src.controller.terms.schemas import TermResponse
-from src.db.models.terms import Term
+from src.controller.terms import TermResponse
+from src.db.models import Term
 
 
 class TestTermResponse:

@@ -11,6 +11,7 @@ class TestValidItems:
         assert ValidItems.EmailStr == "email@mail.aub.edu"
         assert ValidItems.NonNegativeInt == 0
         assert ValidItems.NonNegativeFloat == 0.0
+        assert ValidItems.GradeFloat == 1.0
         assert ValidItems.Bool == True
 
 
@@ -27,7 +28,7 @@ class TestValidData:
         assert ValidData.Course.id == ValidItems.UuidStr
         assert ValidData.Course.available_course_id == ValidItems.UuidStr
         assert ValidData.Course.user_id == ValidItems.UuidStr
-        assert ValidData.Course.grade == ValidItems.NonNegativeFloat
+        assert ValidData.Course.grade == ValidItems.GradeFloat
         assert ValidData.Course.passed == ValidItems.Bool
 
     def test_term_valid_data(self) -> None:

@@ -2,9 +2,8 @@ from typing import Optional, Union
 
 from supabase import Client
 
-from src.common.utils.types.TermStr import TermStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.terms import Term
+from src.common.utils.types import TermStr, UuidStr
+from src.db.models import Term
 from src.db.tables import SupabaseTables
 
 
@@ -17,17 +16,6 @@ class TermDAO:
             self.client.table(SupabaseTables.TERMS)
             .select("*")
             .eq("id", term_id)
-            .execute()
-        )
-        if not data.data:
-            return None
-        return Term.model_validate(data.data[0])
-
-    def get_term_by_name(self, name: TermStr) -> Optional[Term]:
-        data = (
-            self.client.table(SupabaseTables.TERMS)
-            .select("*")
-            .eq("name", name)
             .execute()
         )
         if not data.data:
@@ -65,8 +53,17 @@ class TermDAO:
             return None
         return Term.model_validate(data.data[0])
 
-    def get_all_terms(self) -> list[Term]:
-        data = self.client.table(SupabaseTables.TERMS).select("*").execute()
+    def get_terms_by_query(
+        self,
+        id: Optional[UuidStr] = None,
+        name: Optional[TermStr] = None,
+    ) -> list[Term]:
+        queries = self.client.table(SupabaseTables.TERMS).select("*")
+        if id:
+            queries = queries.eq("id", id)
+        if name:
+            queries = queries.eq("name", name)
+        data = queries.execute()
         if not data.data:
             return []
         return [Term.model_validate(term) for term in data.data]

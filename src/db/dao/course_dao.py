@@ -3,8 +3,8 @@ from typing import Optional, Union
 from pydantic import NonNegativeFloat
 from supabase import Client
 
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.courses import Course
+from src.common.utils.types import CourseGradeFloat, UuidStr
+from src.db.models import Course
 from src.db.tables import SupabaseTables
 
 
@@ -22,42 +22,6 @@ class CourseDAO:
         if not data.data:
             return None
         return Course.model_validate(data.data[0])
-
-    def get_courses_by_user_id(self, user_id: UuidStr) -> list[Course]:
-        data = (
-            (self.client.table(SupabaseTables.COURSES))
-            .select("*")
-            .eq("user_id", user_id)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [Course.model_validate(course) for course in data.data]
-
-    def get_courses_by_available_courses_id(
-        self, available_courses_id: UuidStr
-    ) -> list[Course]:
-        data = (
-            (self.client.table(SupabaseTables.COURSES))
-            .select("*")
-            .eq("available_courses_id", available_courses_id)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [Course.model_validate(course) for course in data.data]
-
-    def get_courses_by_grade(self, grade: float, user_id: UuidStr) -> list[Course]:
-        data = (
-            (self.client.table(SupabaseTables.COURSES))
-            .select("*")
-            .eq("grade", grade)
-            .eq("user_id", user_id)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [Course.model_validate(course) for course in data.data]
 
     def create_course(
         self, course_data: dict[str, Union[UuidStr, NonNegativeFloat, bool, None]]
@@ -95,8 +59,23 @@ class CourseDAO:
             return None
         return Course.model_validate(data.data[0])
 
-    def get_all_courses(self) -> list[Course]:
-        data = self.client.table(SupabaseTables.COURSES).select("*").execute()
+    def get_courses_by_query(
+        self,
+        available_course_id: Optional[UuidStr] = None,
+        user_id: Optional[UuidStr] = None,
+        grade: Optional[CourseGradeFloat] = None,
+        passed: Optional[bool] = None,
+    ) -> list[Course]:
+        queries = self.client.table(SupabaseTables.COURSES).select("*")
+        if available_course_id:
+            queries = queries.eq("available_course_id", available_course_id)
+        if user_id:
+            queries = queries.eq("user_id", user_id)
+        if grade:
+            queries = queries.eq("grade", grade)
+        if passed:
+            queries = queries.eq("passed", passed)
+        data = queries.execute()
         if not data.data:
             return []
         return [Course.model_validate(course) for course in data.data]

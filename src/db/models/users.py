@@ -1,11 +1,11 @@
 from typing import Optional
 
-from gotrue.types import User as SupabaseUser  # type: ignore
+from gotrue.types import User as GoTrueUser  # type: ignore
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt, field_validator
 
-from src.common.utils.models.BaseModel import BaseModel
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.common.utils.types.UuidStr import UuidStr
+from src.common.utils.models import BaseModel
+from src.common.utils.types import UsernameStr, UuidStr
+from src.common.utils.validators.EmailValidator import validate_email
 
 
 class User(BaseModel):
@@ -19,7 +19,7 @@ class User(BaseModel):
     grade: NonNegativeFloat
 
     @classmethod
-    def validate_supabase_user(cls, user: SupabaseUser) -> "User":
+    def validate_supabase_user(cls, user: GoTrueUser) -> "User":
         credits = user.user_metadata.get("credits", 0)
         counted_credits = user.user_metadata.get("counted_credits", 0)
         grade = user.user_metadata.get("grade", 0.0)
@@ -35,11 +35,5 @@ class User(BaseModel):
         )
 
     @field_validator("email")
-    def validate_email_domain(cls, v: str) -> str:
-        try:
-            domain = v.split("@")[1]
-            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-                raise ValueError
-        except ValueError:
-            raise ValueError(f"{v} is an invalid email")
-        return v
+    def email_validator(cls, v: str) -> str:
+        return validate_email(v)

@@ -2,18 +2,18 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.db.models.terms import Term
+from src.db.models import Term
 
 
 @pytest.fixture
-def terms(uuid4: Mock) -> list[Term]:
+def terms(valid_uuid: Mock) -> list[Term]:
     return [
         Term(
-            id=str(uuid4()),
+            id=str(valid_uuid),
             name="Fall 2022 - 2023",
         ),
         Term(
-            id=str(uuid4()),
+            id=str(valid_uuid),
             name="Spring 2023 - 2024",
         ),
     ]

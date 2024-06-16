@@ -7,6 +7,7 @@ class ValidItems:
     EmailStr = "email@mail.aub.edu"
     NonNegativeInt = 0
     NonNegativeFloat = 0.0
+    GradeFloat = 1.0
     Bool = True
 
 
@@ -23,7 +24,7 @@ class ValidData:
         id = ValidItems.UuidStr
         available_course_id = ValidItems.UuidStr
         user_id = ValidItems.UuidStr
-        grade = ValidItems.NonNegativeFloat
+        grade = ValidItems.GradeFloat
         passed = ValidItems.Bool
 
     class Term:

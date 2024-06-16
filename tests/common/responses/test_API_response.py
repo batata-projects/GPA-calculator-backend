@@ -4,7 +4,7 @@ from src.common.responses import APIResponse
 
 
 class TestAPIResponse:
-    def test_api_response(self) -> None:
+    def test_api_response_successful(self) -> None:
         response = APIResponse[int](status=200, message="OK", data=1)
         assert response.status == 200
         assert response.message == "OK"

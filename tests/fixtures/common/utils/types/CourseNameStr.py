@@ -1,6 +1,6 @@
 import pytest
 
-from src.common.utils.types.CourseNameStr import CourseNameStr
+from src.common.utils.types import CourseNameStr
 
 
 @pytest.fixture

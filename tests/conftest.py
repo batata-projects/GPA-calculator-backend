@@ -1,11 +1,18 @@
+from .fixtures.auth.schemas import login_request, register_request
+from .fixtures.common.session import session
 from .fixtures.common.utils.types.CourseCodeStr import (
     invalid_course_code,
     valid_course_code,
+)
+from .fixtures.common.utils.types.CourseGradeFloat import (
+    invalid_course_grade_float,
+    valid_course_grade_float,
 )
 from .fixtures.common.utils.types.CourseNameStr import (
     invalid_course_name,
     valid_course_name,
 )
+from .fixtures.common.utils.types.PasswordStr import invalid_password, valid_password
 from .fixtures.common.utils.types.TermStr import invalid_term, valid_term
 from .fixtures.common.utils.types.UsernameStr import (
     invalid_username1,
@@ -13,6 +20,12 @@ from .fixtures.common.utils.types.UsernameStr import (
     valid_username,
 )
 from .fixtures.common.utils.types.UuidStr import invalid_uuid, valid_uuid
+from .fixtures.common.utils.validators.EmailValidator import invalid_email, valid_email
+from .fixtures.common.utils.validators.NameValidator import invalid_name, valid_name
+from .fixtures.controller.available_courses.schemas import available_course_request
+from .fixtures.controller.courses.schemas import course_request
+from .fixtures.controller.terms.schemas import term_request
+from .fixtures.controller.users.schemas import user_request
 from .fixtures.db.models.available_courses import (
     available_course1,
     available_course2,
@@ -43,4 +56,17 @@ from .fixtures.db.models.users import (
     users_same_grade,
     users_same_last_name,
 )
-from .fixtures.uuid import uuid4
+from .fixtures.others.gotrue import gotrue_session, gotrue_user
+from .fixtures.others.jwt import (
+    invalid_jwt,
+    invalid_signature,
+    valid_jwt,
+    valid_signature,
+)
+from .fixtures.others.tokens import (
+    invalid_access_token,
+    invalid_refresh_token,
+    valid_access_token,
+    valid_refresh_token,
+)
+from .fixtures.others.uuid import uuid4

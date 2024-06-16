@@ -3,10 +3,8 @@ from typing import Optional, Union
 from pydantic import NonNegativeInt
 from supabase import Client
 
-from src.common.utils.types.CourseCodeStr import CourseCodeStr
-from src.common.utils.types.CourseNameStr import CourseNameStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.available_courses import AvailableCourse
+from src.common.utils.types import CourseCodeStr, CourseNameStr, UuidStr
+from src.db.models import AvailableCourse
 from src.db.tables import SupabaseTables
 
 
@@ -26,66 +24,6 @@ class AvailableCourseDAO:
         if not data.data:
             return None
         return AvailableCourse.model_validate(data.data[0])
-
-    def get_available_courses_by_course_name(
-        self, course_name: CourseNameStr
-    ) -> list[AvailableCourse]:
-        data = (
-            self.client.table(SupabaseTables.AVAILABLE_COURSES)
-            .select("*")
-            .eq("name", course_name)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [
-            AvailableCourse.model_validate(available_course)
-            for available_course in data.data
-        ]
-
-    def get_available_courses_by_credit(self, credit: int) -> list[AvailableCourse]:
-        data = (
-            self.client.table(SupabaseTables.AVAILABLE_COURSES)
-            .select("*")
-            .eq("credits", credit)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [
-            AvailableCourse.model_validate(available_course)
-            for available_course in data.data
-        ]
-
-    def get_available_courses_by_term_id(
-        self, term_id: UuidStr
-    ) -> list[AvailableCourse]:
-        data = (
-            self.client.table(SupabaseTables.AVAILABLE_COURSES)
-            .select("*")
-            .eq("term_id", term_id)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [
-            AvailableCourse.model_validate(available_course)
-            for available_course in data.data
-        ]
-
-    def get_available_courses_by_graded(self, graded: bool) -> list[AvailableCourse]:
-        data = (
-            self.client.table(SupabaseTables.AVAILABLE_COURSES)
-            .select("*")
-            .eq("graded", graded)
-            .execute()
-        )
-        if not data.data:
-            return []
-        return [
-            AvailableCourse.model_validate(available_course)
-            for available_course in data.data
-        ]
 
     def create_available_course(
         self,
@@ -135,8 +73,26 @@ class AvailableCourseDAO:
             return None
         return AvailableCourse.model_validate(data.data[0])
 
-    def get_all_available_courses(self) -> list[AvailableCourse]:
-        data = self.client.table(SupabaseTables.AVAILABLE_COURSES).select("*").execute()
+    def get_available_courses_by_query(
+        self,
+        term_id: Optional[UuidStr] = None,
+        name: Optional[CourseNameStr] = None,
+        code: Optional[CourseCodeStr] = None,
+        credit: Optional[NonNegativeInt] = None,
+        graded: Optional[bool] = None,
+    ) -> list[AvailableCourse]:
+        queries = self.client.table(SupabaseTables.AVAILABLE_COURSES).select("*")
+        if term_id:
+            queries = queries.eq("term_id", term_id)
+        if name:
+            queries = queries.eq("name", name)
+        if code:
+            queries = queries.eq("code", code)
+        if credit:
+            queries = queries.eq("credits", credit)
+        if graded:
+            queries = queries.eq("graded", graded)
+        data = queries.execute()
         if not data.data:
             return []
         return [

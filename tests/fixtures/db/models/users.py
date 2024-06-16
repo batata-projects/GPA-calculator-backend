@@ -2,14 +2,14 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.db.models.users import User
+from src.db.models import User
 
 
 @pytest.fixture
-def users(uuid4: Mock) -> list[User]:
+def users(valid_uuid: Mock) -> list[User]:
     return [
         User(
-            id=str(uuid4()),
+            id=str(valid_uuid),
             email="jss31@mail.aub.edu",
             username="Jad",
             first_name="Jad",
@@ -19,7 +19,7 @@ def users(uuid4: Mock) -> list[User]:
             grade=15.0,
         ),
         User(
-            id=str(uuid4()),
+            id=str(valid_uuid),
             email="rmf40@mail.aub.edu",
             username="Rayan",
             first_name="Rayan",

@@ -4,26 +4,25 @@ import pytest
 from postgrest.base_request_builder import APIResponse
 from supabase import Client
 
-from src.db.dao.user_dao import UserDAO
-from src.db.models.users import User
+from src.db.dao import UserDAO
+from src.db.models import User
 from src.db.tables import SupabaseTables
 
 
 class TestUserDAO:
-    def test_get_user_by_id_successful(self, users: list[User]) -> None:
-        user = users[0]
+    def test_get_user_by_id_successful(self, user1: User) -> None:
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
 
         mock_client.table(SupabaseTables.USERS).select("*").eq(
-            "id", user.id
-        ).execute.return_value = APIResponse(data=[user.model_dump()], count=None)
+            "id", user1.id
+        ).execute.return_value = APIResponse(data=[user1.model_dump()], count=None)
 
-        assert user.id is not None
+        assert user1.id is not None
 
-        result = user_dao.get_user_by_id(user.id)
+        result = user_dao.get_user_by_id(user1.id)
 
-        assert result == user
+        assert result == user1
 
     @pytest.mark.parametrize(
         "method, method_arg, query_methods, query_return, attribute_name",
@@ -70,57 +69,54 @@ class TestUserDAO:
 
         assert result == request.getfixturevalue(query_return)
 
-    def test_get_all_users_successful(self, users: list[User]) -> None:
-        mock_client = Mock(spec=Client)
-        user_dao = UserDAO(mock_client)
-
-        mock_client.table(SupabaseTables.USERS).select("*").execute.return_value = (
-            APIResponse(data=[user.model_dump() for user in users], count=len(users))
-        )
-
-        result = user_dao.get_all_users()
-
-        assert result == users
-
-    def test_create_user_successful(self, users: list[User]) -> None:
-        user = users[0]
+    def test_create_user_successful(self, user1: User) -> None:
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
 
         mock_client.table(SupabaseTables.USERS).insert(
-            user.model_dump()
-        ).execute.return_value = APIResponse(data=[user.model_dump()], count=None)
+            user1.model_dump()
+        ).execute.return_value = APIResponse(data=[user1.model_dump()], count=None)
 
-        result = user_dao.create_user(user.model_dump())
+        result = user_dao.create_user(user1.model_dump())
 
-        assert result == user
+        assert result == user1
 
-    def test_update_user_successful(self, users: list[User]) -> None:
-        user = users[0]
+    def test_update_user_successful(self, user1: User) -> None:
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
 
-        mock_client.table(SupabaseTables.USERS).update(user.model_dump()).eq(
-            "id", user.id
-        ).execute.return_value = APIResponse(data=[user.model_dump()], count=None)
+        mock_client.table(SupabaseTables.USERS).update(user1.model_dump()).eq(
+            "id", user1.id
+        ).execute.return_value = APIResponse(data=[user1.model_dump()], count=None)
 
-        assert user.id is not None
+        assert user1.id is not None
 
-        result = user_dao.update_user(user.id, user.model_dump())
+        result = user_dao.update_user(user1.id, user1.model_dump())
 
-        assert result == user
+        assert result == user1
 
-    def test_delete_user_successful(self, users: list[User]) -> None:
-        user = users[0]
+    def test_delete_user_successful(self, user1: User) -> None:
         mock_client = Mock(spec=Client)
         user_dao = UserDAO(mock_client)
 
         mock_client.table(SupabaseTables.USERS).delete().eq(
-            "id", user.id
-        ).execute.return_value = APIResponse(data=[user.model_dump()], count=None)
+            "id", user1.id
+        ).execute.return_value = APIResponse(data=[user1.model_dump()], count=None)
 
-        assert user.id is not None
+        assert user1.id is not None
 
-        result = user_dao.delete_user(user.id)
+        result = user_dao.delete_user(user1.id)
 
-        assert result == user
+        assert result == user1
+
+    def test_get_user_by_query_successful(self, user1: User) -> None:
+        mock_client = Mock(spec=Client)
+        user_dao = UserDAO(mock_client)
+
+        mock_client.table(SupabaseTables.USERS).select("*").eq(
+            "email", user1.email
+        ).execute.return_value = APIResponse(data=[user1.model_dump()], count=None)
+
+        result = user_dao.get_users_by_query(email=user1.email)
+
+        assert result == [user1]

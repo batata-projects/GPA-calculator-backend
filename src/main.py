@@ -4,11 +4,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.auth.router import router as auth_router
 from src.common.responses import APIResponse
 from src.config import Config
-from src.controller.available_courses.router import router as available_courses_router
-from src.controller.courses.router import router as courses_router
-from src.controller.status import router as status_router
-from src.controller.terms.router import router as terms_router
-from src.controller.users.router import router as users_router
+from src.controller import (
+    available_courses_router,
+    courses_router,
+    status_router,
+    terms_router,
+    users_router,
+)
 
 app = FastAPI(
     title=Config.APP.TITLE,
@@ -18,7 +20,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -3,8 +3,6 @@ import subprocess
 
 from tap import Tap
 
-FILES_TO_CLEAN = ["src", "tests", "cli.py"]
-
 SEP = os.path.sep
 
 
@@ -23,7 +21,7 @@ def run() -> None:
     subprocess.run(["uvicorn", "src.main:app", "--reload"])
 
 
-def clean() -> None:
+def clean(files: list[str] = ["src", "tests", "cli.py"]) -> None:
     """
     command: clean
     Clean up the code
@@ -36,18 +34,12 @@ def clean() -> None:
             "--remove-all-unused-imports",
             "--remove-unused-variables",
             "-i",
-            *FILES_TO_CLEAN,
+            *files,
         ]
     )
-    subprocess.run(["isort", *FILES_TO_CLEAN, "--profile", "black"])
-    subprocess.run(["black", *FILES_TO_CLEAN])
-    subprocess.run(
-        [
-            "mypy",
-            "--strict",
-            *FILES_TO_CLEAN,
-        ]
-    )
+    subprocess.run(["isort", *files, "--profile", "black"])
+    subprocess.run(["black", *files])
+    subprocess.run(["mypy", "--strict", *files])
 
 
 def generate_test_files() -> None:
@@ -103,7 +95,7 @@ def import_fixtures() -> None:
                 function_names = []
                 while i < len(lines):
                     line = lines[i]
-                    if "@pytest.fixture" in line:
+                    if "@pytest.fixture" == line[:15]:
                         line = lines[i + 1]
                         function_names.append(line.split("def ")[1].split("(")[0])
                     i += 1
@@ -114,6 +106,7 @@ def import_fixtures() -> None:
                         path = path.replace("..", ".")
                     conftest.write(f"from {path} import {', '.join(function_names)}\n")
     conftest.close()
+    clean(["tests/conftest.py"])
 
 
 def run_tests() -> None:
@@ -128,15 +121,38 @@ def clean_unused_files() -> None:
     """
     command: clean-unused-files
     This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
+    This command also deletes the test files in the `tests` directory that do not have a corresponding file in the `src` directory.
     """
     for dirpath, dirnames, filenames in os.walk("tests"):
         if "__pycache__" in dirpath:
             continue
+        if "fixtures" in dirpath:
+            continue
+        if "conftest.py" in filenames:
+            filenames.remove("conftest.py")
         for filename in filenames:
             if filename.endswith(".py"):
                 if filename == "__init__.py":
                     continue
                 file = os.path.join(dirpath, filename)
+                file = file.replace("test_", "")
+                file = file.replace("tests", "src")
+                if not os.path.exists(file):
+                    os.remove(os.path.join(dirpath, filename))
+    for dirpath, dirnames, filenames in os.walk("tests/fixtures"):
+        if "__pycache__" in dirpath:
+            continue
+        if "others" in dirpath:
+            continue
+        for filename in filenames:
+            if filename.endswith(".py"):
+                file = os.path.join(dirpath, filename)
+                file = file.replace("tests/fixtures", "src")
+                if not os.path.exists(file):
+                    os.remove(os.path.join(dirpath, filename))
+                file = os.path.join(dirpath, filename)
+                if file.endswith("__init__.py"):
+                    continue
                 if not open(file).read().strip():
                     os.remove(file)
 
@@ -160,14 +176,16 @@ def help() -> None:
     print("Usage: python cli.py [command]")
     print("Commands:")
     commands: list[dict[str, str]] = []
-    for name, func in globals().items():
-        if callable(func):
-            if type(func.__doc__) != str:
+    for name, obj in globals().items():
+        if obj.__class__.__name__ == "type":
+            continue
+        if callable(obj):
+            if type(obj.__doc__) != str:
                 continue
             commands.append(
                 {
-                    "command": func.__doc__.split("\n")[1].split(":")[1].strip(),
-                    "description": "\n".join(func.__doc__.split("\n")[2:-1]),
+                    "command": obj.__doc__.split("\n")[1].split(":")[1].strip(),
+                    "description": "\n".join(obj.__doc__.split("\n")[2:-1]),
                 }
             )
     max_command_length = max([len(command["command"]) for command in commands])

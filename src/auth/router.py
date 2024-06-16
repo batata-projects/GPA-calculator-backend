@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from src.auth.auth import login, register
 from src.auth.schemas import LoginRequest, RegisterRequest
 from src.common.responses import APIResponse, AuthResponse
-from src.db.dao.user_dao import UserDAO
+from src.db.dao import UserDAO
 from src.db.dependencies import get_user_dao_unauthenticated
 
 router = APIRouter(prefix="/auth", tags=["auth"])

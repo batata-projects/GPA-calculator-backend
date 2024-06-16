@@ -1,17 +1,16 @@
 from unittest.mock import Mock
 
 import pytest
-from pydantic import NonNegativeFloat
 
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.courses import Course
+from src.common.utils.types import CourseGradeFloat, UuidStr
+from src.db.models import Course
 
 
 class TestCourse:
-    def test_course_successful(self, uuid4: Mock) -> None:
-        course_id = str(uuid4())
-        available_course_id = str(uuid4())
-        user_id = str(uuid4())
+    def test_course_successful(self, valid_uuid: Mock) -> None:
+        course_id = str(valid_uuid)
+        available_course_id = str(valid_uuid)
+        user_id = str(valid_uuid)
         grade = 4.0
         passed = True
 
@@ -29,9 +28,9 @@ class TestCourse:
         assert course.grade == grade
         assert course.passed == passed
 
-    def test_course_no_id(self, uuid4: Mock) -> None:
-        available_course_id = str(uuid4())
-        user_id = str(uuid4())
+    def test_course_no_id(self, valid_uuid: Mock) -> None:
+        available_course_id = str(valid_uuid)
+        user_id = str(valid_uuid)
         grade = 4.0
         passed = True
 
@@ -48,10 +47,10 @@ class TestCourse:
         assert course.grade == grade
         assert course.passed == passed
 
-    def test_course_invalid_id(self, uuid4: Mock) -> None:
+    def test_course_invalid_id(self, valid_uuid: Mock) -> None:
         course_id = "invalid"
-        available_course_id = str(uuid4())
-        user_id = str(uuid4())
+        available_course_id = str(valid_uuid)
+        user_id = str(valid_uuid)
         grade = 4.0
         passed = True
 
@@ -75,7 +74,7 @@ class TestCourse:
         self,
         available_course_id: UuidStr,
         user_id: UuidStr,
-        grade: NonNegativeFloat,
+        grade: CourseGradeFloat,
         passed: bool,
         request: pytest.FixtureRequest,
     ) -> None:
@@ -106,7 +105,7 @@ class TestCourse:
         self,
         available_course_id: UuidStr,
         user_id: UuidStr,
-        grade: NonNegativeFloat,
+        grade: CourseGradeFloat,
         passed: bool,
         request: pytest.FixtureRequest,
     ) -> None:

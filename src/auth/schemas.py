@@ -1,33 +1,30 @@
 from typing import Optional, Union
 
-from pydantic import BaseModel, EmailStr, field_validator
+from pydantic import BaseModel, EmailStr, Field, field_validator
 
-from src.common.utils.types.PasswordStr import PasswordStr
-from src.common.utils.types.UsernameStr import UsernameStr
+from src.common.utils.types import PasswordStr, UsernameStr
+from src.common.utils.validators import validate_email, validate_name
 
 
 class RegisterRequest(BaseModel):
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    email: EmailStr
-    username: Optional[UsernameStr] = None
-    password: PasswordStr
+    first_name: Optional[str] = Field(default="First Name", description="First Name")
+    last_name: Optional[str] = Field(default="Last Name", description="Last Name")
+    email: EmailStr = Field(
+        default="username@mail.aub.edu", description="Email must be an AUB email"
+    )
+    username: Optional[UsernameStr] = Field(default="username", description="Username")
+    password: PasswordStr = Field(
+        default="Password123",
+        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
+    )
 
     @field_validator("first_name", "last_name")
     def name_validator(cls, v: str) -> str:
-        if v:
-            return v.title()
-        return v
+        return validate_name(v)
 
     @field_validator("email")
-    def validate_email_domain(cls, v: EmailStr) -> EmailStr:
-        try:
-            domain = v.split("@")[1]
-            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-                raise ValueError
-        except ValueError:
-            raise ValueError(f"{v} is an invalid email")
-        return v
+    def email_validator(cls, v: EmailStr) -> EmailStr:
+        return validate_email(v)
 
     def auth_model_dump(
         self,
@@ -46,18 +43,17 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    email: EmailStr
-    password: PasswordStr
+    email: EmailStr = Field(
+        default="username@mail.aub.edu", description="Email must be an AUB email"
+    )
+    password: PasswordStr = Field(
+        default="Password123",
+        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
+    )
 
     @field_validator("email")
-    def validate_email_domain(cls, v: EmailStr) -> EmailStr:
-        try:
-            domain = v.split("@")[1]
-            if domain not in ["aub.edu.lb", "mail.aub.edu"]:
-                raise ValueError
-        except ValueError:
-            raise ValueError(f"{v} is an invalid email")
-        return v
+    def email_validator(cls, v: EmailStr) -> EmailStr:
+        return validate_email(v)
 
     def auth_model_dump(self) -> dict[str, str]:
         return {

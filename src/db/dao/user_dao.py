@@ -3,9 +3,8 @@ from typing import Optional, Union
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 from supabase import Client
 
-from src.common.utils.types.UsernameStr import UsernameStr
-from src.common.utils.types.UuidStr import UuidStr
-from src.db.models.users import User
+from src.common.utils.types import UsernameStr, UuidStr
+from src.db.models import User
 from src.db.tables import SupabaseTables
 
 
@@ -96,8 +95,35 @@ class UserDAO:
             return None
         return User.model_validate(data.data[0])
 
-    def get_all_users(self) -> list[User]:
-        data = self.client.table(SupabaseTables.USERS).select("*").execute()
+    def get_users_by_query(
+        self,
+        id: Optional[UuidStr] = None,
+        username: Optional[UsernameStr] = None,
+        email: Optional[EmailStr] = None,
+        first_name: Optional[str] = None,
+        last_name: Optional[str] = None,
+        credits: Optional[NonNegativeInt] = None,
+        counted_credits: Optional[NonNegativeInt] = None,
+        grade: Optional[NonNegativeFloat] = None,
+    ) -> list[User]:
+        queries = self.client.table(SupabaseTables.USERS).select("*")
+        if id:
+            queries = queries.eq("id", id)
+        if username:
+            queries = queries.eq("username", username)
+        if email:
+            queries = queries.eq("email", email)
+        if first_name:
+            queries = queries.eq("first_name", first_name)
+        if last_name:
+            queries = queries.eq("last_name", last_name)
+        if credits:
+            queries = queries.eq("credits", credits)
+        if counted_credits:
+            queries = queries.eq("counted_credits", counted_credits)
+        if grade:
+            queries = queries.eq("grade", grade)
+        data = queries.execute()
         if not data.data:
             return []
         return [User.model_validate(user) for user in data.data]

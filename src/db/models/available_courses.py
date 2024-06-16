@@ -2,10 +2,8 @@ from typing import Optional
 
 from pydantic import NonNegativeInt
 
-from src.common.utils.models.BaseModel import BaseModel
-from src.common.utils.types.CourseCodeStr import CourseCodeStr
-from src.common.utils.types.CourseNameStr import CourseNameStr
-from src.common.utils.types.UuidStr import UuidStr
+from src.common.utils.models import BaseModel
+from src.common.utils.types import CourseCodeStr, CourseNameStr, UuidStr
 
 
 class AvailableCourse(BaseModel):
