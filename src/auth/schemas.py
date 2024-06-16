@@ -1,7 +1,7 @@
 from typing import Optional, Union
 
-from pydantic import EmailStr, Field, field_validator
 from pydantic import BaseModel as PydanticBaseModel
+from pydantic import EmailStr, Field, field_validator
 
 from src.common.utils.types import PasswordStr, UsernameStr
 from src.common.utils.validators import validate_email, validate_name
