@@ -42,7 +42,7 @@ def clean(files: list[str] = ["src", "tests", "cli.py"]) -> None:
     subprocess.run(["mypy", "--strict", *files])
 
 
-def generate_test_files() -> None:
+def generate_test_files(tests: bool = True, fixtures: bool = False) -> None:
     """
     command: generate-test-files
     Generate empty test files in the `tests` and `tests/fixtures`
@@ -58,25 +58,28 @@ def generate_test_files() -> None:
         test_path = os.path.join(test_dir, relative_path)
         fixtures_path = os.path.join(fixtures_dir, relative_path)
 
-        os.makedirs(test_path, exist_ok=True)
-        os.makedirs(fixtures_path, exist_ok=True)
+        if tests:
+            os.makedirs(test_path, exist_ok=True)
+            init_file = os.path.join(test_path, "__init__.py")
+            open(init_file, "w").close()
 
-        init_file = os.path.join(test_path, "__init__.py")
-        open(init_file, "w").close()
-
-        init_file = os.path.join(fixtures_path, "__init__.py")
-        open(init_file, "w").close()
+        if fixtures:
+            os.makedirs(fixtures_path, exist_ok=True)
+            init_file = os.path.join(fixtures_path, "__init__.py")
+            open(init_file, "w").close()
 
         for filename in filenames:
             if filename.endswith(".py"):
                 if filename == "__init__.py":
                     continue
                 test_filename = "test_" + filename
-                test_file = os.path.join(test_path, test_filename)
-                open(test_file, "a").close()
+                if tests:
+                    test_file = os.path.join(test_path, test_filename)
+                    open(test_file, "a").close()
 
-                fixture_file = os.path.join(fixtures_path, filename)
-                open(fixture_file, "a").close()
+                if fixtures:
+                    fixture_file = os.path.join(fixtures_path, filename)
+                    open(fixture_file, "a").close()
 
 
 def import_fixtures() -> None:
