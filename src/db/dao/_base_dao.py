@@ -16,15 +16,28 @@ class BaseDAO(Generic[BaseModelType]):
         self.table = table
         self.base_model = base_model
 
-    def get_by_id(self, id: UuidStr) -> Optional[BaseModelType]:
-        data = self.client.table(self.table).select("*").eq("id", id).execute()
+    def get_by_query(
+        self,
+        **kwargs: Any,
+    ) -> list[BaseModelType]:
+        query = self.client.table(self.table).select("*")
+        for key, value in kwargs.items():
+            if value is not None:
+                query = query.eq(key, value)
+        data = query.execute()
         if not data.data:
-            return None
-        return self.base_model.model_validate(data.data[0])
+            return []
+        return [self.base_model.model_validate(item) for item in data.data]
 
     def create(self, model_data: dict[str, Any]) -> Optional[BaseModelType]:
         self.base_model.model_validate(model_data)
         data = self.client.table(self.table).insert(model_data).execute()
+        if not data.data:
+            return None
+        return self.base_model.model_validate(data.data[0])
+
+    def get_by_id(self, id: UuidStr) -> Optional[BaseModelType]:
+        data = self.client.table(self.table).select("*").eq("id", id).execute()
         if not data.data:
             return None
         return self.base_model.model_validate(data.data[0])
@@ -43,15 +56,3 @@ class BaseDAO(Generic[BaseModelType]):
         if not data.data:
             return None
         return self.base_model.model_validate(data.data[0])
-
-    def get_by_query(
-        self,
-        **kwargs: Any,
-    ) -> list[BaseModelType]:
-        query = self.client.table(self.table).select("*")
-        for key, value in kwargs.items():
-            query = query.eq(key, value)
-        data = query.execute()
-        if not data.data:
-            return []
-        return [self.base_model.model_validate(item) for item in data.data]

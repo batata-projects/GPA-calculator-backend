@@ -53,3 +53,7 @@ class ValidData:
         credits = ValidItems().nonNegativeInt
         counted_credits = ValidItems().nonNegativeInt
         grade = ValidItems().nonNegativeFloat
+
+    class TestObject:
+        id = ValidItems().uuidStr
+        name = ""

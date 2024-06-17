@@ -54,3 +54,9 @@ class TestValidData:
         assert ValidData.User.credits == validItems.nonNegativeInt
         assert ValidData.User.counted_credits == validItems.nonNegativeInt
         assert ValidData.User.grade == validItems.nonNegativeFloat
+
+    def test_test_object_valid_data(self) -> None:
+        validItems = ValidItems()
+
+        assert ValidData.TestObject.id == validItems.uuidStr
+        assert ValidData.TestObject.name == ""

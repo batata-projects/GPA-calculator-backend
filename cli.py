@@ -42,7 +42,7 @@ def clean(files: list[str] = ["src", "tests", "cli.py"]) -> None:
     subprocess.run(["mypy", "--strict", *files])
 
 
-def generate_test_files(tests: bool = True, fixtures: bool = False) -> None:
+def generate_test_files(tests: bool = True, fixtures: bool = True) -> None:
     """
     command: generate-test-files
     Generate empty test files in the `tests` and `tests/fixtures`
@@ -142,6 +142,7 @@ def clean_unused_files() -> None:
                 file = file.replace("tests", "src")
                 if not os.path.exists(file):
                     os.remove(os.path.join(dirpath, filename))
+                    print(f"Deleted {os.path.join(dirpath, filename)}")
     for dirpath, dirnames, filenames in os.walk("tests/fixtures"):
         if "__pycache__" in dirpath:
             continue
@@ -149,15 +150,16 @@ def clean_unused_files() -> None:
             continue
         for filename in filenames:
             if filename.endswith(".py"):
+                if file.endswith("__init__.py"):
+                    continue
                 file = os.path.join(dirpath, filename)
                 file = file.replace("tests/fixtures", "src")
                 if not os.path.exists(file):
                     os.remove(os.path.join(dirpath, filename))
                 file = os.path.join(dirpath, filename)
-                if file.endswith("__init__.py"):
-                    continue
                 if not open(file).read().strip():
                     os.remove(file)
+                    print(f"Deleted {file}")
 
 
 def pre_stage() -> None:
