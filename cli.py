@@ -3,6 +3,8 @@ import subprocess
 
 from tap import Tap
 
+# TODO: Create pre-merge command
+
 SEP = os.path.sep
 
 
@@ -126,6 +128,8 @@ def clean_unused_files() -> None:
     This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
     This command also deletes the test files in the `tests` directory that do not have a corresponding file in the `src` directory.
     """
+    # ! This command does not work recursively for some reason
+    # TODO: Fix this issue
     for dirpath, dirnames, filenames in os.walk("tests"):
         if "__pycache__" in dirpath:
             continue
