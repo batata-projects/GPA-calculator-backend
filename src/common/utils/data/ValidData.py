@@ -1,42 +1,59 @@
-class ValidItems:
-    UuidStr = "00000000-0000-0000-0000-000000000000"
-    TermStr = "Fall 2023 - 2024"
-    UsernameStr = "username"
-    CourseNameStr = "ABCD"
-    CourseCodeStr = "1234"
-    EmailStr = "email@mail.aub.edu"
-    NonNegativeInt = 0
-    NonNegativeFloat = 0.0
-    GradeFloat = 1.0
-    Bool = True
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
+
+from src.common.utils.types import (
+    CourseCodeStr,
+    CourseGradeFloat,
+    CourseNameStr,
+    TermStr,
+    UsernameStr,
+    UuidStr,
+)
+
+
+class ValidItems(PydanticBaseModel):
+    uuidStr: UuidStr = "00000000-0000-0000-0000-000000000000"
+    termStr: TermStr = "Fall 2023 - 2024"
+    usernameStr: UsernameStr = "username"
+    courseNameStr: CourseNameStr = "ABCD"
+    courseCodeStr: CourseCodeStr = "1234"
+    emailStr: EmailStr = "email@mail.aub.edu"
+    courseGradeFloat: CourseGradeFloat = 1.0
+    nonNegativeInt: NonNegativeInt = 0
+    nonNegativeFloat: NonNegativeFloat = 0.0
+    boolean: bool = True
 
 
 class ValidData:
     class AvailableCourse:
-        id = ValidItems.UuidStr
-        term_id = ValidItems.UuidStr
-        name = ValidItems.CourseNameStr
-        code = ValidItems.CourseCodeStr
-        credits = ValidItems.NonNegativeInt
-        graded = ValidItems.Bool
+        id = ValidItems().uuidStr
+        term_id = ValidItems().uuidStr
+        name = ValidItems().courseNameStr
+        code = ValidItems().courseCodeStr
+        credits = ValidItems().nonNegativeInt
+        graded = ValidItems().boolean
 
     class Course:
-        id = ValidItems.UuidStr
-        available_course_id = ValidItems.UuidStr
-        user_id = ValidItems.UuidStr
-        grade = ValidItems.GradeFloat
-        passed = ValidItems.Bool
+        id = ValidItems().uuidStr
+        available_course_id = ValidItems().uuidStr
+        user_id = ValidItems().uuidStr
+        grade = ValidItems().courseGradeFloat
+        passed = ValidItems().boolean
 
     class Term:
-        id = ValidItems.UuidStr
-        name = ValidItems.TermStr
+        id = ValidItems().uuidStr
+        name = ValidItems().termStr
 
     class User:
-        id = ValidItems.UuidStr
-        email = ValidItems.EmailStr
-        username = ValidItems.UsernameStr
+        id = ValidItems().uuidStr
+        email = ValidItems().emailStr
+        username = ValidItems().usernameStr
         first_name = ""
         last_name = ""
-        credits = ValidItems.NonNegativeInt
-        counted_credits = ValidItems.NonNegativeInt
-        grade = ValidItems.NonNegativeFloat
+        credits = ValidItems().nonNegativeInt
+        counted_credits = ValidItems().nonNegativeInt
+        grade = ValidItems().nonNegativeFloat
+
+    class TestObject:
+        id = ValidItems().uuidStr
+        name = ""

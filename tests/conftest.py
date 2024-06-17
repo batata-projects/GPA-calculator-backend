@@ -22,10 +22,18 @@ from .fixtures.common.utils.types.UsernameStr import (
 from .fixtures.common.utils.types.UuidStr import invalid_uuid, valid_uuid
 from .fixtures.common.utils.validators.EmailValidator import invalid_email, valid_email
 from .fixtures.common.utils.validators.NameValidator import invalid_name, valid_name
-from .fixtures.controller.available_courses.schemas import available_course_request
-from .fixtures.controller.courses.schemas import course_request
-from .fixtures.controller.terms.schemas import term_request
-from .fixtures.controller.users.schemas import user_request
+from .fixtures.controller.routers._base_router import (
+    router_empty,
+    router_error,
+    router_successful,
+)
+from .fixtures.controller.schemas._base_schemas import test_query
+from .fixtures.db.dao._base_dao import (
+    test_dao_empty,
+    test_dao_error,
+    test_dao_successful,
+)
+from .fixtures.db.models._base_model import test_object1, test_object2, test_objects
 from .fixtures.db.models.available_courses import (
     available_course1,
     available_course2,

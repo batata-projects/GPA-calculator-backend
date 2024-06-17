@@ -21,7 +21,7 @@ def register(request: RegisterRequest, user_dao: UserDAO) -> AuthResponse:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email is required",
             )
-        if user_dao.get_user_by_email(request.email):
+        if user_dao.get_by_query(email=request.email):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already in use",
@@ -48,7 +48,7 @@ def register(request: RegisterRequest, user_dao: UserDAO) -> AuthResponse:
 
 def login(request: LoginRequest, user_dao: UserDAO) -> AuthResponse:
     try:
-        if not user_dao.get_user_by_email(request.email):
+        if not user_dao.get_by_query(email=request.email):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User not found",
