@@ -19,7 +19,7 @@ class TestCourseDAO:
 
         assert course1.id is not None
 
-        result = course_dao.get_course_by_id(course1.id)
+        result = course_dao.get_by_id(course1.id)
 
         assert result == course1
 
@@ -33,7 +33,7 @@ class TestCourseDAO:
 
         assert course1.id is not None
 
-        result = course_dao.create_course(course1.model_dump())
+        result = course_dao.create(course1.model_dump())
 
         assert result == course1
 
@@ -47,7 +47,7 @@ class TestCourseDAO:
 
         assert course1.id is not None
 
-        result = course_dao.update_course(course1.id, course1.model_dump())
+        result = course_dao.update(course1.id, course1.model_dump())
 
         assert result == course1
 
@@ -61,7 +61,7 @@ class TestCourseDAO:
 
         assert course1.id is not None
 
-        result = course_dao.delete_course(course1.id)
+        result = course_dao.delete(course1.id)
 
         assert result == course1
 
@@ -73,7 +73,7 @@ class TestCourseDAO:
             "available_course_id", course1.available_course_id
         ).execute.return_value = APIResponse(data=[course1.model_dump()], count=None)
 
-        result = course_dao.get_courses_by_query(
+        result = course_dao.get_by_query(
             available_course_id=course1.available_course_id
         )
 

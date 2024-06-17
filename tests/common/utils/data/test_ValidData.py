@@ -3,44 +3,54 @@ from src.common.utils.data.ValidData import ValidData, ValidItems
 
 class TestValidItems:
     def test_ValidItems(self) -> None:
-        assert ValidItems.UuidStr == "00000000-0000-0000-0000-000000000000"
-        assert ValidItems.TermStr == "Fall 2023 - 2024"
-        assert ValidItems.UsernameStr == "username"
-        assert ValidItems.CourseNameStr == "ABCD"
-        assert ValidItems.CourseCodeStr == "1234"
-        assert ValidItems.EmailStr == "email@mail.aub.edu"
-        assert ValidItems.NonNegativeInt == 0
-        assert ValidItems.NonNegativeFloat == 0.0
-        assert ValidItems.GradeFloat == 1.0
-        assert ValidItems.Bool == True
+        validItems = ValidItems()
+
+        assert validItems.uuidStr == "00000000-0000-0000-0000-000000000000"
+        assert validItems.termStr == "Fall 2023 - 2024"
+        assert validItems.usernameStr == "username"
+        assert validItems.courseNameStr == "ABCD"
+        assert validItems.courseCodeStr == "1234"
+        assert validItems.emailStr == "email@mail.aub.edu"
+        assert validItems.courseGradeFloat == 1.0
+        assert validItems.nonNegativeInt == 0
+        assert validItems.nonNegativeFloat == 0.0
+        assert validItems.boolean == True
 
 
 class TestValidData:
     def test_available_course_valid_data(self) -> None:
-        assert ValidData.AvailableCourse.id == ValidItems.UuidStr
-        assert ValidData.AvailableCourse.term_id == ValidItems.UuidStr
-        assert ValidData.AvailableCourse.name == ValidItems.CourseNameStr
-        assert ValidData.AvailableCourse.code == ValidItems.CourseCodeStr
-        assert ValidData.AvailableCourse.credits == ValidItems.NonNegativeInt
-        assert ValidData.AvailableCourse.graded == ValidItems.Bool
+        validItems = ValidItems()
+
+        assert ValidData.AvailableCourse.id == validItems.uuidStr
+        assert ValidData.AvailableCourse.term_id == validItems.uuidStr
+        assert ValidData.AvailableCourse.name == validItems.courseNameStr
+        assert ValidData.AvailableCourse.code == validItems.courseCodeStr
+        assert ValidData.AvailableCourse.credits == validItems.nonNegativeInt
+        assert ValidData.AvailableCourse.graded == validItems.boolean
 
     def test_course_valid_data(self) -> None:
-        assert ValidData.Course.id == ValidItems.UuidStr
-        assert ValidData.Course.available_course_id == ValidItems.UuidStr
-        assert ValidData.Course.user_id == ValidItems.UuidStr
-        assert ValidData.Course.grade == ValidItems.GradeFloat
-        assert ValidData.Course.passed == ValidItems.Bool
+        validItems = ValidItems()
+
+        assert ValidData.Course.id == validItems.uuidStr
+        assert ValidData.Course.available_course_id == validItems.uuidStr
+        assert ValidData.Course.user_id == validItems.uuidStr
+        assert ValidData.Course.grade == validItems.courseGradeFloat
+        assert ValidData.Course.passed == validItems.boolean
 
     def test_term_valid_data(self) -> None:
-        assert ValidData.Term.id == ValidItems.UuidStr
-        assert ValidData.Term.name == ValidItems.TermStr
+        validItems = ValidItems()
+
+        assert ValidData.Term.id == validItems.uuidStr
+        assert ValidData.Term.name == validItems.termStr
 
     def test_user_valid_data(self) -> None:
-        assert ValidData.User.id == ValidItems.UuidStr
-        assert ValidData.User.email == ValidItems.EmailStr
-        assert ValidData.User.username == ValidItems.UsernameStr
+        validItems = ValidItems()
+
+        assert ValidData.User.id == validItems.uuidStr
+        assert ValidData.User.email == validItems.emailStr
+        assert ValidData.User.username == validItems.usernameStr
         assert ValidData.User.first_name == ""
         assert ValidData.User.last_name == ""
-        assert ValidData.User.credits == ValidItems.NonNegativeInt
-        assert ValidData.User.counted_credits == ValidItems.NonNegativeInt
-        assert ValidData.User.grade == ValidItems.NonNegativeFloat
+        assert ValidData.User.credits == validItems.nonNegativeInt
+        assert ValidData.User.counted_credits == validItems.nonNegativeInt
+        assert ValidData.User.grade == validItems.nonNegativeFloat

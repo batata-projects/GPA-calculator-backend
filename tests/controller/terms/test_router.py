@@ -19,7 +19,7 @@ from src.db.models import Term
 class TestGetTermById:
     async def test_get_term_by_id_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.get_term_by_id.return_value = term1
+        term_dao.get_by_id.return_value = term1
 
         assert term1.id is not None
 
@@ -27,11 +27,11 @@ class TestGetTermById:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Term found"
-        assert response.data == TermResponse(terms=[term1])
+        assert response.data == TermResponse(items=[term1])
 
     async def test_get_term_by_id_not_found(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.get_term_by_id.return_value = None
+        term_dao.get_by_id.return_value = None
 
         response = await get_term_by_id(term_id=str(valid_uuid), term_dao=term_dao)
 
@@ -41,7 +41,7 @@ class TestGetTermById:
 
     async def test_get_term_by_id_error(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.get_term_by_id.side_effect = Exception("Error")
+        term_dao.get_by_id.side_effect = Exception("Error")
 
         response = await get_term_by_id(term_id=str(valid_uuid), term_dao=term_dao)
 
@@ -56,7 +56,7 @@ class TestCreateTerm:
         self, term1: Term, term_request: TermRequest
     ) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.create_term.return_value = term1
+        term_dao.create.return_value = term1
 
         assert term1.name is not None
 
@@ -64,11 +64,11 @@ class TestCreateTerm:
 
         assert response.status == status.HTTP_201_CREATED
         assert response.message == "Term created"
-        assert response.data == TermResponse(terms=[term1])
+        assert response.data == TermResponse(items=[term1])
 
     async def test_create_term_duplicate(self, term_request: TermRequest) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.create_term.side_effect = Exception("Failed to create term")
+        term_dao.create.side_effect = Exception("Failed to create term")
 
         response = await create_term(term_request, term_dao=term_dao)
 
@@ -78,7 +78,7 @@ class TestCreateTerm:
 
     async def test_create_term_error(self, term_request: TermRequest) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.create_term.side_effect = Exception("Error")
+        term_dao.create.side_effect = Exception("Error")
 
         response = await create_term(term_request, term_dao=term_dao)
 
@@ -92,7 +92,7 @@ class TestUpdateTerm:
     async def test_update_term_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
         term1.name = "Fall 2026 - 2027"
-        term_dao.update_term.return_value = term1
+        term_dao.update.return_value = term1
 
         assert term1.id is not None
 
@@ -102,11 +102,11 @@ class TestUpdateTerm:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Term updated"
-        assert response.data == TermResponse(terms=[term1])
+        assert response.data == TermResponse(items=[term1])
 
     async def test_update_term_not_found(self, valid_uuid: Mock, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.update_term.return_value = None
+        term_dao.update.return_value = None
 
         response = await update_term(
             term_id=str(valid_uuid), term_name=term1.name, term_dao=term_dao
@@ -118,7 +118,7 @@ class TestUpdateTerm:
 
     async def test_update_term_duplicate(self, term1: Term, term2: Term) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.update_term.side_effect = Exception("Failed to update term")
+        term_dao.update.side_effect = Exception("Failed to update term")
 
         assert term1.id is not None
 
@@ -135,7 +135,7 @@ class TestUpdateTerm:
 class TestDeleteTerm:
     async def test_delete_term_successful(self, term1: Term) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.delete_term.return_value = term1
+        term_dao.delete.return_value = term1
 
         assert term1.id is not None
 
@@ -143,11 +143,11 @@ class TestDeleteTerm:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Term deleted"
-        assert response.data == TermResponse(terms=[term1])
+        assert response.data == TermResponse(items=[term1])
 
     async def test_delete_term_not_found(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.delete_term.return_value = None
+        term_dao.delete.return_value = None
 
         response = await delete_term(term_id=str(valid_uuid), term_dao=term_dao)
 
@@ -157,7 +157,7 @@ class TestDeleteTerm:
 
     async def test_delete_term_error(self, valid_uuid: Mock) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.delete_term.side_effect = Exception("Error")
+        term_dao.delete.side_effect = Exception("Error")
 
         response = await delete_term(term_id=str(valid_uuid), term_dao=term_dao)
 
@@ -170,17 +170,17 @@ class TestDeleteTerm:
 class TestGetTermsByQuery:
     async def test_get_terms_by_query_successful(self, terms: list[Term]) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.get_terms_by_query.return_value = terms
+        term_dao.get_by_query.return_value = terms
 
         response = await get_terms_by_query(term_dao=term_dao)
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Terms found"
-        assert response.data == TermResponse(terms=terms)
+        assert response.data == TermResponse(items=terms)
 
     async def test_get_terms_by_query_unsuccessful(self) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.get_terms_by_query.return_value = []
+        term_dao.get_by_query.return_value = []
 
         response = await get_terms_by_query(term_dao=term_dao)
 
@@ -190,7 +190,7 @@ class TestGetTermsByQuery:
 
     async def test_get_terms_by_query_error(self) -> None:
         term_dao = Mock(spec=TermDAO)
-        term_dao.get_terms_by_query.side_effect = Exception("Error")
+        term_dao.get_by_query.side_effect = Exception("Error")
 
         response = await get_terms_by_query(term_dao=term_dao)
 

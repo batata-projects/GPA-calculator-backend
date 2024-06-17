@@ -20,7 +20,7 @@ class TestRegister:
         self, register_request: RegisterRequest, user1: User, gotrue_user: GoTrueUser
     ) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = None
+        user_dao.get_by_query.return_value = None
         user_dao.client.auth.sign_up.return_value = GoTrueAuthResponse(
             user=gotrue_user,
             session=None,
@@ -28,7 +28,7 @@ class TestRegister:
 
         response = register(register_request, user_dao)
 
-        assert user_dao.get_user_by_email.called
+        assert user_dao.get_by_query.called
         assert user_dao.client.auth.sign_up.called
 
         assert response.user == user1
@@ -52,7 +52,7 @@ class TestRegister:
         email: EmailStr,
     ) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = None
+        user_dao.get_by_query.return_value = None
         user_dao.client.auth.sign_up.return_value = GoTrueAuthResponse(
             user=GoTrueUser(
                 id=user1.id,
@@ -82,7 +82,7 @@ class TestRegister:
         self, register_request: RegisterRequest, user1: User
     ) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = user1
+        user_dao.get_by_query.return_value = user1
 
         with pytest.raises(Exception) as exc:
             register(register_request, user_dao)
@@ -92,7 +92,7 @@ class TestRegister:
         self, register_request: RegisterRequest, user1: User
     ) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = None
+        user_dao.get_by_query.return_value = None
         user_dao.client.auth.sign_up.side_effect = Exception()
 
         with pytest.raises(Exception) as exc:
@@ -153,14 +153,14 @@ class TestLogin:
         gotrue_session: GoTrueSession,
     ) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = user1
+        user_dao.get_by_query.return_value = user1
         user_dao.client.auth.sign_in_with_password.return_value = GoTrueAuthResponse(
             user=gotrue_user, session=gotrue_session
         )
 
         response = login(login_request, user_dao)
 
-        assert user_dao.get_user_by_email.called
+        assert user_dao.get_by_query.called
         assert user_dao.client.auth.sign_in_with_password.called
 
         assert response.user == user1
@@ -168,7 +168,7 @@ class TestLogin:
 
     async def test_login_user_not_found(self, login_request: LoginRequest) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = None
+        user_dao.get_by_query.return_value = None
 
         with pytest.raises(Exception) as exc:
             login(login_request, user_dao)
@@ -176,7 +176,7 @@ class TestLogin:
 
     async def test_login_failed(self, login_request: LoginRequest) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = None
+        user_dao.get_by_query.return_value = None
         user_dao.client.auth.sign_in_with_password.side_effect = Exception()
 
         with pytest.raises(Exception) as exc:

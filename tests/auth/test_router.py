@@ -16,7 +16,7 @@ class TestRegisterRoute:
         self, register_request: RegisterRequest, gotrue_user: GoTrueUser
     ) -> None:
         user_dao = Mock()
-        user_dao.get_user_by_email.return_value = None
+        user_dao.get_by_query.return_value = None
         user_dao.client.auth.sign_up.return_value = GoTrueAuthResponse(
             user=gotrue_user,
             session=None,

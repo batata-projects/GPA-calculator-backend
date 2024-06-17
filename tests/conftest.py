@@ -24,7 +24,6 @@ from .fixtures.common.utils.validators.EmailValidator import invalid_email, vali
 from .fixtures.common.utils.validators.NameValidator import invalid_name, valid_name
 from .fixtures.controller.available_courses.schemas import available_course_request
 from .fixtures.controller.courses.schemas import course_request
-from .fixtures.controller.terms.schemas import term_request
 from .fixtures.controller.users.schemas import user_request
 from .fixtures.db.models.available_courses import (
     available_course1,

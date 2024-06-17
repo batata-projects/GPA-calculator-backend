@@ -2,13 +2,13 @@ from fastapi import APIRouter, status
 
 from src.common.responses import APIResponse
 
-router = APIRouter(
+status_router = APIRouter(
     prefix="/status",
     tags=["Status"],
 )
 
 
-@router.get(
+@status_router.get(
     "",
     response_model=APIResponse[None],
     response_description="Status check",

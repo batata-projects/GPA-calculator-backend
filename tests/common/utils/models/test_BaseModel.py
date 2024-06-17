@@ -1,7 +1,6 @@
 import pytest
 
-from src.common.utils.models import BaseModel
-from src.db.models import AvailableCourse, Course, Term, User
+from src.db.models import AvailableCourse, BaseModel, Course, Term, User
 
 
 class TestBaseModel:

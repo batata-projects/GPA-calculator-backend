@@ -1,7 +1,7 @@
 from typing import Optional
 
-from src.common.utils.models import BaseModel
 from src.common.utils.types import CourseGradeFloat, UuidStr
+from src.db.models import BaseModel
 
 
 class Course(BaseModel):

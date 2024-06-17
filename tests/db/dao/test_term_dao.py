@@ -20,7 +20,7 @@ class TestTermDAO:
 
         assert term.id is not None
 
-        result = term_dao.get_term_by_id(term.id)
+        result = term_dao.get_by_id(term.id)
 
         assert result == term
 
@@ -33,7 +33,7 @@ class TestTermDAO:
             term.model_dump()
         ).execute.return_value = APIResponse(data=[term.model_dump()], count=None)
 
-        result = term_dao.create_term(term.model_dump())
+        result = term_dao.create(term.model_dump())
 
         assert result == term
 
@@ -48,7 +48,7 @@ class TestTermDAO:
 
         assert term.id is not None
 
-        result = term_dao.update_term(term.id, term.model_dump())
+        result = term_dao.update(term.id, term.model_dump())
 
         assert result == term
 
@@ -63,7 +63,7 @@ class TestTermDAO:
 
         assert term.id is not None
 
-        result = term_dao.delete_term(term.id)
+        result = term_dao.delete(term.id)
 
         assert result == term
 
@@ -78,6 +78,6 @@ class TestTermDAO:
 
         assert term.id is not None
 
-        result = term_dao.get_terms_by_query(term.id, term.name)
+        result = term_dao.get_by_query(id=term.id, name=term.name)
 
         assert result == [term]

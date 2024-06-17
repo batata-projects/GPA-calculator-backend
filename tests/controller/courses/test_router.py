@@ -19,7 +19,7 @@ from src.db.models import Course
 class TestGetCourseById:
     async def test_get_course_by_id_successful(self, course1: Course) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_course_by_id.return_value = course1
+        course_dao.get_by_id.return_value = course1
 
         assert course1.id is not None
 
@@ -27,11 +27,11 @@ class TestGetCourseById:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Course found"
-        assert response.data == CourseResponse(courses=[course1])
+        assert response.data == CourseResponse(items=[course1])
 
     async def test_get_course_by_id_not_found(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_course_by_id.return_value = None
+        course_dao.get_by_id.return_value = None
 
         response = await get_course_by_id(
             course_id=str(valid_uuid), course_dao=course_dao
@@ -43,7 +43,7 @@ class TestGetCourseById:
 
     async def test_get_course_by_id_error(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_course_by_id.side_effect = Exception("Error")
+        course_dao.get_by_id.side_effect = Exception("Error")
 
         response = await get_course_by_id(
             course_id=str(valid_uuid), course_dao=course_dao
@@ -58,17 +58,17 @@ class TestGetCourseById:
 class TestGetCoursesByQuery:
     async def test_get_courses_by_query_successful(self, course1: Course) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_query.return_value = [course1]
+        course_dao.get_by_query.return_value = [course1]
 
         response = await get_courses_by_query(course_dao=course_dao)
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Courses found"
-        assert response.data == CourseResponse(courses=[course1])
+        assert response.data == CourseResponse(items=[course1])
 
     async def test_get_courses_by_query_not_found(self) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_query.return_value = []
+        course_dao.get_by_query.return_value = []
 
         response = await get_courses_by_query(course_dao=course_dao)
 
@@ -78,7 +78,7 @@ class TestGetCoursesByQuery:
 
     async def test_get_courses_by_query_error(self) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.get_courses_by_query.side_effect = Exception("Error")
+        course_dao.get_by_query.side_effect = Exception("Error")
 
         response = await get_courses_by_query(course_dao=course_dao)
 
@@ -93,7 +93,7 @@ class TestCreateCourse:
         self, course_request: CourseRequest, course1: Course
     ) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.create_course.return_value = course1
+        course_dao.create.return_value = course1
 
         response = await create_course(
             course_request,
@@ -102,11 +102,11 @@ class TestCreateCourse:
 
         assert response.status == status.HTTP_201_CREATED
         assert response.message == "Course created"
-        assert response.data == CourseResponse(courses=[course1])
+        assert response.data == CourseResponse(items=[course1])
 
     async def test_create_course_error(self, course_request: CourseRequest) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.create_course.side_effect = Exception("Error")
+        course_dao.create.side_effect = Exception("Error")
 
         response = await create_course(
             course_request,
@@ -122,7 +122,7 @@ class TestCreateCourse:
 class TestUpdateCourse:
     async def test_update_course_successful(self, course1: Course) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.update_course.return_value = course1
+        course_dao.update.return_value = course1
 
         assert course1.id is not None
 
@@ -137,11 +137,11 @@ class TestUpdateCourse:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Course updated"
-        assert response.data == CourseResponse(courses=[course1])
+        assert response.data == CourseResponse(items=[course1])
 
     async def test_update_course_not_found(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.update_course.return_value = None
+        course_dao.update.return_value = None
 
         response = await update_course(
             str(valid_uuid), str(valid_uuid), str(valid_uuid), 12, True, course_dao
@@ -153,7 +153,7 @@ class TestUpdateCourse:
 
     async def test_update_course_error(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.update_course.side_effect = Exception("Error")
+        course_dao.update.side_effect = Exception("Error")
 
         response = await update_course(
             str(valid_uuid), str(valid_uuid), str(valid_uuid), 12, True, course_dao
@@ -168,7 +168,7 @@ class TestUpdateCourse:
 class TestDeleteCourse:
     async def test_delete_course_successful(self, course1: Course) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.delete_course.return_value = course1
+        course_dao.delete.return_value = course1
 
         assert course1.id is not None
 
@@ -176,11 +176,11 @@ class TestDeleteCourse:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Course deleted"
-        assert response.data == CourseResponse(courses=[course1])
+        assert response.data == CourseResponse(items=[course1])
 
     async def test_delete_course_not_found(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.delete_course.return_value = None
+        course_dao.delete.return_value = None
 
         response = await delete_course(course_id=str(valid_uuid), course_dao=course_dao)
 
@@ -190,7 +190,7 @@ class TestDeleteCourse:
 
     async def test_delete_course_error(self, valid_uuid: Mock) -> None:
         course_dao = Mock(spec=CourseDAO)
-        course_dao.delete_course.side_effect = Exception("Error")
+        course_dao.delete.side_effect = Exception("Error")
 
         response = await delete_course(course_id=str(valid_uuid), course_dao=course_dao)
 

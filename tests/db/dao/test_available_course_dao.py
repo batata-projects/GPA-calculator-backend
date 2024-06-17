@@ -23,7 +23,7 @@ class TestAvailableCourseDAO:
 
         assert available_course1.id is not None
 
-        result = available_course_dao.get_available_course_by_id(available_course1.id)
+        result = available_course_dao.get_by_id(available_course1.id)
 
         assert result == available_course1
 
@@ -39,9 +39,7 @@ class TestAvailableCourseDAO:
             data=[available_course1.model_dump()], count=None
         )
 
-        result = available_course_dao.create_available_course(
-            available_course1.model_dump()
-        )
+        result = available_course_dao.create(available_course1.model_dump())
 
         assert result == available_course1
 
@@ -59,7 +57,7 @@ class TestAvailableCourseDAO:
 
         assert available_course1.id is not None
 
-        result = available_course_dao.update_available_course(
+        result = available_course_dao.update(
             available_course1.id, available_course1.model_dump()
         )
 
@@ -79,7 +77,7 @@ class TestAvailableCourseDAO:
 
         assert available_course1.id is not None
 
-        result = available_course_dao.delete_available_course(available_course1.id)
+        result = available_course_dao.delete(available_course1.id)
 
         assert result == available_course1
 
@@ -95,8 +93,6 @@ class TestAvailableCourseDAO:
             data=[available_course1.model_dump()], count=None
         )
 
-        result = available_course_dao.get_available_courses_by_query(
-            name=available_course1.name
-        )
+        result = available_course_dao.get_by_query(name=available_course1.name)
 
         assert result == [available_course1]

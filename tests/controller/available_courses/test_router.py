@@ -24,7 +24,7 @@ class TestGetAvailableCourseById:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.get_available_course_by_id.return_value = available_course1
+        available_course_dao.get_by_id.return_value = available_course1
 
         assert available_course1.id is not None
 
@@ -35,13 +35,11 @@ class TestGetAvailableCourseById:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Available course found"
-        assert response.data == AvailableCourseResponse(
-            available_courses=[available_course1]
-        )
+        assert response.data == AvailableCourseResponse(items=[available_course1])
 
     async def test_get_available_course_by_id_not_found(self, valid_uuid: Mock) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.get_available_course_by_id.return_value = None
+        available_course_dao.get_by_id.return_value = None
 
         response = await get_available_course_by_id(
             available_course_id=str(valid_uuid),
@@ -54,7 +52,7 @@ class TestGetAvailableCourseById:
 
     async def test_get_available_course_by_id_error(self, valid_uuid: Mock) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.get_available_course_by_id.side_effect = Exception("Error")
+        available_course_dao.get_by_id.side_effect = Exception("Error")
 
         response = await get_available_course_by_id(
             available_course_id=str(valid_uuid),
@@ -72,9 +70,7 @@ class TestGetAvailableCoursesByQuery:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.get_available_courses_by_query.return_value = [
-            available_course1
-        ]
+        available_course_dao.get_by_query.return_value = [available_course1]
 
         response = await get_available_courses_by_query(
             term_id=available_course1.term_id, available_course_dao=available_course_dao
@@ -82,15 +78,13 @@ class TestGetAvailableCoursesByQuery:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Available courses found"
-        assert response.data == AvailableCourseResponse(
-            available_courses=[available_course1]
-        )
+        assert response.data == AvailableCourseResponse(items=[available_course1])
 
     async def test_get_available_courses_by_query_not_found(
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.get_available_courses_by_query.return_value = None
+        available_course_dao.get_by_query.return_value = None
 
         response = await get_available_courses_by_query(
             term_id=available_course1.term_id, available_course_dao=available_course_dao
@@ -104,9 +98,7 @@ class TestGetAvailableCoursesByQuery:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.get_available_courses_by_query.side_effect = Exception(
-            "Error"
-        )
+        available_course_dao.get_by_query.side_effect = Exception("Error")
 
         response = await get_available_courses_by_query(
             term_id=available_course1.term_id, available_course_dao=available_course_dao
@@ -125,7 +117,7 @@ class TestCreateAvailableCourse:
         available_course_request: AvailableCourseRequest,
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.create_available_course.return_value = available_course1
+        available_course_dao.create.return_value = available_course1
 
         response = await create_available_course(
             available_course_request,
@@ -134,15 +126,13 @@ class TestCreateAvailableCourse:
 
         assert response.status == status.HTTP_201_CREATED
         assert response.message == "Available course created"
-        assert response.data == AvailableCourseResponse(
-            available_courses=[available_course1]
-        )
+        assert response.data == AvailableCourseResponse(items=[available_course1])
 
     async def test_create_available_course_error(
         self, available_course_request: AvailableCourseRequest
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.create_available_course.side_effect = Exception("Error")
+        available_course_dao.create.side_effect = Exception("Error")
 
         response = await create_available_course(
             available_course_request, available_course_dao
@@ -159,7 +149,7 @@ class TestUpdateAvailableCourse:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.update_available_course.return_value = available_course1
+        available_course_dao.update.return_value = available_course1
         assert available_course1.id is not None
         response = await update_available_course(
             available_course1.id,
@@ -173,13 +163,11 @@ class TestUpdateAvailableCourse:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Available course updated"
-        assert response.data == AvailableCourseResponse(
-            available_courses=[available_course1]
-        )
+        assert response.data == AvailableCourseResponse(items=[available_course1])
 
     async def test_update_available_course_id_not_found(self, valid_uuid: Mock) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.update_available_course.return_value = None
+        available_course_dao.update.return_value = None
 
         response = await update_available_course(
             str(valid_uuid),
@@ -195,7 +183,7 @@ class TestUpdateAvailableCourse:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.update_available_course.side_effect = Exception("Error")
+        available_course_dao.update.side_effect = Exception("Error")
         assert available_course1.id is not None
         response = await update_available_course(
             available_course1.id,
@@ -218,7 +206,7 @@ class TestDeleteAvailableCourse:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.delete_available_course.return_value = available_course1
+        available_course_dao.delete.return_value = available_course1
         assert available_course1.id is not None
         response = await delete_available_course(
             available_course1.id, available_course_dao=available_course_dao
@@ -226,13 +214,11 @@ class TestDeleteAvailableCourse:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Available course deleted"
-        assert response.data == AvailableCourseResponse(
-            available_courses=[available_course1]
-        )
+        assert response.data == AvailableCourseResponse(items=[available_course1])
 
     async def test_delete_available_course_id_not_found(self, valid_uuid: Mock) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.delete_available_course.return_value = None
+        available_course_dao.delete.return_value = None
 
         response = await delete_available_course(
             str(valid_uuid), available_course_dao=available_course_dao
@@ -246,7 +232,7 @@ class TestDeleteAvailableCourse:
         self, available_course1: AvailableCourse
     ) -> None:
         available_course_dao = Mock(spec=AvailableCourseDAO)
-        available_course_dao.delete_available_course.side_effect = Exception("Error")
+        available_course_dao.delete.side_effect = Exception("Error")
         assert available_course1.id is not None
         response = await delete_available_course(
             available_course1.id, available_course_dao=available_course_dao

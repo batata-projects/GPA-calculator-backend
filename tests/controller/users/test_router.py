@@ -19,7 +19,7 @@ from src.db.models import User
 class TestGetUserById:
     async def test_get_user_by_id_successful(self, user1: User) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_id.return_value = user1
+        user_dao.get_by_id.return_value = user1
 
         assert user1.id is not None
 
@@ -27,11 +27,11 @@ class TestGetUserById:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "User found"
-        assert response.data == UserResponse(users=[user1])
+        assert response.data == UserResponse(items=[user1])
 
     async def test_get_user_by_id_not_found(self, valid_uuid: Mock) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_id.return_value = None
+        user_dao.get_by_id.return_value = None
 
         response = await get_user_by_id(user_id=str(valid_uuid), user_dao=user_dao)
 
@@ -41,7 +41,7 @@ class TestGetUserById:
 
     async def test_get_user_by_id_error(self, valid_uuid: Mock) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_user_by_id.side_effect = Exception("Error")
+        user_dao.get_by_id.side_effect = Exception("Error")
 
         response = await get_user_by_id(user_id=str(valid_uuid), user_dao=user_dao)
 
@@ -56,17 +56,17 @@ class TestGetUsersByQuery:
         self, user1: User, user2: User
     ) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_users_by_query.return_value = [user1, user2]
+        user_dao.get_by_query.return_value = [user1, user2]
 
         response = await get_users_by_query(user_dao=user_dao)
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "Users found"
-        assert response.data == UserResponse(users=[user1, user2])
+        assert response.data == UserResponse(items=[user1, user2])
 
     async def test_get_users_by_query_not_found(self) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_users_by_query.return_value = []
+        user_dao.get_by_query.return_value = []
 
         response = await get_users_by_query(user_dao=user_dao)
 
@@ -76,7 +76,7 @@ class TestGetUsersByQuery:
 
     async def test_get_users_by_query_error(self) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.get_users_by_query.side_effect = Exception("Error")
+        user_dao.get_by_query.side_effect = Exception("Error")
 
         response = await get_users_by_query(user_dao=user_dao)
 
@@ -91,17 +91,17 @@ class TestCreateUser:
         self, user1: User, user_request: UserRequest
     ) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.create_user.return_value = user1
+        user_dao.create.return_value = user1
 
         response = await create_user(user_request, user_dao)
 
         assert response.status == status.HTTP_201_CREATED
         assert response.message == "User created"
-        assert response.data == UserResponse(users=[user1])
+        assert response.data == UserResponse(items=[user1])
 
     async def test_create_user_fail(self, user_request: UserRequest) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.create_user.return_value = None
+        user_dao.create.return_value = None
 
         response = await create_user(user_request, user_dao)
 
@@ -111,7 +111,7 @@ class TestCreateUser:
 
     async def test_create_user_error(self, user_request: UserRequest) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.create_user.side_effect = Exception("Error")
+        user_dao.create.side_effect = Exception("Error")
 
         response = await create_user(user_request, user_dao)
         assert response.status == status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -124,7 +124,7 @@ class TestUpdateUser:
     async def test_update_user_successful(self, user1: User) -> None:
         user_dao = Mock(spec=UserDAO)
         user1.username = "new_username"
-        user_dao.update_user.return_value = user1
+        user_dao.update.return_value = user1
 
         assert user1.id is not None
 
@@ -134,7 +134,7 @@ class TestUpdateUser:
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "User updated"
-        assert response.data == UserResponse(users=[user1])
+        assert response.data == UserResponse(items=[user1])
 
     async def test_update_user_not_found(
         self,
@@ -142,7 +142,7 @@ class TestUpdateUser:
     ) -> None:
         user_dao = Mock(spec=UserDAO)
         user1.username = "new_username"
-        user_dao.update_user.return_value = None
+        user_dao.update.return_value = None
         assert user1.id is not None
         response = await update_user(
             user_id=user1.id, username=user1.username, user_dao=user_dao
@@ -155,7 +155,7 @@ class TestUpdateUser:
     async def test_update_user_error(self, user1: User) -> None:
         user_dao = Mock(spec=UserDAO)
         user1.username = "new_username"
-        user_dao.update_user.return_value = Exception("Error")
+        user_dao.update.return_value = Exception("Error")
         assert user1.id is not None
         response = await update_user(
             user_id=user1.id, username=user1.username, user_dao=user_dao
@@ -169,17 +169,17 @@ class TestUpdateUser:
 class TestDeleteUser:
     async def test_delete_user_successful(self, user1: User) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.delete_user.return_value = user1
+        user_dao.delete.return_value = user1
         assert user1.id is not None
         response = await delete_user(user_id=user1.id, user_dao=user_dao)
 
         assert response.status == status.HTTP_200_OK
         assert response.message == "User deleted"
-        assert response.data == UserResponse(users=[user1])
+        assert response.data == UserResponse(items=[user1])
 
     async def test_delete_user_not_found(self, user1: User) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.delete_user.return_value = None
+        user_dao.delete.return_value = None
         assert user1.id is not None
         response = await delete_user(user_id=user1.id, user_dao=user_dao)
 
@@ -189,7 +189,7 @@ class TestDeleteUser:
 
     async def test_delete_user_error(self, user1: User) -> None:
         user_dao = Mock(spec=UserDAO)
-        user_dao.delete_user.side_effect = Exception("Error")
+        user_dao.delete.side_effect = Exception("Error")
         assert user1.id is not None
         response = await delete_user(user_id=user1.id, user_dao=user_dao)
 
