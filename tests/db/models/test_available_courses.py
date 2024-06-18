@@ -49,10 +49,10 @@ class TestAvailableCourse:
     @pytest.mark.parametrize(
         "terms_id, name, code, credits",
         [
-            (None, "EECE", "230", 3, True),
-            ("uuid4", None, "230", 3, True),
-            ("uuid4", "EECE", None, 3, True),
-            ("uuid4", "EECE", "230", None, True),
+            (None, "EECE", "230", 3),
+            ("uuid4", None, "230", 3),
+            ("uuid4", "EECE", None, 3),
+            ("uuid4", "EECE", "230", None),
         ],
     )
     def test_available_course_none_attribute(
@@ -66,17 +66,15 @@ class TestAvailableCourse:
         if terms_id is not None:
             terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
-            AvailableCourse(
-                term_id=terms_id, name=name, code=code, credits=credits
-            )
+            AvailableCourse(term_id=terms_id, name=name, code=code, credits=credits)
 
     @pytest.mark.parametrize(
         "terms_id, name, code, credits",
         [
-            ("12345", "EECE", "230", 3, True),
-            ("uuid4", "Electrical", "230", 3, True),
-            ("uuid4", "EECE", "L12", 3, True),
-            ("uuid4", "EECE", "230", 3.5, True),
+            ("12345", "EECE", "230", 3),
+            ("uuid4", "Electrical", "230", 3),
+            ("uuid4", "EECE", "L12", 3),
+            ("uuid4", "EECE", "230", 3.5),
         ],
     )
     def test_available_course_invalid_attribute(
@@ -90,9 +88,7 @@ class TestAvailableCourse:
         if terms_id == "uuid4":
             terms_id = str(getattr(request.getfixturevalue(terms_id), "return_value"))
         with pytest.raises(ValueError):
-            AvailableCourse(
-                term_id=terms_id, name=name, code=code, credits=credits
-            )
+            AvailableCourse(term_id=terms_id, name=name, code=code, credits=credits)
 
     def test_model_validate_partial_invalid(
         self, invalid_available_course_data: list[dict[str, Any]]

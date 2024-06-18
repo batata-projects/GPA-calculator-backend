@@ -8,6 +8,9 @@ from src.db.models import BaseModel
 BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
 
 
+# TODO: Add get_by_all method
+
+
 class BaseDAO(Generic[BaseModelType]):
     def __init__(
         self, client: Client, table: str, base_model: type[BaseModelType]

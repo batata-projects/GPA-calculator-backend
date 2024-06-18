@@ -32,5 +32,4 @@ class Driver(Chrome):
             options.add_argument(f"download.default_directory={download_location}")
         if prefs:
             options.add_experimental_option("prefs", prefs)
-        self.driver = Chrome(options=options)
-driver = Driver()
+        super().__init__(options=options)

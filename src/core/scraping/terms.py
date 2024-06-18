@@ -28,7 +28,7 @@ class TermsScraper:
         for term in response_data:
             try:
                 data.append(Term.convert_from_sis_term(term["code"]))
-            except ValueError as e:
+            except ValueError:
                 continue
         return data
 

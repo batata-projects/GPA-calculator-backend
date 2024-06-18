@@ -61,14 +61,6 @@ def available_courses_same_terms(
 
 
 @pytest.fixture
-def available_courses_same_graded(
-    available_courses: list[AvailableCourse],
-) -> list[AvailableCourse]:
-    available_courses[1].graded = available_courses[0].graded
-    return available_courses
-
-
-@pytest.fixture
 def available_courses_data(valid_uuid: Mock) -> list[dict[str, Any]]:
     return [
         {
@@ -103,7 +95,7 @@ def invalid_available_course_data(valid_uuid: Mock) -> list[dict[str, Any]]:
         {
             "id": str(valid_uuid),
             "term_id": str(valid_uuid),
-            "name": "PHYS",
+            "name": "SUBJECT",
             "code": "200",
             "credits": 3,
         },

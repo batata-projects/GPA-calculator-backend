@@ -32,8 +32,8 @@ def get_scrapper_client() -> Client:
     if Config.SUPABASE.KEY is None or Config.SUPABASE.URL is None:
         raise ValueError("SUPABASE_KEY and SUPABASE_URL must be set in the environment")
     if (
-        Config.SUPABASE.SCRAPING.EMAIL is None
-        or Config.SUPABASE.SCRAPING.PASSWORD is None
+        Config.SCRAPING.SUPABASE_EMAIL is None
+        or Config.SCRAPING.SUPABASE_PASSWORD is None
     ):
         raise ValueError(
             "SUPABASE_SCRAPER_EMAIL and SUPABASE_SCRAPER_PASSWORD must be set in the environment"
@@ -44,8 +44,8 @@ def get_scrapper_client() -> Client:
     )
     client.auth.sign_in_with_password(
         {
-            "email": Config.SUPABASE.SCRAPING.EMAIL,
-            "password": Config.SUPABASE.SCRAPING.PASSWORD,
+            "email": Config.SCRAPING.SUPABASE_EMAIL,
+            "password": Config.SCRAPING.SUPABASE_PASSWORD,
         }
     )
     return client
