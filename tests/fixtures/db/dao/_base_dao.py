@@ -9,6 +9,8 @@ from tests.fixtures.db.models._base_model import TestObject
 
 
 class TestDAO(BaseDAO[TestObject]):
+    __test__ = False
+
     def __init__(self, client: Client) -> None:
         super().__init__(client, "TESTS", TestObject)
 

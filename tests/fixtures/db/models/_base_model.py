@@ -8,6 +8,7 @@ from src.db.models import BaseModel
 
 
 class TestObject(BaseModel):
+    __test__ = False
     id: Optional[UuidStr] = None
     name: str
 

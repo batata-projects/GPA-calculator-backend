@@ -15,10 +15,6 @@ class Config:
         KEY = os.getenv("SUPABASE_KEY")
         URL = os.getenv("SUPABASE_URL")
 
-        class SCRAPING:
-            EMAIL = os.getenv("SUPABASE_SCRAPER_EMAIL")
-            PASSWORD = os.getenv("SUPABASE_SCRAPER_PASSWORD")
-
     class JWT:
         SECRET = os.getenv("JWT_SECRET")
         ALGORITHM = "HS256"
@@ -27,3 +23,7 @@ class Config:
     class Testing:
         class RANDOM:
             SEED = 0
+
+    class SCRAPING:
+        SUPABASE_EMAIL = os.getenv("SUPABASE_SCRAPER_EMAIL")
+        SUPABASE_PASSWORD = os.getenv("SUPABASE_SCRAPER_PASSWORD")

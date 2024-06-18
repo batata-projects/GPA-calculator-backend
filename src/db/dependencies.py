@@ -33,11 +33,9 @@ def get_user_dao_unauthenticated(
     return UserDAO(client)
 
 
-def get_scrapper_terms_dao(client: Client = get_scrapper_client()) -> TermDAO:
-    return TermDAO(client)
+def get_scrapper_terms_dao() -> TermDAO:
+    return TermDAO(get_scrapper_client())
 
 
-def get_scrapper_available_courses_dao(
-    client: Client = get_scrapper_client(),
-) -> AvailableCourseDAO:
-    return AvailableCourseDAO(client)
+def get_scrapper_available_courses_dao() -> AvailableCourseDAO:
+    return AvailableCourseDAO(get_scrapper_client())

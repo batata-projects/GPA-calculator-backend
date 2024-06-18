@@ -7,6 +7,7 @@ from tests.fixtures.db.models._base_model import TestObject
 
 
 class TestQuery(BaseQuery[TestObject]):
+    __test__ = False
     name: Optional[str] = None
 
 

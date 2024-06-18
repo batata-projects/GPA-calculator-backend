@@ -76,7 +76,7 @@ class TestCourse:
         [
             (None, "uuid4", 4.0, True, True),
             ("uuid4", None, 4.0, True, True),
-            ("uuid4", "uuid4", 4.0, True, None),    
+            ("uuid4", "uuid4", 4.0, True, None),
         ],
     )
     def test_course_none_attribute(
