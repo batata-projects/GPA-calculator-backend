@@ -15,26 +15,12 @@ class AvailableCoursesScrapper:
         self.term_dao = term_dao
         self.available_course_dao = available_course_dao
         self.base_url = "https://sturegss.aub.edu.lb/StudentRegistrationSsb/ssb/searchResults/searchResults?txt_term={term_number}&pageOffset={page_offset}&pageMaxSize={page_max_size}"
-        self.cookie = [
-            "JSESSIONID=69A4D83F7DB82B9BD94136E34CFCFCC4",
-            "*=6ec06d2a72d7d526c39f0b18f03d27fdd6b18c52",
-        ]
-        self.headers = {"Host": "sturegss.aub.edu.lb", "Cookie": ";".join(self.cookie)}
+        self.headers = {"Host": "sturegss.aub.edu.lb"}
 
     def fetch_course_graded(
         self, term_number: str, course_reference_number: str
     ) -> bool:
-        url = "https://sturegss.aub.edu.lb/StudentRegistrationSsb/ssb/searchResults/getSectionCatalogDetails"
-        payload = f"term={term_number}&courseReferenceNumber={course_reference_number}"
-        headers = {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-        }
-
-        response = requests.request("POST", url, headers=headers, data=payload)
-
-        if "Letter Grade L" in response.text:
-            return True
-        return False
+        return True
 
     def _fetch_available_courses(
         self,
@@ -49,6 +35,8 @@ class AvailableCoursesScrapper:
             page_offset=page_offset,
             page_max_size=page_max_size,
         )
+        self.cookie = self._get_cookie()
+        self.headers = {"Cookie": self.cookie}
         response = requests.request("GET", url, headers=self.headers)
         if response.status_code != status.HTTP_200_OK:
             raise HTTPException(
@@ -60,28 +48,21 @@ class AvailableCoursesScrapper:
             grade = self.fetch_course_graded(
                 term_number, available_course["courseReferenceNumber"]
             )
-            try:
-                course_name = str(
-                    available_course["subject"] + " " + available_course["courseNumber"]
-                )
-                if course_name in data:
-                    continue
-                _available_course = AvailableCourse(
-                    term_id=term_id,
-                    name=available_course["subject"],
-                    code=available_course["courseNumber"],
-                    credits=int(
-                        available_course["creditHours"]
-                        or available_course["creditHourLow"]
-                    ),
-                    graded=grade,
-                )
-                data[course_name] = _available_course
-            except Exception as e:
-                print(available_course)
-                raise e
-            print(f"\r{i + 1}/{len(response_data)}", end="")
-        print()
+            course_name = str(
+                available_course["subject"] + " " + available_course["courseNumber"]
+            )
+            if course_name in data:
+                continue
+            _available_course = AvailableCourse(
+                term_id=term_id,
+                name=available_course["subject"],
+                code=available_course["courseNumber"],
+                credits=int(
+                    available_course["creditHours"] or available_course["creditHourLow"]
+                ),
+                graded=grade,
+            )
+            data[course_name] = _available_course
         return data
 
     def fetch_available_courses(
@@ -129,4 +110,4 @@ ACS = AvailableCoursesScrapper(
     get_scrapper_terms_dao(), get_scrapper_available_courses_dao()
 )
 
-ACS.create_available_courses()
+x = ACS.create_available_courses()

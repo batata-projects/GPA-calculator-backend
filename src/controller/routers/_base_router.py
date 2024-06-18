@@ -11,7 +11,6 @@ from src.db.dao import BaseDAO
 from src.db.models import BaseModel
 
 BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
-ResponseType = TypeVar("ResponseType", bound=BaseResponse[BaseModel])
 
 
 class BaseRouter(Generic[BaseModelType]):
