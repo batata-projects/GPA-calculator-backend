@@ -44,4 +44,4 @@ from .fixtures.db.models.users import (
     users_same_grade,
     users_same_last_name,
 )
-from .fixtures.uuid import uuid4
+from .fixtures.others.uuid import uuid4
