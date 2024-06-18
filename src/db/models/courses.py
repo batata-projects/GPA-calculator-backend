@@ -10,3 +10,4 @@ class Course(BaseModel):
     user_id: UuidStr
     grade: Optional[CourseGradeFloat] = None
     passed: Optional[bool] = None
+    graded: bool

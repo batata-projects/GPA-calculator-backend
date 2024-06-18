@@ -15,7 +15,6 @@ def available_courses(valid_uuid: Mock) -> list[AvailableCourse]:
             name="PHYS",
             code="210L",
             credits=1,
-            graded=True,
         ),
         AvailableCourse(
             id=str(valid_uuid),
@@ -23,7 +22,6 @@ def available_courses(valid_uuid: Mock) -> list[AvailableCourse]:
             name="FEAA",
             code="200",
             credits=3,
-            graded=False,
         ),
     ]
 
@@ -81,7 +79,6 @@ def available_courses_data(valid_uuid: Mock) -> list[dict[str, Any]]:
         {
             "code": "200",
             "credits": 3,
-            "graded": False,
         },
         {
             "term_id": str(valid_uuid),
@@ -102,7 +99,6 @@ def invalid_available_course_data(valid_uuid: Mock) -> list[dict[str, Any]]:
             "name": "PHYS",
             "code": "20",
             "credits": 3,
-            "graded": False,
         },
         {
             "id": str(valid_uuid),
@@ -110,6 +106,5 @@ def invalid_available_course_data(valid_uuid: Mock) -> list[dict[str, Any]]:
             "name": "PHYS",
             "code": "200",
             "credits": 3,
-            "graded": -1,
         },
     ]

@@ -12,4 +12,3 @@ class AvailableCourse(BaseModel):
     name: CourseNameStr
     code: CourseCodeStr
     credits: NonNegativeInt
-    graded: bool
