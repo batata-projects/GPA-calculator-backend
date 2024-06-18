@@ -15,6 +15,13 @@ class TestConfig:
             assert Config.SUPABASE.KEY == "SUPABASE_KEY"
             assert Config.SUPABASE.URL == "SUPABASE_URL"
 
+        class TestScraping:
+            def test_scraping(self) -> None:
+                Config.SUPABASE.SCRAPING.EMAIL = "SUPABASE_SCRAPER_EMAIL"
+                Config.SUPABASE.SCRAPING.PASSWORD = "SUPABASE_SCRAPER_PASSWORD"
+                assert Config.SUPABASE.SCRAPING.EMAIL == "SUPABASE_SCRAPER_EMAIL"
+                assert Config.SUPABASE.SCRAPING.PASSWORD == "SUPABASE_SCRAPER_PASSWORD"
+
     class TestJWT:
         def test_jwt(self) -> None:
             Config.JWT.SECRET = "JWT_SECRET"
