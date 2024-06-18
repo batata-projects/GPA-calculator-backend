@@ -10,3 +10,4 @@ pyjwt==2.8.0
 typed-argument-parser==1.10.0
 pytest-mock==3.14.0
 requests==2.32.3
+selenium==4.21.0
