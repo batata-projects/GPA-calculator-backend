@@ -7,7 +7,7 @@ def validate_course_name(v: Optional[str] = None) -> Optional[str]:
     if not v:
         return None
     try:
-        if len(v) != 4 or not v.isalpha():
+        if len(v) not in [3, 4] or not v.isalpha():
             raise ValueError
         return v
     except ValueError:

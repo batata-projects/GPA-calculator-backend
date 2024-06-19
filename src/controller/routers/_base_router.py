@@ -75,6 +75,29 @@ class BaseRouter(Generic[BaseModelType]):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 message=str(e),
             )
+        
+    async def create_many(
+        self,
+        request: list[dict[str, Any]],
+        dao: BaseDAO[BaseModelType],
+    ) -> APIResponse[BaseResponse[BaseModelType]]:
+        try:
+            items = dao.create_many(request)
+            if items:
+                return APIResponse(
+                    status=status.HTTP_201_CREATED,
+                    message=f"{self.name}s created",
+                    data=BaseResponse[BaseModelType](items=items),
+                )
+            return APIResponse(
+                status=status.HTTP_404_NOT_FOUND,
+                message=f"{self.name}s not created",
+            )
+        except Exception as e:
+            return APIResponse(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                message=str(e),
+            )
 
     async def get_by_id(
         self, id: UuidStr, dao: BaseDAO[BaseModelType]
@@ -161,6 +184,13 @@ class BaseRouter(Generic[BaseModelType]):
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.create(request, dao)
+        
+        @router.post("/many")
+        async def create_many(
+            request: list[dict[str, Any]] = self.request,
+            dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
+        ) -> APIResponse[BaseResponse[BaseModelType]]:
+            return await self.create_many(request, dao)
 
         @router.get("/{id}")
         async def get_by_id(

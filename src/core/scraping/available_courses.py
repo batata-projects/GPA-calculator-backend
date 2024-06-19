@@ -85,6 +85,7 @@ class AvailableCoursesScrapper:
     def fetch_available_courses(
         self, term_number: str, term_id: UuidStr
     ) -> list[AvailableCourse]:
+        # TODO: Show progress bar
         data: dict[str, AvailableCourse] = {}
         page_offset = 0
         page_max_size = 500
@@ -103,23 +104,26 @@ class AvailableCoursesScrapper:
         return _data
 
     def create_available_courses(self, term: Term) -> list[AvailableCourse]:
+        # TODO: Show progress bar
         if not term.id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail="Term ID is required"
             )
         available_courses = self.fetch_available_courses(term.get_sis_term(), term.id)
+        _available_courses = self.available_course_dao.get_by_query(term_id=term.id)
+        _to_create = []
         for i, available_course in enumerate(available_courses):
-            _available_course = self.available_course_dao.get_by_query(
-                term_id=available_course.term_id,
-                name=available_course.name,
-                code=available_course.code,
-            )
+            _available_course = [
+                _available_course
+                for _available_course in _available_courses
+                if _available_course.name == available_course.name
+                and _available_course.code == available_course.code
+            ]
             if _available_course and len(_available_course) > 0:
                 available_courses[i] = _available_course[0]
             else:
                 _dict = available_course.model_dump()
                 _dict.pop("id")
-                created_available_course = self.available_course_dao.create(_dict)
-                if created_available_course:
-                    available_courses[i] = created_available_course
+                _to_create.append(_dict)
+        available_courses = self.available_course_dao.create_many(_to_create)
         return available_courses
