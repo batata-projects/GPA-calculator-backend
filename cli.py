@@ -3,16 +3,20 @@ import subprocess
 
 from tap import Tap
 
-# TODO: Create pre-merge command
-
 SEP = os.path.sep
 
 
 class ArgumentParser(Tap):
     command: str
+    tests: bool = True
+    fixtures: bool = False
 
     def configure(self) -> None:
         self.add_argument("command", type=str, help="Command to run")
+        self.add_argument("--tests", type=bool, help="Generate test files")
+        self.add_argument(
+            "--fixtures", type=bool, help="Generate fixtures for test files"
+        )
 
 
 def run() -> None:
@@ -44,7 +48,7 @@ def clean(files: list[str] = ["src", "tests", "cli.py"]) -> None:
     subprocess.run(["mypy", "--strict", *files])
 
 
-def generate_test_files(tests: bool = True, fixtures: bool = True) -> None:
+def generate_test_files(tests: bool = True, fixtures: bool = False) -> None:
     """
     command: generate-test-files
     Generate empty test files in the `tests` and `tests/fixtures`
@@ -209,14 +213,18 @@ def help() -> None:
 
 
 if __name__ == "__main__":
-    args = ArgumentParser().parse_args()
+    arg_parser = ArgumentParser()
+    args = arg_parser.parse_args()
 
     if args.command == "clean":
         clean()
     elif args.command == "run":
         run()
     elif args.command == "generate-test-files":
-        generate_test_files()
+        generate_test_files(
+            tests=args.tests,
+            fixtures=args.fixtures,
+        )
     elif args.command == "import-fixtures":
         import_fixtures()
     elif args.command == "run-tests":
