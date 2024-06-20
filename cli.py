@@ -132,8 +132,9 @@ def clean_unused_files() -> None:
     This command deletes all the test files in the `tests` and `tests/fixtures` directories that empty.
     This command also deletes the test files in the `tests` directory that do not have a corresponding file in the `src` directory.
     """
+    # ! Refactor this code; it is not working as expected
     # ! This command does not work recursively for some reason
-    # TODO: Fix this issue
+    # TODO: Fix this code
     for dirpath, dirnames, filenames in os.walk("tests"):
         if "__pycache__" in dirpath:
             continue
