@@ -17,7 +17,6 @@ class TestDAO(BaseDAO[TestObject]):
 
 @pytest.fixture
 def test_dao_successful(test_object1: TestObject, client: Client = Mock()) -> TestDAO:
-    # TODO: Allow nested calls in the mocking
     client = Mock()
     response = APIResponse(data=[test_object1.model_dump()], count=None)
     client.table("").select("").execute.return_value = response

@@ -17,8 +17,4 @@ ACS = AvailableCoursesScraper(term_dao, available_courses_dao)
 
 terms = ACS.term_dao.get_by_query()
 
-
-for term in terms:
-    print(term.name)
-    available_courses = ACS.create_available_courses(term)
-    print(len(available_courses))
+ACS.create_available_courses(terms)

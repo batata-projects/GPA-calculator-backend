@@ -11,9 +11,15 @@ from src.db.models import AvailableCourse, Term
 
 
 class AvailableCoursesScraper:
-    def __init__(self, term_dao: TermDAO, available_course_dao: AvailableCourseDAO):
+    def __init__(
+        self,
+        term_dao: TermDAO,
+        available_course_dao: AvailableCourseDAO,
+        logging: bool = True,
+    ):
         self.term_dao = term_dao
         self.available_course_dao = available_course_dao
+        self.logging = logging
         self.base_url = "https://sturegss.aub.edu.lb/StudentRegistrationSsb/ssb/searchResults/searchResults?txt_term={term_number}&pageOffset={page_offset}&pageMaxSize={page_max_size}"
         self.headers = {"Host": "sturegss.aub.edu.lb"}
 
@@ -95,46 +101,58 @@ class AvailableCoursesScraper:
     def fetch_available_courses(
         self, term_number: str, term_id: UuidStr
     ) -> list[AvailableCourse]:
-        # TODO: Show progress bar
         data: dict[str, AvailableCourse] = {}
         page_offset = 0
         page_max_size = 500
         self._set_cookie(term_number=term_number)
         while True:
+            retries = 0
             count = len(data)
-            self._fetch_available_courses(
-                term_number, term_id, page_offset, page_max_size, data
-            )
+            try:
+                self._fetch_available_courses(
+                    term_number, term_id, page_offset, page_max_size, data
+                )
+            except Exception as e:
+                retries += 1
+                self._set_cookie(term_number=term_number)
+                self._fetch_available_courses(
+                    term_number, term_id, page_offset, page_max_size, data
+                )
+                if retries == 3:
+                    raise e
             if len(data) == count:
                 break
             page_offset += page_max_size
-            print(f"Page Offset: {page_offset}")
-            print(f"Data Length: {len(data)}")
         _data = list(data.values())
         return _data
 
-    def create_available_courses(self, term: Term) -> list[AvailableCourse]:
-        # TODO: Show progress bar
-        if not term.id:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail="Term ID is required"
-            )
-        available_courses = self.fetch_available_courses(term.get_sis_term(), term.id)
-        _available_courses = self.available_course_dao.get_by_query(term_id=term.id)
+    def create_available_courses(self, terms: list[Term]) -> list[AvailableCourse]:
         _to_create = []
-        for i, available_course in enumerate(available_courses):
-            _available_course = [
-                _available_course
-                for _available_course in _available_courses
-                if _available_course.name == available_course.name
-                and _available_course.code == available_course.code
-            ]
-            if _available_course and len(_available_course) > 0:
-                available_courses[i] = _available_course[0]
-            else:
-                _dict = available_course.model_dump()
-                _dict.pop("id")
-                _to_create.append(_dict)
+        for term in terms:
+            if self.logging:
+                print(term.name)
+            if not term.id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Term ID is required",
+                )
+            available_courses = self.fetch_available_courses(
+                term.get_sis_term(), term.id
+            )
+            _available_courses = self.available_course_dao.get_by_query(term_id=term.id)
+            for i, available_course in enumerate(available_courses):
+                _available_course = [
+                    _available_course
+                    for _available_course in _available_courses
+                    if _available_course.name == available_course.name
+                    and _available_course.code == available_course.code
+                ]
+                if _available_course and len(_available_course) > 0:
+                    available_courses[i] = _available_course[0]
+                else:
+                    _dict = available_course.model_dump()
+                    _dict.pop("id")
+                    _to_create.append(_dict)
         if _to_create:
             available_courses = self.available_course_dao.create_many(_to_create)
         return available_courses

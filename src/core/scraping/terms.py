@@ -4,8 +4,6 @@ from fastapi import HTTPException, status
 from src.db.dao import TermDAO
 from src.db.models import Term
 
-# TODO: Use the TermDAO.create_many method to create multiple terms at once
-
 
 class TermsScraper:
     def __init__(self, term_dao: TermDAO, offset: int = 1, max: int = 100):
@@ -36,12 +34,13 @@ class TermsScraper:
 
     def create_terms(self) -> list[Term]:
         terms = self.fetch_terms()
+        _to_create = []
         for i, term in enumerate(terms):
             _term = self.term_dao.get_by_query(name=term.name)
             if _term and len(_term) > 0:
                 terms[i] = _term[0]
             else:
-                created_term = self.term_dao.create({"name": term.name})
-                if created_term:
-                    terms[i] = created_term
+                _to_create.append({"name": term.name})
+        if len(_to_create) > 0:
+            self.term_dao.create_many(_to_create)
         return terms
