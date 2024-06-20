@@ -14,10 +14,10 @@ class TestObject(BaseModel):
 
 
 @pytest.fixture
-def test_objects(uuid4: Mock) -> list[TestObject]:
+def test_objects(uuid4: Mock, valid_uuid: UuidStr) -> list[TestObject]:
     return [
-        TestObject(id=str(uuid4()), name="test_name_1"),
-        TestObject(id=str(uuid4()), name="test_name_2"),
+        TestObject(id=valid_uuid, name="test_name_1"),
+        TestObject(id=valid_uuid, name="test_name_2"),
     ]
 
 

@@ -6,7 +6,6 @@ from src.common.utils.data import ValidData
 
 
 class BaseModel(PydanticBaseModel):
-    # TODO: Change this type to generic
     @classmethod
     def model_validate_partial(cls, data: dict[str, Any]) -> "BaseModel":
         _data = {}

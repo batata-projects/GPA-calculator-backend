@@ -3,7 +3,7 @@ from typing import Annotated, Optional
 from pydantic.functional_validators import BeforeValidator
 
 
-def validate_course_name(v: Optional[str] = None) -> Optional[str]:
+def validate_course_name_str(v: Optional[str] = None) -> Optional[str]:
     if not v:
         return None
     try:
@@ -14,4 +14,4 @@ def validate_course_name(v: Optional[str] = None) -> Optional[str]:
         raise ValueError(f"{v} is an invalid course name")
 
 
-CourseNameStr = Annotated[str, BeforeValidator(validate_course_name)]
+CourseNameStr = Annotated[str, BeforeValidator(validate_course_name_str)]
