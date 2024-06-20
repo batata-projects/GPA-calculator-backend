@@ -29,8 +29,6 @@ terms = ACS.term_dao.get_by_query()
 
 
 for term in terms:
-    term = terms[-1]
     print(term.name)
     available_courses = ACS.create_available_courses(term)
     print(len(available_courses))
-    break
