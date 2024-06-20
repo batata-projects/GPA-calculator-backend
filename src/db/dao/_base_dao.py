@@ -8,11 +8,6 @@ from src.db.models import BaseModel
 BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
 
 
-# TODO: Add get_by_all, delete_all, delete_by_query methods
-# ? Should we add a custom query method?
-# TODO: Test create_many method
-
-
 class BaseDAO(Generic[BaseModelType]):
     def __init__(
         self, client: Client, table: str, base_model: type[BaseModelType]

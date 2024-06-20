@@ -55,6 +55,18 @@ class TestBaseDAO:
             with pytest.raises(Exception):
                 test_dao_error.create({})
 
+    class TestCreateMany:
+        def test_create_many_test_object_successful(
+            self, test_object1: TestObject, test_dao_successful: TestDAO
+        ) -> None:
+            result = test_dao_successful.create_many([test_object1.model_dump()])
+
+            assert result == [test_object1]
+
+        def test_create_many_test_object_error(self, test_dao_error: TestDAO) -> None:
+            with pytest.raises(Exception):
+                test_dao_error.create_many([{}])
+
     class TestUpdate:
         def test_update_test_object_successful(
             self, test_object1: TestObject, test_dao_successful: TestDAO
