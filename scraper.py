@@ -18,12 +18,14 @@ os.environ["SUPABASE_SCRAPER_EMAIL"] = "jss31@mail.aub.edu"
 os.environ["SUPABASE_SCRAPER_PASSWORD"] = "Password123"
 
 
-TS = TermsScraper(get_scrapper_terms_dao())
+term_dao = get_scrapper_terms_dao()
+available_courses_dao = get_scrapper_available_courses_dao()
+
+
+TS = TermsScraper(term_dao)
 TS.create_terms()
 
-ACS = AvailableCoursesScraper(
-    get_scrapper_terms_dao(), get_scrapper_available_courses_dao()
-)
+ACS = AvailableCoursesScraper(term_dao, available_courses_dao)
 
 terms = ACS.term_dao.get_by_query()
 
