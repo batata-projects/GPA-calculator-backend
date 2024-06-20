@@ -26,3 +26,10 @@ class TestConfig:
         class TestRandom:
             def test_random(self) -> None:
                 assert Config.Testing.RANDOM.SEED == 0
+
+    class TestScraping:
+        def test_scraping(self) -> None:
+            Config.SCRAPING.SUPABASE_EMAIL = "SUPABASE_SCRAPER_EMAIL"
+            Config.SCRAPING.SUPABASE_PASSWORD = "SUPABASE_SCRAPER_PASSWORD"
+            assert Config.SCRAPING.SUPABASE_EMAIL == "SUPABASE_SCRAPER_EMAIL"
+            assert Config.SCRAPING.SUPABASE_PASSWORD == "SUPABASE_SCRAPER_PASSWORD"

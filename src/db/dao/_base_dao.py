@@ -36,6 +36,14 @@ class BaseDAO(Generic[BaseModelType]):
             return None
         return self.base_model.model_validate(data.data[0])
 
+    def create_many(self, model_data: list[dict[str, Any]]) -> list[BaseModelType]:
+        for _data in model_data:
+            self.base_model.model_validate(_data)
+        data = self.client.table(self.table).insert(model_data).execute()
+        if not data.data or len(data.data) > 1000:
+            return []
+        return [self.base_model.model_validate(item) for item in data.data]
+
     def get_by_id(self, id: UuidStr) -> Optional[BaseModelType]:
         data = self.client.table(self.table).select("*").eq("id", id).execute()
         if not data.data:

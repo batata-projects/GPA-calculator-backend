@@ -1,14 +1,8 @@
-from typing import Optional
-
 from pydantic import BaseModel as PydanticBaseModel
 
+from src.common.utils.types import UuidStr
 from src.controller.schemas._base_schemas import BaseQuery, BaseResponse
-from src.db.models import BaseModel
-
-
-class TestObject(BaseModel):
-    id: Optional[str] = None
-    name: str
+from tests.fixtures.db.models._base_model import TestObject
 
 
 class TestBaseQuery:
@@ -19,8 +13,8 @@ class TestBaseQuery:
 
 class TestBaseResponse:
 
-    def test_base_response(self) -> None:
-        obj = TestObject(id="test_id", name="test_name")
+    def test_base_response(self, valid_uuid: UuidStr) -> None:
+        obj = TestObject(id=valid_uuid, name="test_name")
         response = BaseResponse[TestObject](items=[obj])
 
         assert response.items == [obj]

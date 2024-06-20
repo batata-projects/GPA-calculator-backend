@@ -12,6 +12,10 @@ from .fixtures.common.utils.types.CourseNameStr import (
     invalid_course_name,
     valid_course_name,
 )
+from .fixtures.common.utils.types.CourseReferenceNumberStr import (
+    invalid_course_reference_number,
+    valid_course_reference_number,
+)
 from .fixtures.common.utils.types.PasswordStr import invalid_password, valid_password
 from .fixtures.common.utils.types.TermStr import invalid_term, valid_term
 from .fixtures.common.utils.types.UsernameStr import (
@@ -41,7 +45,6 @@ from .fixtures.db.models.available_courses import (
     available_courses_data,
     available_courses_same_course_name,
     available_courses_same_credits,
-    available_courses_same_graded,
     available_courses_same_terms,
     invalid_available_course_data,
 )

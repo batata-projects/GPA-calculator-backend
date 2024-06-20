@@ -11,7 +11,6 @@ from src.db.dao import BaseDAO
 from src.db.models import BaseModel
 
 BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
-ResponseType = TypeVar("ResponseType", bound=BaseResponse[BaseModel])
 
 
 class BaseRouter(Generic[BaseModelType]):
@@ -24,14 +23,17 @@ class BaseRouter(Generic[BaseModelType]):
         query: Type[BaseQuery[BaseModelType]],
         get_dao: Callable[[], BaseDAO[BaseModelType]],
     ):
-        self.prefix = prefix
-        self.tags = tags
         self.name = name
         self.request = {
             field: field for field in model.model_fields.keys() if field != "id"
         }
+        self.request_many = [self.request]
         self.query = query
         self.get_dao = get_dao
+        self.router = APIRouter(
+            prefix=prefix,
+            tags=tags,
+        )
 
     async def get_by_query(
         self, query: BaseQuery[BaseModelType], dao: BaseDAO[BaseModelType]
@@ -70,6 +72,29 @@ class BaseRouter(Generic[BaseModelType]):
             return APIResponse(
                 status=status.HTTP_404_NOT_FOUND,
                 message=f"{self.name} not created",
+            )
+        except Exception as e:
+            return APIResponse(
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                message=str(e),
+            )
+
+    async def create_many(
+        self,
+        request: list[dict[str, Any]],
+        dao: BaseDAO[BaseModelType],
+    ) -> APIResponse[BaseResponse[BaseModelType]]:
+        try:
+            items = dao.create_many(request)
+            if items:
+                return APIResponse(
+                    status=status.HTTP_201_CREATED,
+                    message=f"{self.name}s created",
+                    data=BaseResponse[BaseModelType](items=items),
+                )
+            return APIResponse(
+                status=status.HTTP_404_NOT_FOUND,
+                message=f"{self.name}s not created",
             )
         except Exception as e:
             return APIResponse(
@@ -144,33 +169,35 @@ class BaseRouter(Generic[BaseModelType]):
             )
 
     def build_router(self) -> APIRouter:
-        router = APIRouter(
-            prefix=self.prefix,
-            tags=self.tags,
-        )
-
-        @router.get("/")
+        @self.router.get("/")
         async def get_by_query(
             query: self.query = Depends(),  # type: ignore
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.get_by_query(query, dao)
 
-        @router.post("/")
+        @self.router.post("/")
         async def create(
             request: dict[str, Any] = self.request,
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.create(request, dao)
 
-        @router.get("/{id}")
+        @self.router.post("/many")
+        async def create_many(
+            request: list[dict[str, Any]] = self.request_many,
+            dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
+        ) -> APIResponse[BaseResponse[BaseModelType]]:
+            return await self.create_many(request, dao)
+
+        @self.router.get("/{id}")
         async def get_by_id(
             id: UuidStr,
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.get_by_id(id, dao)
 
-        @router.put("/{id}")
+        @self.router.put("/{id}")
         async def update(
             id: UuidStr,
             request: dict[str, Any] = self.request,
@@ -178,11 +205,11 @@ class BaseRouter(Generic[BaseModelType]):
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.update(id, request, dao)
 
-        @router.delete("/{id}")
+        @self.router.delete("/{id}")
         async def delete(
             id: UuidStr,
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.delete(id, dao)
 
-        return router
+        return self.router

@@ -10,7 +10,7 @@ def validate_term_str(v: Optional[str] = None) -> Optional[str]:
         term_name, start, _, end = v.split()
         if term_name not in ["Fall", "Spring", "Summer", "Winter"]:
             raise ValueError
-        if not 2010 <= int(start) + 1 == int(end) <= 2100:
+        if not 2010 <= int(start) + 1 == int(end):
             raise ValueError
         if not str(_) == "-":
             raise ValueError
