@@ -10,7 +10,7 @@ from src.db.dao import AvailableCourseDAO, TermDAO
 from src.db.models import AvailableCourse, Term
 
 
-class AvailableCoursesScrapper:
+class AvailableCoursesScraper:
     def __init__(self, term_dao: TermDAO, available_course_dao: AvailableCourseDAO):
         self.term_dao = term_dao
         self.available_course_dao = available_course_dao
@@ -76,7 +76,17 @@ class AvailableCoursesScrapper:
                 name=available_course["subject"],
                 code=available_course["courseNumber"],
                 credits=int(
-                    available_course["creditHours"] or available_course["creditHourLow"]
+                    available_course["creditHours"]
+                    or available_course["creditHourLow"]
+                    or available_course["creditHourHigh"]
+                    or sum(
+                        [
+                            _available["meetingTime"]["creditHourSession"]
+                            for _available in available_course["meetingsFaculty"]
+                            if _available["meetingTime"]["creditHourSession"]
+                        ]
+                    )
+                    or 0
                 ),
             )
             data[course_name] = _available_course
@@ -125,5 +135,6 @@ class AvailableCoursesScrapper:
                 _dict = available_course.model_dump()
                 _dict.pop("id")
                 _to_create.append(_dict)
-        available_courses = self.available_course_dao.create_many(_to_create)
+        if _to_create:
+            available_courses = self.available_course_dao.create_many(_to_create)
         return available_courses

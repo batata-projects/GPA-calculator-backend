@@ -8,7 +8,8 @@ from src.db.models import BaseModel
 BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
 
 
-# TODO: Add get_by_all method
+# TODO: Add get_by_all, delete_all, delete_by_query methods
+# ? Should we add a custom query method?
 # TODO: Test create_many method
 
 
@@ -39,10 +40,10 @@ class BaseDAO(Generic[BaseModelType]):
         if not data.data:
             return None
         return self.base_model.model_validate(data.data[0])
-    
+
     def create_many(self, model_data: list[dict[str, Any]]) -> list[BaseModelType]:
-        for data in model_data:
-            self.base_model.model_validate(data)
+        for _data in model_data:
+            self.base_model.model_validate(_data)
         data = self.client.table(self.table).insert(model_data).execute()
         if not data.data:
             return []

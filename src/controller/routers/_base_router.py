@@ -13,6 +13,9 @@ from src.db.models import BaseModel
 BaseModelType = TypeVar("BaseModelType", bound=BaseModel)
 
 
+# TODO: Automate build_router method
+
+
 class BaseRouter(Generic[BaseModelType]):
     def __init__(
         self,
@@ -29,6 +32,7 @@ class BaseRouter(Generic[BaseModelType]):
         self.request = {
             field: field for field in model.model_fields.keys() if field != "id"
         }
+        self.request_many = [self.request]
         self.query = query
         self.get_dao = get_dao
 
@@ -75,7 +79,7 @@ class BaseRouter(Generic[BaseModelType]):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 message=str(e),
             )
-        
+
     async def create_many(
         self,
         request: list[dict[str, Any]],
@@ -184,10 +188,10 @@ class BaseRouter(Generic[BaseModelType]):
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.create(request, dao)
-        
+
         @router.post("/many")
         async def create_many(
-            request: list[dict[str, Any]] = self.request,
+            request: list[dict[str, Any]] = self.request_many,
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.create_many(request, dao)
