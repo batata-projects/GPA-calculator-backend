@@ -8,5 +8,4 @@ def test_course_query() -> None:
         "available_course_id": None,
         "user_id": None,
         "grade": None,
-        "passed": None,
     }

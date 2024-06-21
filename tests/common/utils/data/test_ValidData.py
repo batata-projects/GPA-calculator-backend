@@ -35,7 +35,6 @@ class TestValidData:
         assert ValidData.Course.available_course_id == validItems.uuidStr
         assert ValidData.Course.user_id == validItems.uuidStr
         assert ValidData.Course.grade == validItems.courseGradeFloat
-        assert ValidData.Course.passed == validItems.boolean
 
     def test_term_valid_data(self) -> None:
         validItems = ValidItems()

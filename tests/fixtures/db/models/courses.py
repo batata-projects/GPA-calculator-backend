@@ -13,7 +13,6 @@ def courses(valid_uuid: Mock) -> list[Course]:
             available_course_id=str(valid_uuid),
             user_id=str(valid_uuid),
             grade=4.0,
-            passed=True,
             graded=True,
         ),
         Course(
@@ -21,7 +20,6 @@ def courses(valid_uuid: Mock) -> list[Course]:
             available_course_id=str(valid_uuid),
             user_id=str(valid_uuid),
             grade=2.0,
-            passed=False,
             graded=False,
         ),
     ]

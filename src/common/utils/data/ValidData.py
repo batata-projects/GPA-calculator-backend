@@ -38,7 +38,6 @@ class ValidData:
         available_course_id = ValidItems().uuidStr
         user_id = ValidItems().uuidStr
         grade = ValidItems().courseGradeFloat
-        passed = ValidItems().boolean
 
     class Term:
         id = ValidItems().uuidStr

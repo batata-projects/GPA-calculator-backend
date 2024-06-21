@@ -9,4 +9,3 @@ class CourseQuery(BaseQuery[Course]):
     available_course_id: Optional[UuidStr] = None
     user_id: Optional[UuidStr] = None
     grade: Optional[CourseGradeFloat] = None
-    passed: Optional[bool] = None
