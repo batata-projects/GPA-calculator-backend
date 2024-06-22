@@ -6,7 +6,6 @@ def test_user_query() -> None:
     assert query is not None
     assert query.model_dump() == {
         "email": None,
-        "username": None,
         "first_name": None,
         "last_name": None,
         "credits": None,

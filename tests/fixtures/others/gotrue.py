@@ -12,7 +12,6 @@ def gotrue_user(user1: User) -> GoTrueUser:
         id=user1.id,
         email=user1.email,
         user_metadata={
-            "username": user1.username,
             "first_name": user1.first_name,
             "last_name": user1.last_name,
             "credits": user1.credits,

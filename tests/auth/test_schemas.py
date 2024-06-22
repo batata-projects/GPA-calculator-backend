@@ -8,21 +8,18 @@ class TestRegisterRequest:
         register_request = RegisterRequest(
             first_name="First",
             last_name="Last",
-            email="username@mail.aub.edu",
-            username="username",
+            email="email@mail.aub.edu",
             password="Password123",
         )
         assert register_request.first_name == "First"
         assert register_request.last_name == "Last"
-        assert register_request.email == "username@mail.aub.edu"
-        assert register_request.username == "username"
+        assert register_request.email == "email@mail.aub.edu"
         assert register_request.password == "Password123"
         assert register_request.auth_model_dump() == {
-            "email": "username@mail.aub.edu",
+            "email": "email@mail.aub.edu",
             "password": "Password123",
             "options": {
                 "data": {
-                    "username": "username",
                     "first_name": "First",
                     "last_name": "Last",
                 }
@@ -33,15 +30,13 @@ class TestRegisterRequest:
         register_request = RegisterRequest()
         assert register_request.first_name == "First Name"
         assert register_request.last_name == "Last Name"
-        assert register_request.email == "username@mail.aub.edu"
-        assert register_request.username == "username"
+        assert register_request.email == "email@mail.aub.edu"
         assert register_request.password == "Password123"
         assert register_request.auth_model_dump() == {
-            "email": "username@mail.aub.edu",
+            "email": "email@mail.aub.edu",
             "password": "Password123",
             "options": {
                 "data": {
-                    "username": "username",
                     "first_name": "First Name",
                     "last_name": "Last Name",
                 }
@@ -49,60 +44,50 @@ class TestRegisterRequest:
         }
 
     @pytest.mark.parametrize(
-        "first_name, last_name, email, username, password",
+        "first_name, last_name, email, password",
         [
-            (12345, "Last", "username@mail.aub.edu", "username", "Password123"),
-            ("First", 12345, "username@mail.aub.edu", "username", "Password123"),
-            ("First", "Last", "username@hotmail.com", "username", "Password123"),
-            (
-                "First",
-                "Last",
-                "username@mail.aub.edu",
-                "invalid username",
-                "Password123",
-            ),
-            ("First", "Last", "username@mail.aub.edu", "username", "password123"),
+            (12345, "Last", "email@mail.aub.edu", "Password123"),
+            ("First", 12345, "email@mail.aub.edu", "Password123"),
+            ("First", "Last", "email@hotmail.com", "Password123"),
+            ("First", "Last", "email@mail.aub.edu", "password123"),
         ],
     )
     def test_register_request_invalid(
-        self, first_name: str, last_name: str, email: str, username: str, password: str
+        self, first_name: str, last_name: str, email: str, password: str
     ) -> None:
         with pytest.raises(ValueError):
             RegisterRequest(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
-                username=username,
                 password=password,
             )
 
 
 class TestLoginRequest:
     def test_login_request_successful(self) -> None:
-        login_request = LoginRequest(
-            email="username@mail.aub.edu", password="Password123"
-        )
-        assert login_request.email == "username@mail.aub.edu"
+        login_request = LoginRequest(email="email@mail.aub.edu", password="Password123")
+        assert login_request.email == "email@mail.aub.edu"
         assert login_request.password == "Password123"
         assert login_request.auth_model_dump() == {
-            "email": "username@mail.aub.edu",
+            "email": "email@mail.aub.edu",
             "password": "Password123",
         }
 
     def test_login_request_default(self) -> None:
         login_request = LoginRequest()
-        assert login_request.email == "username@mail.aub.edu"
+        assert login_request.email == "email@mail.aub.edu"
         assert login_request.password == "Password123"
         assert login_request.auth_model_dump() == {
-            "email": "username@mail.aub.edu",
+            "email": "email@mail.aub.edu",
             "password": "Password123",
         }
 
     @pytest.mark.parametrize(
         "email, password",
         [
-            ("username@hotmail.com", "Password123"),
-            ("username@mail.aub.edu", "password123"),
+            ("email@hotmail.com", "Password123"),
+            ("email@mail.aub.edu", "password123"),
         ],
     )
     def test_login_request_invalid(self, email: str, password: str) -> None:

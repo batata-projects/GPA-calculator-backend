@@ -1,19 +1,17 @@
 from .CourseCodeStr import CourseCodeStr
 from .CourseGradeFloat import CourseGradeFloat
-from .CourseNameStr import CourseNameStr
-from .CourseReferenceNumberStr import CourseReferenceNumberStr
 from .PasswordStr import PasswordStr
-from .TermStr import TermStr
-from .UsernameStr import UsernameStr
+from .SubjectStr import SubjectStr
+from .TermInt import TermInt
 from .UuidStr import UuidStr
+
+# TODO: Convert types to Classes
 
 __all__ = [
     "CourseCodeStr",
-    "CourseReferenceNumberStr",
     "CourseGradeFloat",
-    "CourseNameStr",
     "PasswordStr",
-    "TermStr",
-    "UsernameStr",
+    "SubjectStr",
+    "TermInt",
     "UuidStr",
 ]

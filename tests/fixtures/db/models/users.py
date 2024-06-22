@@ -9,9 +9,8 @@ from src.db.models import User
 def users(valid_uuid: Mock) -> list[User]:
     return [
         User(
-            id=str(valid_uuid),
+            id=valid_uuid,
             email="jss31@mail.aub.edu",
-            username="Jad",
             first_name="Jad",
             last_name="Shaker",
             credits=15,
@@ -19,9 +18,8 @@ def users(valid_uuid: Mock) -> list[User]:
             grade=15.0,
         ),
         User(
-            id=str(valid_uuid),
+            id=valid_uuid,
             email="rmf40@mail.aub.edu",
-            username="Rayan",
             first_name="Rayan",
             last_name="Fakhreddine",
             credits=16,

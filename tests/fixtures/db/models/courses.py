@@ -9,17 +9,23 @@ from src.db.models import Course
 def courses(valid_uuid: Mock) -> list[Course]:
     return [
         Course(
-            id=str(valid_uuid),
-            available_course_id=str(valid_uuid),
-            user_id=str(valid_uuid),
-            grade=4.0,
+            id=valid_uuid,
+            user_id=valid_uuid,
+            subject="EECE",
+            course_code="230",
+            term=202310,
+            credits=3,
+            grade=4.3,
             graded=True,
         ),
         Course(
-            id=str(valid_uuid),
-            available_course_id=str(valid_uuid),
-            user_id=str(valid_uuid),
-            grade=2.0,
+            id=valid_uuid,
+            user_id=valid_uuid,
+            subject="FEAA",
+            course_code="200",
+            term=202310,
+            credits=3,
+            grade=1,
             graded=False,
         ),
     ]
@@ -33,14 +39,6 @@ def course1(courses: list[Course]) -> Course:
 @pytest.fixture
 def course2(courses: list[Course]) -> Course:
     return courses[1]
-
-
-@pytest.fixture
-def courses_same_available_course_id(
-    courses: list[Course],
-) -> list[Course]:
-    courses[1].available_course_id = courses[0].available_course_id
-    return courses
 
 
 @pytest.fixture
