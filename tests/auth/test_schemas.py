@@ -48,7 +48,7 @@ class TestRegisterRequest:
         [
             (12345, "Last", "email@mail.aub.edu", "Password123"),
             ("First", 12345, "email@mail.aub.edu", "Password123"),
-            ("First", "Last", "email@hotmail.com", "Password123"),
+            ("First", "Last", "email@hotmail", "Password123"),
             ("First", "Last", "email@mail.aub.edu", "password123"),
         ],
     )
@@ -86,7 +86,7 @@ class TestLoginRequest:
     @pytest.mark.parametrize(
         "email, password",
         [
-            ("email@hotmail.com", "Password123"),
+            ("email@hotmail", "Password123"),
             ("email@mail.aub.edu", "password123"),
         ],
     )

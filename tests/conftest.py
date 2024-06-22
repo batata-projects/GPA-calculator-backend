@@ -1,5 +1,9 @@
 from .fixtures.auth.schemas import login_request, register_request
 from .fixtures.common.session import session
+from .fixtures.common.utils.types.CourseCodeStr import (
+    invalid_course_code_str,
+    valid_course_code_str,
+)
 from .fixtures.common.utils.types.CourseGradeFloat import (
     invalid_course_grade_float,
     valid_course_grade_float,

@@ -1,6 +1,12 @@
 from typing import Optional
 
-from src.common.utils.types import CourseCodeStr, CourseGradeFloat, SubjectStr, UuidStr
+from src.common.utils.types import (
+    CourseCodeStr,
+    CourseGradeFloat,
+    SubjectStr,
+    TermInt,
+    UuidStr,
+)
 from src.db.models import BaseModel
 
 
@@ -9,7 +15,7 @@ class Course(BaseModel):
     user_id: UuidStr
     subject: SubjectStr
     course_code: CourseCodeStr
-    term: int
+    term: TermInt
     credits: int
     grade: Optional[CourseGradeFloat] = None
     graded: bool
