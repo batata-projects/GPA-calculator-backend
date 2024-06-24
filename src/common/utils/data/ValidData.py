@@ -1,7 +1,7 @@
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
 
-from src.common.utils.types import CourseCodeStr, CourseGradeFloat, SubjectStr, UuidStr
+from src.common.utils.types import CourseGradeFloat, CourseStr, UuidStr
 
 
 class ValidItems(PydanticBaseModel):
@@ -10,8 +10,7 @@ class ValidItems(PydanticBaseModel):
     courseGradeFloat: CourseGradeFloat = 1.0
     nonNegativeInt: NonNegativeInt = 0
     nonNegativeFloat: NonNegativeFloat = 0.0
-    subject: SubjectStr = "SUBJECT"
-    courseCode: CourseCodeStr = "251W"
+    courseStr: CourseStr = "EECE230"
     firstName: str = "First"
     lastName: str = "Last"
     termInt: int = 202310
@@ -32,8 +31,8 @@ class ValidData:
     class Course:
         id = ValidItems().uuidStr
         user_id = ValidItems().uuidStr
-        subject = ValidItems().subject
-        course_code = ValidItems().courseCode
+        subject = ValidItems().courseStr
+        course_code = ValidItems().courseStr
         term = ValidItems().termInt
         credits = ValidItems().nonNegativeInt
         grade = ValidItems().courseGradeFloat

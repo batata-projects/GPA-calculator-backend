@@ -1,15 +1,16 @@
 from .fixtures.auth.schemas import login_request, register_request
 from .fixtures.common.session import session
-from .fixtures.common.utils.types.CourseCodeStr import (
-    invalid_course_code_str,
-    valid_course_code_str,
-)
 from .fixtures.common.utils.types.CourseGradeFloat import (
     invalid_course_grade_float,
     valid_course_grade_float,
 )
+from .fixtures.common.utils.types.CourseStr import (
+    invalid_course_str,
+    none_course_str,
+    valid_course_str1,
+    valid_course_str2,
+)
 from .fixtures.common.utils.types.PasswordStr import invalid_password, valid_password
-from .fixtures.common.utils.types.SubjectStr import invalid_subject, valid_subject
 from .fixtures.common.utils.types.TermInt import invalid_term, valid_term
 from .fixtures.common.utils.types.UuidStr import invalid_uuid, valid_uuid
 from .fixtures.common.utils.validators.NameValidator import invalid_name, valid_name

@@ -1,13 +1,7 @@
 import pytest
 from pydantic import NonNegativeInt
 
-from src.common.utils.types import (
-    CourseCodeStr,
-    CourseGradeFloat,
-    SubjectStr,
-    TermInt,
-    UuidStr,
-)
+from src.common.utils.types import CourseGradeFloat, CourseStr, TermInt, UuidStr
 from src.db.models import Course
 
 
@@ -107,8 +101,8 @@ class TestCourse:
     def test_course_none_attribute(
         self,
         user_id: UuidStr,
-        subject: SubjectStr,
-        course_code: CourseCodeStr,
+        subject: CourseStr,
+        course_code: CourseStr,
         term: TermInt,
         credits: NonNegativeInt,
         grade: CourseGradeFloat,
@@ -159,3 +153,29 @@ class TestCourse:
     def test_convert_to_term_number_invalid(self, term_name: str, year: int) -> None:
         with pytest.raises(ValueError):
             Course.convert_to_term_number(term_name, year)
+
+    @pytest.mark.parametrize(
+        "term_number, expected",
+        [
+            (202310, ("Fall", 2023)),
+            (202315, ("Winter", 2023)),
+            (202320, ("Spring", 2023)),
+            (202330, ("Summer", 2023)),
+        ],
+    )
+    def test_convert_to_term_name_successful(
+        self, term_number: int, expected: tuple[str, int]
+    ) -> None:
+        assert Course.convert_to_term_name(term_number) == expected
+
+    @pytest.mark.parametrize(
+        "term_number",
+        [
+            0,
+            202300,
+            202340,
+        ],
+    )
+    def test_convert_to_term_name_invalid(self, term_number: int) -> None:
+        with pytest.raises(ValueError):
+            Course.convert_to_term_name(term_number)

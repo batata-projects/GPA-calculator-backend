@@ -18,7 +18,6 @@ users_router = BaseRouter[User](
 ).build_router()
 
 
-# TODO: Add tests
 @users_router.get("/dashboard/{user_id}")
 async def get_dashboard(
     user_id: UuidStr,
@@ -40,14 +39,13 @@ async def get_dashboard(
 
         courses = course_dao.get_by_query(user_id=user_id)
 
-        # TODO: Define the type of the terms variable
         terms: dict[Any, Any] = {}
 
         for course in courses:
             term = course.term
             if term not in terms:
                 terms[term] = {
-                    "name": Course.convert_to_term_name(term),
+                    "name": " ".join(map(str, Course.convert_to_term_name(term))),
                     "gpa": 0.0,
                     "grade": 0.0,
                     "credits": 0,
@@ -55,9 +53,6 @@ async def get_dashboard(
                     "courses": {},
                 }
             if course.graded and course.grade:
-                if type(terms[term]["grade"]) != float:
-                    terms[term]["grade"] = 0.0
-                    terms[term]["counted_credits"] = 0
                 terms[term]["grade"] += course.grade * course.credits
                 terms[term]["counted_credits"] += course.credits
             if course.grade:

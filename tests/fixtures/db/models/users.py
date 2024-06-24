@@ -13,9 +13,9 @@ def users(valid_uuid: Mock) -> list[User]:
             email="jss31@mail.aub.edu",
             first_name="Jad",
             last_name="Shaker",
-            credits=15,
-            counted_credits=12,
-            grade=15.0,
+            credits=6,
+            counted_credits=3,
+            grade=12.9,
         ),
         User(
             id=valid_uuid,
