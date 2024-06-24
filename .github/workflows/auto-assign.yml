@@ -1,8 +1,6 @@
 name: Auto Assign
 
 on:
-  pull_request:
-    types: [opened]
   workflow_run:
     workflows: ["Python Code Cleaning and Testing Workflow"]
     types:
