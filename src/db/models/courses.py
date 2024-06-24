@@ -1,20 +1,14 @@
 from typing import Optional
 
-from src.common.utils.types import (
-    CourseCodeStr,
-    CourseGradeFloat,
-    SubjectStr,
-    TermInt,
-    UuidStr,
-)
+from src.common.utils.types import CourseGradeFloat, CourseStr, TermInt, UuidStr
 from src.db.models import BaseModel
 
 
 class Course(BaseModel):
     id: Optional[UuidStr] = None
     user_id: UuidStr
-    subject: SubjectStr
-    course_code: CourseCodeStr
+    subject: CourseStr
+    course_code: CourseStr
     term: TermInt
     credits: int
     grade: Optional[CourseGradeFloat] = None
@@ -35,3 +29,18 @@ class Course(BaseModel):
             return year * 100 + 30
         else:
             raise ValueError(f"Invalid term name: {term_name}")
+
+    @classmethod
+    def convert_to_term_name(cls, term_number: int) -> tuple[str, int]:
+        year = term_number // 100
+        term = term_number % 100
+        if term == 10:
+            return "Fall", year
+        elif term == 15:
+            return "Winter", year
+        elif term == 20:
+            return "Spring", year
+        elif term == 30:
+            return "Summer", year
+        else:
+            raise ValueError(f"Invalid term number: {term_number}")

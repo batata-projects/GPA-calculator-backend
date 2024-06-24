@@ -11,8 +11,7 @@ class TestValidItems:
         assert validItems.courseGradeFloat == 1.0
         assert validItems.nonNegativeInt == 0
         assert validItems.nonNegativeFloat == 0.0
-        assert validItems.subject == "SUBJECT"
-        assert validItems.courseCode == "251W"
+        assert validItems.courseStr == "EECE230"
         assert validItems.firstName == "First"
         assert validItems.lastName == "Last"
         assert validItems.termInt == 202310
@@ -46,8 +45,8 @@ class TestValidData:
 
         assert ValidData.Course.id == validItems.uuidStr
         assert ValidData.Course.user_id == validItems.uuidStr
-        assert ValidData.Course.subject == validItems.subject
-        assert ValidData.Course.course_code == validItems.courseCode
+        assert ValidData.Course.subject == validItems.courseStr
+        assert ValidData.Course.course_code == validItems.courseStr
         assert ValidData.Course.term == validItems.termInt
         assert ValidData.Course.credits == validItems.nonNegativeInt
         assert ValidData.Course.grade == validItems.courseGradeFloat
