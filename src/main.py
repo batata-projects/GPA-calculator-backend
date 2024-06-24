@@ -10,7 +10,7 @@ app = FastAPI(
     title=Config.APP.TITLE,
     description=Config.APP.DESCRIPTION,
     version=Config.APP.VERSION,
-)
+) 
 
 app.add_middleware(
     CORSMiddleware,
