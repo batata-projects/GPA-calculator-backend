@@ -1,7 +1,6 @@
 import pytest
 
 from src.controller.routers._base_router import BaseRouter
-from tests.fixtures.controller.schemas._base_schemas import TestQuery
 from tests.fixtures.db.dao._base_dao import TestDAO
 from tests.fixtures.db.models._base_model import TestObject
 
@@ -13,7 +12,6 @@ def router_successful(test_dao_successful: TestDAO) -> BaseRouter[TestObject]:
         tags=["test"],
         name="test",
         model=TestObject,
-        query=TestQuery,
         get_dao=lambda: test_dao_successful,
     )
 
@@ -25,7 +23,6 @@ def router_empty(test_dao_empty: TestDAO) -> BaseRouter[TestObject]:
         tags=["test"],
         name="test",
         model=TestObject,
-        query=TestQuery,
         get_dao=lambda: test_dao_empty,
     )
 
@@ -37,6 +34,5 @@ def router_error(test_dao_error: TestDAO) -> BaseRouter[TestObject]:
         tags=["test"],
         name="test",
         model=TestObject,
-        query=TestQuery,
         get_dao=lambda: test_dao_error,
     )
