@@ -35,3 +35,19 @@ class Course(BaseModel):
             return year * 100 + 30
         else:
             raise ValueError(f"Invalid term name: {term_name}")
+
+    # TODO: Test this method
+    @classmethod
+    def convert_to_term_name(cls, term_number: int) -> str:
+        year = term_number // 100
+        term = term_number % 100
+        if term == 10:
+            return f"Fall {year}"
+        elif term == 15:
+            return f"Winter {year}"
+        elif term == 20:
+            return f"Spring {year}"
+        elif term == 30:
+            return f"Summer {year}"
+        else:
+            raise ValueError(f"Invalid term number: {term_number}")
