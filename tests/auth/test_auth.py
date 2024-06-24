@@ -58,7 +58,6 @@ class TestRegister:
                 id=user1.id,
                 email=email,
                 user_metadata={
-                    "username": user1.username,
                     "first_name": first_name,
                     "last_name": last_name,
                     "credits": user1.credits,

@@ -4,10 +4,10 @@ from src.common.utils.types import CourseCodeStr
 
 
 @pytest.fixture
-def valid_course_code() -> CourseCodeStr:
-    return "202"
+def valid_course_code_str() -> CourseCodeStr:
+    return "230"
 
 
 @pytest.fixture
-def invalid_course_code() -> CourseCodeStr:
-    return "invalid-course-code"
+def invalid_course_code_str() -> CourseCodeStr:
+    return None  # type: ignore

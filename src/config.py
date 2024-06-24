@@ -23,7 +23,3 @@ class Config:
     class Testing:
         class RANDOM:
             SEED = 0
-
-    class SCRAPING:
-        SUPABASE_EMAIL = os.getenv("SUPABASE_SCRAPER_EMAIL")
-        SUPABASE_PASSWORD = os.getenv("SUPABASE_SCRAPER_PASSWORD")

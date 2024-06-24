@@ -11,7 +11,6 @@ def register_request() -> Any:
         first_name="Rayan",
         last_name="Fakhreddine",
         email="verynew@aub.edu.lb",
-        username="rmf40",
         password="pasSword123",
     )
 
