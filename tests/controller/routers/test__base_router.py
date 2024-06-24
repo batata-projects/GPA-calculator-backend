@@ -1,9 +1,9 @@
 import pytest
 from fastapi import status
+from pydantic import BaseModel as PydanticBaseModel
 
 from src.common.utils.data import ValidItems
 from src.controller.routers._base_router import BaseRouter
-from tests.fixtures.controller.schemas._base_schemas import TestQuery
 from tests.fixtures.db.dao._base_dao import TestDAO
 from tests.fixtures.db.models._base_model import TestObject
 
@@ -14,7 +14,7 @@ class TestGetByQuery:
         self,
         router_successful: BaseRouter[TestObject],
         test_dao_successful: TestDAO,
-        test_query: TestQuery,
+        test_query: PydanticBaseModel,
         test_object1: TestObject,
     ) -> None:
         response = await router_successful.get_by_query(test_query, test_dao_successful)
@@ -28,7 +28,7 @@ class TestGetByQuery:
         self,
         router_empty: BaseRouter[TestObject],
         test_dao_empty: TestDAO,
-        test_query: TestQuery,
+        test_query: PydanticBaseModel,
     ) -> None:
         response = await router_empty.get_by_query(query=test_query, dao=test_dao_empty)
 
@@ -39,7 +39,7 @@ class TestGetByQuery:
         self,
         router_error: BaseRouter[TestObject],
         test_dao_error: TestDAO,
-        test_query: TestQuery,
+        test_query: PydanticBaseModel,
     ) -> None:
         response = await router_error.get_by_query(query=test_query, dao=test_dao_error)
 

@@ -1,16 +1,18 @@
-from typing import Optional
+from typing import Any, Optional, get_type_hints
 
 import pytest
+from fastapi import Query
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import create_model
 
-from src.controller.schemas._base_schemas import BaseQuery
 from tests.fixtures.db.models._base_model import TestObject
 
 
-class TestQuery(BaseQuery[TestObject]):
-    __test__ = False
-    name: Optional[str] = None
-
-
 @pytest.fixture
-def test_query() -> TestQuery:
-    return TestQuery(name="test_name")
+def test_query() -> PydanticBaseModel:
+    fields = dict(get_type_hints(TestObject))
+    queries: dict[str, Any] = {
+        key: (Optional[fields[key]], Query(None)) for key in fields if key != "id"
+    }
+    DynamicModel: type[PydanticBaseModel] = create_model("DynamicModel", **queries)
+    return DynamicModel()
