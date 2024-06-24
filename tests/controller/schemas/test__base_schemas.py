@@ -1,14 +1,6 @@
-from pydantic import BaseModel as PydanticBaseModel
-
 from src.common.utils.types import UuidStr
-from src.controller.schemas._base_schemas import BaseQuery, BaseResponse
+from src.controller.schemas._base_schemas import BaseResponse
 from tests.fixtures.db.models._base_model import TestObject
-
-
-class TestBaseQuery:
-
-    def test_base_query(self) -> None:
-        assert issubclass(BaseQuery, PydanticBaseModel)
 
 
 class TestBaseResponse:

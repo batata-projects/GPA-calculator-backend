@@ -1,12 +1,23 @@
 from enum import Enum
-from typing import Any, Callable, Generic, Optional, Type, TypeVar, Union
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+    get_type_hints,
+)
 
-from fastapi import Depends, status
+from fastapi import Depends, Query, status
 from fastapi.routing import APIRouter
+from pydantic import BaseModel as PydanticBaseModel
+from pydantic import create_model
 
 from src.common.responses import APIResponse
 from src.common.utils.types import UuidStr
-from src.controller.schemas._base_schemas import BaseQuery, BaseResponse
+from src.controller.schemas._base_schemas import BaseResponse
 from src.db.dao import BaseDAO
 from src.db.models import BaseModel
 
@@ -20,7 +31,6 @@ class BaseRouter(Generic[BaseModelType]):
         tags: Optional[list[Union[str, Enum]]],
         name: str,
         model: Type[BaseModelType],
-        query: Type[BaseQuery[BaseModelType]],
         get_dao: Callable[[], BaseDAO[BaseModelType]],
     ):
         self.name = name
@@ -28,7 +38,11 @@ class BaseRouter(Generic[BaseModelType]):
             field: field for field in model.model_fields.keys() if field != "id"
         }
         self.request_many = [self.request]
-        self.query = query
+        fields: dict[str, type] = dict(get_type_hints(model))
+        queries: dict[str, Any] = {
+            key: (Optional[fields[key]], Query(None)) for key in fields if key != "id"
+        }
+        self.query = create_model("DynamicModel", **queries, __base__=BaseModel)
         self.get_dao = get_dao
         self.router = APIRouter(
             prefix=prefix,
@@ -36,7 +50,7 @@ class BaseRouter(Generic[BaseModelType]):
         )
 
     async def get_by_query(
-        self, query: BaseQuery[BaseModelType], dao: BaseDAO[BaseModelType]
+        self, query: PydanticBaseModel, dao: BaseDAO[BaseModelType]
     ) -> APIResponse[BaseResponse[BaseModelType]]:
         try:
             items = dao.get_by_query(**query.model_dump())
@@ -171,7 +185,7 @@ class BaseRouter(Generic[BaseModelType]):
     def build_router(self) -> APIRouter:
         @self.router.get("/")
         async def get_by_query(
-            query: self.query = Depends(),  # type: ignore
+            query: PydanticBaseModel = Depends(self.query),
             dao: BaseDAO[BaseModelType] = Depends(self.get_dao),
         ) -> APIResponse[BaseResponse[BaseModelType]]:
             return await self.get_by_query(query, dao)

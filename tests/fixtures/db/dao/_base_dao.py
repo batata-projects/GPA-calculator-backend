@@ -44,9 +44,9 @@ def test_dao_empty(client: Client = Mock()) -> TestDAO:
 @pytest.fixture
 def test_dao_error(test_object1: TestObject, client: Client = Mock()) -> TestDAO:
     client = Mock()
-    client.table("").select("").execute.return_value = Exception("error")
+    client.table("").select("").execute.side_effect = Exception("error")
     client.table("").select("").eq("", "").execute.side_effect = Exception("error")
-    client.table("").select("").eq("", "").eq("", "").execute.return_value = Exception(
+    client.table("").select("").eq("", "").eq("", "").execute.side_effect = Exception(
         "error"
     )
     client.table("").insert("").execute.side_effect = Exception("error")
