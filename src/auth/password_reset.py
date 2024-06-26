@@ -1,55 +1,37 @@
-# implement reset password and forgot password using supabase API
+from fastapi import APIRouter, Depends, HTTPException, status
+
+from src.auth.schemas import ResetPasswordRequest
+from src.common.responses.API_response import APIResponse
+from src.db.dao.user_dao import UserDAO
+from src.db.dependencies import get_user_dao_unauthenticated
 
 
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
-from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
-from pydantic import EmailStr
-from supabase import create_client
+router = APIRouter(prefix="/pass", tags=["Password Reset"])
 
-from src.config import Config
-
-router = APIRouter()
-
-# Supabase credentials
-SUPABASE_URL = Config.SUPABASE.URL
-SUPABASE_KEY = Config.SUPABASE.KEY
-assert SUPABASE_URL is not None
-assert SUPABASE_KEY is not None
-supabase_client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Email credentials
-conf = ConnectionConfig(
-    MAIL_USERNAME="username",
-    MAIL_PASSWORD="**********",
-    MAIL_FROM="test@email.com",
-    MAIL_PORT=465,
-    MAIL_SERVER="mail server",
-    MAIL_STARTTLS=False,
-    MAIL_SSL_TLS=True,
-    USE_CREDENTIALS=True,
-    VALIDATE_CERTS=True,
+@router.post(
+    "/reset",
+    response_model=APIResponse,
+    summary="Reset Password",
+    description="Reset user password",
 )
-
-
-@router.post("/forgot_password")
-async def forgot_password(email: EmailStr) -> JSONResponse:
-    # check if email exists in the database
-    user = await supabase_client.auth.get_user_by_email(email)
-    if user is None:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    # generate a token
-    token = await supabase_client.auth.api.create_password_reset_token(email)
-
-    # send email
-    message = MessageSchema(
-        subject="Reset Password",
-        recipients=[email],
-        body=f"Click this link to reset your password: http://localhost:3000/reset_password?token={token['access_token']}",
-        subtype=MessageType.plain,
+async def forgot_password_route(request: ResetPasswordRequest, user_dao: UserDAO = Depends(get_user_dao_unauthenticated),) -> APIResponse:
+    return APIResponse(
+        message="Password reset successful",
+        status=status.HTTP_200_OK,
+        data=reset_password(request, user_dao)
     )
-    fm = FastMail(conf)
-    await fm.send_message(message)
 
-    return JSONResponse(content={"message": "Email sent"})
+def reset_password(request: ResetPasswordRequest, user_dao: UserDAO):
+    # Check if user exists
+    user = user_dao.get_user_by_email(request.email)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    
+    # TODO: Generate reset password token
+    # TODO: Send reset password email
+    # TODO: Update user password
+    
+    return None
