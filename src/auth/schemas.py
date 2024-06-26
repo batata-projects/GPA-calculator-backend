@@ -51,3 +51,13 @@ class LoginRequest(PydanticBaseModel):
             "email": self.email,
             "password": self.password,
         }
+
+class ResetPasswordRequest(PydanticBaseModel):
+    email: EmailStr = Field(
+        default="email@mail.aub.edu", description="Email must be an AUB email"
+    )
+
+    def auth_model_dump(self) -> dict[str, str]:
+        return {
+            "email": self.email,
+        }
