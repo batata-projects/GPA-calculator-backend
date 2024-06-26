@@ -3,7 +3,7 @@
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 from pydantic import EmailStr
 from supabase import create_client
 
@@ -47,7 +47,7 @@ async def forgot_password(email: EmailStr) -> JSONResponse:
         subject="Reset Password",
         recipients=[email],
         body=f"Click this link to reset your password: http://localhost:3000/reset_password?token={token['access_token']}",
-        subtype="html",
+        subtype=MessageType.plain,
     )
     fm = FastMail(conf)
     await fm.send_message(message)
