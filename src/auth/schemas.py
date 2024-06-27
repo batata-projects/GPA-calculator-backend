@@ -52,6 +52,7 @@ class LoginRequest(PydanticBaseModel):
             "password": self.password,
         }
 
+
 class ResetPasswordRequest(PydanticBaseModel):
     email: EmailStr = Field(
         default="email@mail.aub.edu", description="Email must be an AUB email"
