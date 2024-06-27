@@ -56,8 +56,8 @@ async def forgot_password_route(
     request: ResetPasswordRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
 ) -> APIResponse[None]:
-    forget_password(request, user_dao)
     return APIResponse(
         message="Password reset successful",
         status=status.HTTP_200_OK,
+        data=forget_password(request, user_dao)
     )
