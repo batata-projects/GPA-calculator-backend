@@ -39,8 +39,9 @@ async def get_refresh_token(
         )
     return token
 
+
 async def get_password_reset_token(
-        token: str = Depends(APIKeyHeader(name="password-reset-token")),
+    token: str = Depends(APIKeyHeader(name="captcha_token")),
 ) -> str:
     if token is None:
         raise HTTPException(
