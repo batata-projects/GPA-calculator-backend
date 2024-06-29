@@ -44,6 +44,11 @@ def reset_password(request: ResetPasswordRequest, user_dao: UserDAO) -> dict[str
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Old password is incorrect",
         )
+    if user["password"] == request.new_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password must be different from old password",
+        )
     if request.new_password != request.confirm_password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
