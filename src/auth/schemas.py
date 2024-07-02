@@ -46,41 +46,15 @@ class LoginRequest(PydanticBaseModel):
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
     )
 
-    def auth_model_dump(self) -> dict[str, str]:
-        return {
-            "email": self.email,
-            "password": self.password,
-        }
-
 
 class ForgotPasswordRequest(PydanticBaseModel):
     email: EmailStr = Field(
         default="email@mail.aub.edu", description="Email must be an AUB email"
     )
 
-    def auth_model_dump(self) -> dict[str, str]:
-        return {
-            "email": self.email,
-        }
-
 
 class ResetPasswordRequest(PydanticBaseModel):
-    old_password: PasswordStr = Field(
+    password: PasswordStr = Field(
         default="Password123",
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
     )
-    new_password: PasswordStr = Field(
-        default="Password123",
-        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
-    )
-    confirm_password: PasswordStr = Field(
-        default="Password123",
-        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
-    )
-
-    def auth_model_dump(self) -> dict[str, str]:
-        return {
-            "old_password": self.old_password,
-            "new_password": self.new_password,
-            "confirm_password": self.confirm_password,
-        }

@@ -54,7 +54,7 @@ def login(request: LoginRequest, user_dao: UserDAO) -> AuthResponse:
                 detail="User not found",
             )
         result: GoTrueAuthResponse = user_dao.client.auth.sign_in_with_password(
-            request.auth_model_dump()
+            request.model_dump()
         )
         user = User.validate_supabase_user(result.user)
         session = Session.validate_supabase_session(result.session)
