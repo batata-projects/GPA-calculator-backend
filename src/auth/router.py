@@ -70,14 +70,14 @@ async def forgot_password_route(
 
 @router.post(
     "/reset-password",
-    response_model=APIResponse,
+    response_model=APIResponse[AuthResponse],
     summary="Change Password",
     description="Change user password",
 )
 async def reset_password_route(
     request: ResetPasswordRequest,
     user_dao: UserDAO = Depends(get_user_dao),
-) -> APIResponse[dict[str, str]]:
+) -> APIResponse[AuthResponse]:
     return APIResponse(
         message="Password change successful",
         status=status.HTTP_200_OK,
