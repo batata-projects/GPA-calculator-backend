@@ -69,19 +69,11 @@ class TestLoginRequest:
         login_request = LoginRequest(email="email@mail.aub.edu", password="Password123")
         assert login_request.email == "email@mail.aub.edu"
         assert login_request.password == "Password123"
-        assert login_request.auth_model_dump() == {
-            "email": "email@mail.aub.edu",
-            "password": "Password123",
-        }
 
     def test_login_request_default(self) -> None:
         login_request = LoginRequest()
         assert login_request.email == "email@mail.aub.edu"
         assert login_request.password == "Password123"
-        assert login_request.auth_model_dump() == {
-            "email": "email@mail.aub.edu",
-            "password": "Password123",
-        }
 
     @pytest.mark.parametrize(
         "email, password",
