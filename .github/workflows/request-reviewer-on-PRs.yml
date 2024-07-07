@@ -1,4 +1,4 @@
-name: Auto Request Reviewer
+name: Request Review on PRs
 
 on:
   workflow_run:
