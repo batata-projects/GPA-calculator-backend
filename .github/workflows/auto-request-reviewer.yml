@@ -17,12 +17,12 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const { context, github } = require('@actions/github');
-            const pull_number = context.payload.workflow_run.head_branch;
-            
+            const { github } = require('@actions/github');
+            const pull_number = process.env.GITHUB_HEAD_REF;
+  
             await github.pulls.requestReviewers({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner: github.repo.owner,
+              repo: github.repo.repo,
               pull_number: pull_number,
               reviewers: ['jadshaker']
             });
