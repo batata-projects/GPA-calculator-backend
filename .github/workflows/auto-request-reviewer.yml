@@ -1,0 +1,28 @@
+name: Auto Request Reviewer
+
+on:
+  workflow_run:
+    workflows: ["Python Code Cleaning and Testing Workflow"]
+    types:
+      - completed
+
+jobs:
+  auto-request-review:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Request review via GitHub API
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { context, github } = require('@actions/github');
+            const pull_number = context.payload.workflow_run.head_branch;
+            
+            await github.pulls.requestReviewers({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull_number,
+              reviewers: ['jadshaker']
+            });
