@@ -1,35 +1,38 @@
 import pytest
+from fastapi import status
 
 from src.common.responses import APIResponse
 
 
 class TestAPIResponse:
     def test_api_response_successful(self) -> None:
-        response = APIResponse[int](status=200, message="OK", data=1)
-        assert response.status == 200
-        assert response.message == "OK"
-        assert response.data == 1
-        assert response.model_dump() == {"status": 200, "message": "OK", "data": 1}
+        response = APIResponse(
+            status_code=status.HTTP_200_OK, message="OK", data={"key": "value"}
+        )
+        res = eval(response.body.decode("utf-8"))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert res == {
+            "message": "OK",
+            "data": {"key": "value"},
+        }
 
     def test_api_response_no_data(self) -> None:
-        response = APIResponse[int](status=200, message="OK")
-        assert response.status == 200
-        assert response.message == "OK"
-        assert response.data is None
-        assert response.model_dump() == {"status": 200, "message": "OK", "data": None}
+        response = APIResponse(status_code=status.HTTP_200_OK, message="OK")
+        res = eval(response.body.decode("utf-8"))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert res == {"message": "OK", "data": {}}
 
     @pytest.mark.parametrize(
-        "status, message, data",
+        "status_code, message, data",
         [
-            (None, "OK", 1),
-            (200, None, 1),
+            (None, "OK", {"key": "value"}),
+            (200, None, {"key": "value"}),
         ],
     )
     def test_api_response_invalid(
-        self,
-        status: int,
-        message: str,
-        data: int,
+        self, status_code: int, message: str, data: dict[str, str]
     ) -> None:
         with pytest.raises(ValueError):
-            APIResponse[int](status=status, message=message, data=data)
+            APIResponse(status_code=status_code, message=message, data=data)

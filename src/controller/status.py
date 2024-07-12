@@ -10,14 +10,15 @@ status_router = APIRouter(
 
 @status_router.get(
     "",
-    response_model=APIResponse[None],
+    response_class=APIResponse,
     response_description="Status check",
     responses={
         status.HTTP_200_OK: {"description": "Status check successful"},
         status.HTTP_404_NOT_FOUND: {"description": "Status check failed"},
     },
 )
-async def status_check() -> APIResponse[None]:
-    return APIResponse[None](
-        status=status.HTTP_200_OK, message="Status check successful", data=None
+async def status_check() -> APIResponse:
+    return APIResponse(
+        message="Status check successful",
+        status_code=status.HTTP_200_OK,
     )

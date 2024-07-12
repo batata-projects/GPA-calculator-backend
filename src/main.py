@@ -2,9 +2,11 @@ from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
-from src.auth.router import router as auth_router
+from src.auth.router import auth_router
 from src.config import Config
 from src.controller import courses_router, status_router, users_router
+from src.controller.routers.courses import courses_router
+from src.controller.status import status_router
 
 app = FastAPI(
     title=Config.APP.TITLE,
