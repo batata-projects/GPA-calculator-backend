@@ -40,7 +40,7 @@ class BaseDAO(Generic[BaseModelType]):
         for _data in model_data:
             self.base_model.model_validate(_data)
         data = self.client.table(self.table).insert(model_data).execute()
-        if not data.data or len(data.data) > 1000:
+        if not data.data:
             return []
         return [self.base_model.model_validate(item) for item in data.data]
 
