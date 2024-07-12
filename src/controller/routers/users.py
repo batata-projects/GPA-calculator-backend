@@ -23,15 +23,15 @@ async def get_dashboard(
     user_id: UuidStr,
     user_dao: UserDAO = Depends(get_user_dao),
     course_dao: CourseDAO = Depends(get_course_dao),
-) -> APIResponse[dict[str, Any]]:
+) -> APIResponse:
     try:
         user = user_dao.get_by_id(user_id)
         if not user:
             return APIResponse(
-                status=status.HTTP_404_NOT_FOUND,
+                status_code=status.HTTP_404_NOT_FOUND,
                 message="User not found",
             )
-        user_data = user.model_dump()
+        user_data = user.model_dump(exclude={"grade"})
         user_data["gpa"] = 0
         if user.counted_credits:
             user_data["gpa"] = user.grade / user.counted_credits
@@ -69,14 +69,14 @@ async def get_dashboard(
             del terms[term]["grade"]
             del terms[term]["counted_credits"]
 
-        return APIResponse[dict[str, Any]](
-            status=status.HTTP_200_OK,
+        return APIResponse(
+            status_code=status.HTTP_200_OK,
             message="Dashboard data retrieved",
             data={"user": user_data, "terms": terms},
         )
 
     except Exception as e:
         return APIResponse(
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             message=str(e),
         )

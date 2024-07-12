@@ -2,42 +2,42 @@ from fastapi import APIRouter, Depends, status
 
 from src.auth.auth import login, register
 from src.auth.schemas import LoginRequest, RegisterRequest
-from src.common.responses import APIResponse, AuthResponse
+from src.common.responses import APIResponse
 from src.db.dao import UserDAO
 from src.db.dependencies import get_user_dao_unauthenticated
 
-router = APIRouter(prefix="/auth", tags=["Authentication"])
+auth_router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
-@router.post(
+@auth_router.post(
     "/register",
-    response_model=APIResponse[AuthResponse],
+    response_class=APIResponse,
     summary="Register",
     description="Register a new user",
 )
 async def register_route(
     request: RegisterRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
-) -> APIResponse[AuthResponse]:
-    return APIResponse[AuthResponse](
+) -> APIResponse:
+    return APIResponse(
         message="Registration successful",
-        status=status.HTTP_200_OK,
-        data=register(request, user_dao),
+        status_code=status.HTTP_200_OK,
+        data=register(request, user_dao).model_dump(),
     )
 
 
-@router.post(
+@auth_router.post(
     "/login",
-    response_model=APIResponse[AuthResponse],
+    response_class=APIResponse,
     summary="Login",
     description="Login to the system",
 )
 async def login_route(
     request: LoginRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
-) -> APIResponse[AuthResponse]:
-    return APIResponse[AuthResponse](
+) -> APIResponse:
+    return APIResponse(
         message="Login successful",
-        status=status.HTTP_200_OK,
-        data=login(request, user_dao),
+        status_code=status.HTTP_200_OK,
+        data=login(request, user_dao).model_dump(),
     )
