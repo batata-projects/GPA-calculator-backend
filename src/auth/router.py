@@ -8,7 +8,7 @@ from src.auth.schemas import (
     RegisterRequest,
     ResetPasswordRequest,
 )
-from src.common.responses import APIResponse, AuthResponse
+from src.common.responses import APIResponse
 from src.common.responses.API_response import APIResponse
 from src.db.dao import UserDAO
 from src.db.dao.user_dao import UserDAO
@@ -46,40 +46,40 @@ async def login_route(
 ) -> APIResponse:
     return APIResponse(
         message="Login successful",
-        status=status.HTTP_200_OK,
-        data=login(request, user_dao),
+        status_code=status.HTTP_200_OK,
+        data=login(request, user_dao).model_dump(),
     )
 
 
-@router.post(
+@auth_router.post(
     "/forgot-password",
-    response_model=APIResponse,
+    response_class=APIResponse,
     summary="Reset Password",
     description="Reset user password",
 )
 async def forgot_password_route(
     request: ForgotPasswordRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
-) -> APIResponse[str]:
+) -> APIResponse:
     return APIResponse(
         message="Password reset successful",
-        status=status.HTTP_200_OK,
-        data=forget_password(request, user_dao),
+        status_code=status.HTTP_200_OK,
+        data=forget_password(request, user_dao).model_dump(),
     )
 
 
-@router.post(
+@auth_router.post(
     "/reset-password",
-    response_model=APIResponse[AuthResponse],
+    response_class=APIResponse,
     summary="Change Password",
     description="Change user password",
 )
 async def reset_password_route(
     request: ResetPasswordRequest,
     user_dao: UserDAO = Depends(get_user_dao),
-) -> APIResponse[AuthResponse]:
+) -> APIResponse:
     return APIResponse(
         message="Password change successful",
-        status=status.HTTP_200_OK,
-        data=reset_password(request, user_dao),
+        status_code=status.HTTP_200_OK,
+        data=reset_password(request, user_dao).model_dump(),
     )
