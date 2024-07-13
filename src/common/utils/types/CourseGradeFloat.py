@@ -1,6 +1,5 @@
 from typing import Annotated
 
-from pydantic import NonNegativeFloat
 from pydantic.functional_validators import BeforeValidator
 
 
@@ -10,6 +9,4 @@ def validate_course_grade_float(v: float) -> float:
     return v
 
 
-CourseGradeFloat = Annotated[
-    NonNegativeFloat, BeforeValidator(validate_course_grade_float)
-]
+CourseGradeFloat = Annotated[float, BeforeValidator(validate_course_grade_float)]
