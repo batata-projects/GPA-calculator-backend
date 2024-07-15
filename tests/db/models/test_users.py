@@ -9,7 +9,7 @@ from src.db.models import User
 class TestUser:
     def test_user_successful(self, valid_uuid: Mock) -> None:
         user_id = valid_uuid
-        email = "rmf40@mail.aub.edu"
+        email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
         credits = 0
@@ -35,7 +35,7 @@ class TestUser:
         assert user.grade == grade
 
     def test_user_no_id(self) -> None:
-        email = "rmf40@mail.aub.edu"
+        email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
         credits = 0
@@ -61,7 +61,7 @@ class TestUser:
 
     def test_user_invalid_id(self) -> None:
         user_id = "invalid"
-        email = "rmf40@mail.aub.edu"
+        email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
         credits = 0
@@ -83,11 +83,11 @@ class TestUser:
         "email, first_name, last_name, credits, counted_credits, grade",
         [
             (None, "Rayan", "Fakhreddine", 0, 0, 0.0),
-            ("rmf40@mail.aub.edu", None, "Fakhreddine", 0, 0, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", None, 0, 0, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", "Fakhreddine", None, 0, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", "Fakhreddine", 0, None, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", "Fakhreddine", 0, 0, None),
+            ("rayan@mail.com", None, "Fakhreddine", 0, 0, 0.0),
+            ("rayan@mail.com", "Rayan", None, 0, 0, 0.0),
+            ("rayan@mail.com", "Rayan", "Fakhreddine", None, 0, 0.0),
+            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, None, 0.0),
+            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, 0, None),
         ],
     )
     def test_user_none_attribute(
@@ -112,12 +112,12 @@ class TestUser:
     @pytest.mark.parametrize(
         "email, first_name, last_name, credits, counted_credits, grade",
         [
-            ("jaadshaker@hotmail", "Jad", "Shaker", 0, 0, 0.0),
-            ("rmf40@mail.aub.edu", 123, "Fakhreddine", 0, 0, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", 123, 0, 0, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", "Fakhreddine", -1, 0, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", "Fakhreddine", 0, -1, 0.0),
-            ("rmf40@mail.aub.edu", "Rayan", "Fakhreddine", 0, 0, -1),
+            ("jaadshaker@mail", "Jad", "Shaker", 0, 0, 0.0),
+            ("rayan@mail.com", 123, "Fakhreddine", 0, 0, 0.0),
+            ("rayan@mail.com", "Rayan", 123, 0, 0, 0.0),
+            ("rayan@mail.com", "Rayan", "Fakhreddine", -1, 0, 0.0),
+            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, -1, 0.0),
+            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, 0, -1),
         ],
     )
     def test_user_invalid_attribute(

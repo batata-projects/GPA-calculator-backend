@@ -38,9 +38,9 @@ class TestRegister:
         "first_name, last_name, email",
         [
             ("", "Shaker", "user1.email"),
-            ("Jad", "", "jss31@mail.aub.edu"),
+            ("Jad", "", "jad@mail.com"),
             ("Jad", "Shaker", ""),
-            ("Jad", "Shaker", "jss31@mail.aub.edu"),
+            ("Jad", "Shaker", "jad@mail.com"),
         ],
     )
     async def test_register_no_attribute(
