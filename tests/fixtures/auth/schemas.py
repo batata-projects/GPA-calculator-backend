@@ -10,11 +10,11 @@ def register_request() -> Any:
     return RegisterRequest(
         first_name="Rayan",
         last_name="Fakhreddine",
-        email="verynew@aub.edu.lb",
+        email="new@mail.com",
         password="pasSword123",
     )
 
 
 @pytest.fixture
 def login_request() -> Any:
-    return LoginRequest(email="rmf40@aub.edu.lb", password="pasSword123")
+    return LoginRequest(email="rayan@mail.com", password="pasSword123")

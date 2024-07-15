@@ -10,7 +10,7 @@ def users(valid_uuid: Mock) -> list[User]:
     return [
         User(
             id=valid_uuid,
-            email="jss31@mail.aub.edu",
+            email="jad@mail.com",
             first_name="Jad",
             last_name="Shaker",
             credits=6,
@@ -19,7 +19,7 @@ def users(valid_uuid: Mock) -> list[User]:
         ),
         User(
             id=valid_uuid,
-            email="rmf40@mail.aub.edu",
+            email="rayan@mail.com",
             first_name="Rayan",
             last_name="Fakhreddine",
             credits=16,

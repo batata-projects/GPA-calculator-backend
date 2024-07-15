@@ -11,7 +11,7 @@ class RegisterRequest(PydanticBaseModel):
     first_name: Optional[str] = Field(default="First Name", description="First Name")
     last_name: Optional[str] = Field(default="Last Name", description="Last Name")
     email: EmailStr = Field(
-        default="email@mail.aub.edu", description="Email must be an AUB email"
+        default="email@mail.com", description="Email must be valid email"
     )
     password: PasswordStr = Field(
         default="Password123",
@@ -39,7 +39,7 @@ class RegisterRequest(PydanticBaseModel):
 
 class LoginRequest(PydanticBaseModel):
     email: EmailStr = Field(
-        default="email@mail.aub.edu", description="Email must be an AUB email"
+        default="email@mail.com", description="Email must be a valid email"
     )
     password: PasswordStr = Field(
         default="Password123",

@@ -6,7 +6,7 @@ from src.common.utils.types import CourseGradeFloat, CourseStr, UuidStr
 
 class ValidItems(PydanticBaseModel):
     uuidStr: UuidStr = "00000000-0000-0000-0000-000000000000"
-    emailStr: EmailStr = "email@mail.aub.edu"
+    emailStr: EmailStr = "email@mail.com"
     courseGradeFloat: CourseGradeFloat = 1.0
     nonNegativeInt: NonNegativeInt = 0
     nonNegativeFloat: NonNegativeFloat = 0.0

@@ -7,7 +7,7 @@ class TestValidItems:
         validItems = ValidItems()
 
         assert validItems.uuidStr == "00000000-0000-0000-0000-000000000000"
-        assert validItems.emailStr == "email@mail.aub.edu"
+        assert validItems.emailStr == "email@mail.com"
         assert validItems.courseGradeFloat == 1.0
         assert validItems.nonNegativeInt == 0
         assert validItems.nonNegativeFloat == 0.0
