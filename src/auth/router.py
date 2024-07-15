@@ -1,13 +1,8 @@
 from fastapi import APIRouter, Depends, status
 
 from src.auth.auth import login, register
-from src.auth.password_reset import forget_password, reset_password
-from src.auth.schemas import (
-    ForgotPasswordRequest,
-    LoginRequest,
-    RegisterRequest,
-    ResetPasswordRequest,
-)
+from src.auth.password_reset import reset_password
+from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest
 from src.common.responses import APIResponse
 from src.common.responses.API_response import APIResponse
 from src.db.dao import UserDAO
