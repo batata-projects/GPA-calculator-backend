@@ -52,7 +52,7 @@ async def get_dashboard(
                     "counted_credits": 0,
                     "courses": {},
                 }
-            if course.graded and course.grade:
+            if course.graded and course.grade is not None and course.grade != -1:
                 terms[term]["grade"] += course.grade * course.credits
                 terms[term]["counted_credits"] += course.credits
             if course.grade:
