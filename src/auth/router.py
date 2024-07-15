@@ -49,8 +49,8 @@ async def login_route(
 @auth_router.post(
     "/reset-password",
     response_class=APIResponse,
-    summary="Change Password",
-    description="Change user password",
+    summary="Reset Password",
+    description="Reset user password",
 )
 async def reset_password_route(
     request: ResetPasswordRequest,
