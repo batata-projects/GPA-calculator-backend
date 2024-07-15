@@ -48,9 +48,9 @@ class LoginRequest(PydanticBaseModel):
 
     def auth_model_dump(self) -> dict[str, str]:
         return {
-             "email": self.email,
-             "password": self.password,
-         }
+            "email": self.email,
+            "password": self.password,
+        }
 
 class ForgotPasswordRequest(PydanticBaseModel):
     email: EmailStr = Field(
