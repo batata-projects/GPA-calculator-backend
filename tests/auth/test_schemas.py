@@ -93,3 +93,12 @@ class TestLoginRequest:
     def test_login_request_invalid(self, email: str, password: str) -> None:
         with pytest.raises(ValueError):
             LoginRequest(email=email, password=password)
+
+
+class TestResetPasswordRequest:
+    def test_reset_password_request_successful(self) -> None: ...
+
+    def test_reset_password_request_default(self) -> None: ...
+
+    @pytest.mark.parametrize("password", ["password123"])
+    def test_reset_password_request_invalid(self, password: str) -> None: ...

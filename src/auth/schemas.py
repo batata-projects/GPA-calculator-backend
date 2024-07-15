@@ -51,3 +51,10 @@ class LoginRequest(PydanticBaseModel):
             "email": self.email,
             "password": self.password,
         }
+
+
+class ResetPasswordRequest(PydanticBaseModel):
+    password: PasswordStr = Field(
+        default="Password123",
+        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
+    )
