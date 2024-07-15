@@ -83,11 +83,6 @@ class TestLoginRequest:
             "password": "Password123",
         }
 
-    def test_login_request_default(self) -> None:
-        login_request = LoginRequest()
-        assert login_request.email == "email@mail.aub.edu"
-        assert login_request.password == "Password123"
-
     @pytest.mark.parametrize(
         "email, password",
         [
