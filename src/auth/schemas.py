@@ -46,6 +46,11 @@ class LoginRequest(PydanticBaseModel):
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
     )
 
+    def auth_model_dump(self) -> dict[str, str]:
+         return {
+             "email": self.email,
+             "password": self.password,
+         }
 
 class ForgotPasswordRequest(PydanticBaseModel):
     email: EmailStr = Field(
