@@ -181,3 +181,18 @@ class TestCourse:
     def test_convert_to_term_name_invalid(self, term_number: int) -> None:
         with pytest.raises(ValueError):
             Course.convert_to_term_name(term_number)
+
+    def test_check_grade_and_graded_successful(self) -> None:
+        values = {
+            "graded": True,
+            "grade": 4.3,
+        }
+        assert Course.check_grade_and_graded(values) == values
+
+    def test_check_grade_and_graded_invalid(self) -> None:
+        values = {
+            "graded": False,
+            "grade": 4.3,
+        }
+        with pytest.raises(ValueError):
+            Course.check_grade_and_graded(values)
