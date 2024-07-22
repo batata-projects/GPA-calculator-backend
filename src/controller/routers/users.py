@@ -34,7 +34,7 @@ async def get_dashboard(
         user_data = user.model_dump(exclude={"grade"})
         user_data["gpa"] = 0
         if user.counted_credits:
-            user_data["gpa"] = user.grade / user.counted_credits
+            user_data["gpa"] = round(user.grade / user.counted_credits, ndigits=10)
         del user_data["counted_credits"]
 
         courses = course_dao.get_by_query(user_id=user_id)
@@ -63,8 +63,9 @@ async def get_dashboard(
 
         for term in terms:
             if terms[term]["counted_credits"]:
-                terms[term]["gpa"] = (
-                    terms[term]["grade"] / terms[term]["counted_credits"]
+                terms[term]["gpa"] = round(
+                    terms[term]["grade"] / terms[term]["counted_credits"],
+                    ndigits=10,
                 )
             del terms[term]["grade"]
             del terms[term]["counted_credits"]
