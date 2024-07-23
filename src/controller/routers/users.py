@@ -23,20 +23,26 @@ async def get_dashboard(
     user_dao: UserDAO = Depends(get_user_dao),
     course_dao: CourseDAO = Depends(get_course_dao),
 ) -> APIResponse:
-    try:
+    # try:
 
-        user = user_dao.get_by_id(user_id)
-        courses = course_dao.get_by_query(user_id=user_id)
-
+    user = user_dao.get_by_id(user_id)
+    if user is None:
         return APIResponse(
-            status_code=status.HTTP_200_OK,
-            message="Dashboard data retrieved",
-            # data={"user": user_data, "terms": terms},
-            data=get_dashboard_data(user, courses),
+            status_code=status.HTTP_404_NOT_FOUND,
+            message="User not found",
         )
 
-    except Exception as e:
-        return APIResponse(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            message=str(e),
-        )
+    courses = course_dao.get_by_query(user_id=user_id)
+
+    return APIResponse(
+        status_code=status.HTTP_200_OK,
+        message="Dashboard data retrieved",
+        data=get_dashboard_data(user, courses),
+    )
+
+
+# except Exception as e:
+#     return APIResponse(
+#         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#         message=str(e),
+#     )
