@@ -1,67 +1,86 @@
 from typing import Any
 
-from src.common.utils.types import TermInt
+from pydantic import BaseModel as PydanticBaseModel
+
+from src.common.utils.types import CourseStr, TermInt, UuidStr
 from src.db.models import Course, User
 
 
+class Term(PydanticBaseModel):
+    name: str
+    gpa: float = 0.0
+    credits: int = 0
+    counted_credits: int = 0
+    grade: float = 0.0
+    courses: dict[UuidStr, Course] = {}
+
+
 def get_dashboard_data(user: User, courses: list[Course]) -> dict[str, Any]:
-    # specify Any
-    terms: dict[TermInt, Any] = {}
-    courses_dict: dict[tuple[str, str], dict[str, Any]] = {}
+    terms: dict[TermInt, Term] = {}
+    courses_dict: dict[tuple[CourseStr, CourseStr], Course] = {}
 
     credits = 0
     counted_credits = 0
-    grade = 0
+    grade = 0.0
 
     for course in courses:
+        if not course.id:
+            raise ValueError("Course ID is required")
 
-        term = course.term
-        if term not in terms:
-            terms[term] = {
-                "name": " ".join(map(str, Course.convert_to_term_name(term))),
-                "gpa": 0.0,
-                "credits": 0,
-                "counted_credits": 0,
-                "grade": 0.0,
-                "courses": {},
-            }
-        terms[term]["credits"] += (
-            course.credits if course.grade != -1 else 0
-        )  # change format of ifs
-        terms[term]["counted_credits"] += (
-            course.credits if course.grade != -1 and course.graded else 0
-        )
-        terms[term]["grade"] += (
-            course.grade * course.credits if course.grade != -1 and course.graded else 0
-        )
-        terms[term]["courses"][course.id] = course.model_dump(exclude={"id", "user_id"})
+        term_number = course.term
 
+        if term_number not in terms:
+            terms[term_number] = Term(
+                name=" ".join(map(str, Course.convert_to_term_name(term_number)))
+            )
+
+        if course.grade and course.grade != -1:
+            terms[term_number].credits += course.credits
+            if course.graded:
+                terms[term_number].counted_credits += course.credits
+                terms[term_number].grade += course.grade * course.credits
+
+        terms[term_number].courses[course.id] = course
         key = (course.subject, course.course_code)
-        if key in courses_dict:
-            courses_dict[key]["grade"] = max(courses_dict[key]["grade"], course.grade)
+
+        if key not in courses_dict:
+            courses_dict[key] = course
         else:
-            courses_dict[key]["grade"] = course.grade
-            courses_dict[key]["credits"] = course.credits
-            courses_dict[key]["graded"] = course.graded
+            courses_dict[key].grade = max(
+                [courses_dict[key].grade, course.grade],
+                default=None,
+                key=lambda x: (x is not None, x),
+            )
 
-    for term in terms:
-        if term["counted_credits"]:
-            term["gpa"] = term["grade"] / term["counted_credits"]
-        del term["grade"]
-        del term["counted_credits"]
+    for term in terms.values():
+        if term.counted_credits:
+            term.gpa = term.grade / term.counted_credits
 
-    for course in courses_dict:
-        credits += course["credits"] if course["grade"] != -1 else 0
-        counted_credits += (
-            course["credits"] if course["grade"] != -1 and course["graded"] else 0
-        )
-        grade += (
-            (course["grade"] * course["credits"])
-            if course["grade"] != -1 and course["graded"]
-            else 0
-        )
+    for course in courses_dict.values():
+        if course.grade and course.grade != -1:
+            credits += course.credits
+            if course.graded:
+                counted_credits += course.credits
+                grade += course.grade * course.credits
 
-    user_data = user.model_dump()
-    user_data["gpa"] = grade / counted_credits if counted_credits else 0
-
-    return {"user": user_data, "terms": terms}
+    return {
+        "user": {
+            **user.model_dump(
+                exclude={
+                    "counted_credits",
+                    "grade",
+                }
+            ),
+            "gpa": grade / counted_credits if counted_credits else 0.0,
+        },
+        "terms": {
+            term_number: term.model_dump(
+                exclude={
+                    "grade": ...,
+                    "counted_credits": ...,
+                    "courses": {course.id: {"user_id", "id"} for course in courses},
+                }
+            )
+            for term_number, term in terms.items()
+        },
+    }
