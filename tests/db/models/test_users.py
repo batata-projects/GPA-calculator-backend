@@ -7,8 +7,8 @@ from src.db.models import User
 
 
 class TestUser:
-    def test_user_successful(self, valid_uuid: Mock) -> None:
-        user_id = valid_uuid
+    def test_user_successful(self, uuid_generator: Mock) -> None:
+        user_id = uuid_generator()
         email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
