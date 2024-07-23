@@ -58,12 +58,14 @@ async def test_get_dashboard_successful(
 
 
 @pytest.mark.asyncio
-async def test_get_dashboard_user_not_found(valid_uuid: Mock) -> None:
+async def test_get_dashboard_user_not_found(uuid_generator: Mock) -> None:
     user_dao = Mock(spec=UserDAO)
     course_dao = Mock(spec=CourseDAO)
     user_dao.get_by_id.return_value = None
 
-    response = await get_dashboard(valid_uuid, user_dao=user_dao, course_dao=course_dao)
+    response = await get_dashboard(
+        uuid_generator(), user_dao=user_dao, course_dao=course_dao
+    )
     res = eval(response.body.decode("utf-8"))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

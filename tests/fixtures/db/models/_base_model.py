@@ -1,4 +1,5 @@
 from typing import Optional
+from unittest.mock import Mock
 
 import pytest
 
@@ -13,10 +14,10 @@ class TestObject(BaseModel):
 
 
 @pytest.fixture
-def test_objects(valid_uuid: UuidStr) -> list[TestObject]:
+def test_objects(uuid_generator: Mock) -> list[TestObject]:
     return [
-        TestObject(id=valid_uuid, name="test_name_1"),
-        TestObject(id=valid_uuid, name="test_name_2"),
+        TestObject(id=uuid_generator(), name="test_name_1"),
+        TestObject(id=uuid_generator(), name="test_name_2"),
     ]
 
 
