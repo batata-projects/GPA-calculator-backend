@@ -1,4 +1,8 @@
-from .fixtures.auth.schemas import login_request, register_request
+from .fixtures.auth.schemas import (
+    login_request,
+    register_request,
+    reset_password_request,
+)
 from .fixtures.common.session import session
 from .fixtures.common.utils.types.CourseGradeFloat import (
     invalid_course_grade_float,

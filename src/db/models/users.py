@@ -24,8 +24,8 @@ class User(BaseModel):
         return cls(
             id=user.id,
             email=user.email,
-            first_name=user.user_metadata["first_name"],
-            last_name=user.user_metadata["last_name"],
+            first_name=user.user_metadata.get("first_name"),
+            last_name=user.user_metadata.get("last_name"),
             credits=credits,
             counted_credits=counted_credits,
             grade=grade,
