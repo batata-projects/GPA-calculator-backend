@@ -9,7 +9,6 @@ from gotrue.types import User as GoTrueUser
 from src.auth.router import login_route, register_route, reset_password_route
 from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest
 from src.common.session import Session
-from src.db.dao.user_dao import UserDAO
 from src.db.models import User
 
 
@@ -61,10 +60,14 @@ class TestLoginRoute:
             },
         }
 
+
 @pytest.mark.asyncio
 class TestResetPasswordRoute:
     async def test_reset_password_route_successful(
-        self, reset_password_request: ResetPasswordRequest, gotrue_user: GoTrueUser, user1: User
+        self,
+        reset_password_request: ResetPasswordRequest,
+        gotrue_user: GoTrueUser,
+        user1: User,
     ) -> None:
         user_dao = Mock()
         user_dao.client.auth.reset_password.return_value = GoTrueAuthResponse(
@@ -77,5 +80,5 @@ class TestResetPasswordRoute:
         assert response.status_code == status.HTTP_200_OK
         assert res == {
             "message": "Password change successful",
-            "data": {"user" : user1.model_dump()},
+            "data": {"user": user1.model_dump()},
         }

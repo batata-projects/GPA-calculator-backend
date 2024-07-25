@@ -1,15 +1,22 @@
 from unittest.mock import Mock
 
 import pytest
+from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
+from gotrue.types import User as GoTrueUser
+
 from src.auth.password_reset import reset_password
 from src.auth.schemas import ResetPasswordRequest
 from src.common.utils.types import PasswordStr
 from src.db.models.users import User
-from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
-from gotrue.types import User as GoTrueUser
+
 
 class TestResetPassword:
-    async def test_reset_password_successful(self, reset_password_request: ResetPasswordRequest, user1: User, gotrue_user: GoTrueUser) -> None:
+    async def test_reset_password_successful(
+        self,
+        reset_password_request: ResetPasswordRequest,
+        user1: User,
+        gotrue_user: GoTrueUser,
+    ) -> None:
         user_dao = Mock()
         user_dao.client.auth.update_user.return_value = GoTrueAuthResponse(
             user=gotrue_user,
@@ -21,7 +28,6 @@ class TestResetPassword:
         assert user_dao.client.auth.update_user.called
 
         assert response.user == user1
-
 
     @pytest.mark.parametrize(
         "password",
@@ -41,7 +47,9 @@ class TestResetPassword:
             "Password1!",
         ],
     )
-    def test_reset_password_invalid_password(self, password: PasswordStr, reset_password_request: ResetPasswordRequest) -> None:
+    def test_reset_password_invalid_password(
+        self, password: PasswordStr, reset_password_request: ResetPasswordRequest
+    ) -> None:
         user_dao = Mock()
         user_dao.client.auth.update_user.side_effect = Exception()
 

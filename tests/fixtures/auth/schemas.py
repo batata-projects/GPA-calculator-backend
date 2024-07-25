@@ -19,6 +19,7 @@ def register_request() -> Any:
 def login_request() -> Any:
     return LoginRequest(email="rayan@mail.com", password="pasSword123")
 
+
 @pytest.fixture
 def reset_password_request() -> Any:
     return ResetPasswordRequest(password="newPasSword123")

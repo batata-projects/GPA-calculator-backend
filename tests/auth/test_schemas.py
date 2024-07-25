@@ -99,7 +99,9 @@ class TestResetPasswordRequest:
     def test_reset_password_request_successful(self) -> None:
         password_reset_request = ResetPasswordRequest(password="Password123")
         assert password_reset_request.password == "Password123"
-        assert password_reset_request.model_dump() == {"password": "Password123",}
+        assert password_reset_request.model_dump() == {
+            "password": "Password123",
+        }
 
     def test_reset_password_request_default(self) -> None:
         password_reset_request = ResetPasswordRequest()
