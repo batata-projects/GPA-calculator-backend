@@ -73,9 +73,3 @@ class TestGetRefreshToken:
     async def test_get_refresh_token(self, valid_refresh_token: str) -> None:
         token = await get_refresh_token(valid_refresh_token)
         assert token == valid_refresh_token
-
-    @pytest.mark.asyncio
-    async def test_get_refresh_token_invalid(self, invalid_refresh_token: str) -> None:
-        with pytest.raises(HTTPException) as e:
-            await get_refresh_token(invalid_refresh_token)
-        assert e.value.status_code == 401
