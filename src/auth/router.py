@@ -1,10 +1,15 @@
 from fastapi import APIRouter, Depends, status
 
 from src.auth.auth import login, register
-from src.auth.reset_password import reset_password
 from src.auth.forget_password import forget_password
 from src.auth.refresh_token import refresh_token
-from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest, ForgetPasswordRequest
+from src.auth.reset_password import reset_password
+from src.auth.schemas import (
+    ForgetPasswordRequest,
+    LoginRequest,
+    RegisterRequest,
+    ResetPasswordRequest,
+)
 from src.common.responses import APIResponse
 from src.common.responses.API_response import APIResponse
 from src.db.dao import UserDAO
@@ -80,7 +85,7 @@ async def forgot_password_route(
         status_code=status.HTTP_200_OK,
         data=forget_password(request, user_dao).model_dump(),
     )
- 
+
 
 @auth_router.post(
     "/refresh-token",

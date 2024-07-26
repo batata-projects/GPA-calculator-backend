@@ -51,7 +51,7 @@ class LoginRequest(PydanticBaseModel):
             "email": self.email,
             "password": self.password,
         }
-    
+
 
 class ForgetPasswordRequest(PydanticBaseModel):
     email: EmailStr = Field(

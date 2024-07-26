@@ -1,6 +1,3 @@
-from fastapi import Depends, HTTPException, status
-
-from src.auth.dependencies import decode_jwt, get_access_token
 from src.auth.schemas import ResetPasswordRequest
 from src.common.responses import AuthResponse
 from src.db.dao import UserDAO
