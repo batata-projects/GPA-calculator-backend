@@ -54,3 +54,23 @@ class Course(BaseModel):
         if not graded and grade not in [-1, 0, 1, None]:
             raise ValueError("Grade must be -1, 0, or 1 when graded is False")
         return values
+
+    @model_validator(mode="before")
+    def forbid_course_different_credits(cls, values: dict[str, Any]) -> dict[str, Any]:
+        course_code = values.get("course_code")
+        subject = values.get("subject")
+        credits = values.get("credits")
+
+        queried_course: Course = ...
+
+        # Check against all courses in the current context
+        if (
+            queried_course.course_code == course_code
+            and queried_course.subject == subject
+        ):
+            if queried_course.credits != credits:
+                raise ValueError(
+                    f"Conflict detected: Course {subject} {course_code} exists with {queried_course.credits} credits, but the new entry specifies {credits} credits."
+                )
+
+        return values
