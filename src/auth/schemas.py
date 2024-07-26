@@ -51,6 +51,12 @@ class LoginRequest(PydanticBaseModel):
             "email": self.email,
             "password": self.password,
         }
+    
+
+class ForgetPasswordRequest(PydanticBaseModel):
+    email: EmailStr = Field(
+        default="email@mail.com", description="Email must be valid email"
+    )
 
 
 class ResetPasswordRequest(PydanticBaseModel):
