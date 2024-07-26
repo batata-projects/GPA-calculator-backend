@@ -6,7 +6,7 @@ from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
 from gotrue.types import Session as GoTrueSession  # type: ignore
 from gotrue.types import User as GoTrueUser
 
-from src.auth.router import login_route, register_route
+from src.auth.router import login_route, refresh_token_route, register_route
 from src.auth.schemas import LoginRequest, RegisterRequest
 from src.common.session import Session
 from src.db.models import User
@@ -54,6 +54,33 @@ class TestLoginRoute:
         assert response.status_code == status.HTTP_200_OK
         assert res == {
             "message": "Login successful",
+            "data": {
+                "user": user1.model_dump(),
+                "session": session.model_dump(),
+            },
+        }
+
+
+@pytest.mark.asyncio
+class TestRefreshToken:
+    async def test_refresh_token_route_successful(
+        self,
+        gotrue_user: GoTrueUser,
+        gotrue_session: GoTrueSession,
+        user1: User,
+        session: Session,
+    ) -> None:
+        user_dao = Mock()
+        user_dao.client.auth.refresh_session.return_value = GoTrueAuthResponse(
+            user=gotrue_user,
+            session=gotrue_session,
+        )
+        response = await refresh_token_route(user_dao)
+        res = eval(response.body.decode("utf-8"))
+
+        assert response.status_code == status.HTTP_200_OK
+        assert res == {
+            "message": "Token refresh successful",
             "data": {
                 "user": user1.model_dump(),
                 "session": session.model_dump(),

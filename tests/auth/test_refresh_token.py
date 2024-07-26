@@ -1,0 +1,9 @@
+class TestRefreshToken:
+    def test_refresh_token_successful(self) -> None:
+        ...
+
+    def test_refresh_token_invalid(self) -> None:
+        ...
+
+    def test_refresh_token_expired(self) -> None:
+        ...
