@@ -64,3 +64,16 @@ class ResetPasswordRequest(PydanticBaseModel):
         default="Password123",
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
     )
+
+
+class OTPRequest(PydanticBaseModel):
+    email: EmailStr = Field(
+        default="email@mail.com", description="Email must be valid email"
+    )
+
+
+class VerifyOTPRequest(PydanticBaseModel):
+    email: EmailStr = Field(
+        default="email@mail.com", description="Email must be valid email"
+    )
+    otp: str = Field(default="123456", description="OTP must be 6 characters long")

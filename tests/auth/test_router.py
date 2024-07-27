@@ -62,7 +62,17 @@ class TestLoginRoute:
 
 
 @pytest.mark.asyncio
-class TestRefreshToken:
+class TestResetPasswordRoute:
+    async def test_reset_password_route_successful(self) -> None: ...
+
+
+@pytest.mark.asyncio
+class TestForgetPasswordRoute:
+    async def test_forget_password_route_successful(self) -> None: ...
+
+
+@pytest.mark.asyncio
+class TestRefreshTokenRoute:
     async def test_refresh_token_route_successful(
         self,
         gotrue_user: GoTrueUser,
@@ -86,3 +96,13 @@ class TestRefreshToken:
                 "session": session.model_dump(),
             },
         }
+
+
+@pytest.mark.asyncio
+class TestRequestOTPRoute:
+    async def test_request_otp_route_successful(self) -> None: ...
+
+
+@pytest.mark.asyncio
+class TestVerifyOTPRoute:
+    async def test_verify_otp_route_successful(self) -> None: ...
