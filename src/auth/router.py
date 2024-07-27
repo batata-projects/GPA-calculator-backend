@@ -3,13 +3,17 @@ from fastapi import APIRouter, Depends, status
 from src.auth.auth import login, register
 from src.auth.forget_password import forget_password
 from src.auth.refresh_token import refresh_token
+from src.auth.request_otp import request_otp
 from src.auth.reset_password import reset_password
 from src.auth.schemas import (
     ForgetPasswordRequest,
     LoginRequest,
+    OTPRequest,
     RegisterRequest,
     ResetPasswordRequest,
+    SignInWithOTPRequest,
 )
+from src.auth.sign_in_with_otp import sign_in_with_otp
 from src.common.responses import APIResponse
 from src.common.responses.API_response import APIResponse
 from src.db.dao import UserDAO
@@ -100,4 +104,38 @@ async def refresh_token_route(
         message="Token refresh successful",
         status_code=status.HTTP_200_OK,
         data=refresh_token(user_dao).model_dump(),
+    )
+
+
+@auth_router.post(
+    "/request-otp",
+    response_class=APIResponse,
+    summary="Request OTP",
+    description="Request OTP",
+)
+async def request_otp_route(
+    request: OTPRequest,
+    user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
+) -> APIResponse:
+    return APIResponse(
+        message="OTP request successful",
+        status_code=status.HTTP_200_OK,
+        data=request_otp(request, user_dao).model_dump(),
+    )
+
+
+@auth_router.post(
+    "/sign-in-with-otp",
+    response_class=APIResponse,
+    summary="Sign In With OTP",
+    description="Sign in with OTP",
+)
+async def sign_in_with_otp_route(
+    request: SignInWithOTPRequest,
+    user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
+) -> APIResponse:
+    return APIResponse(
+        message="Sign in with OTP successful",
+        status_code=status.HTTP_200_OK,
+        data=sign_in_with_otp(request, user_dao).model_dump(),
     )
