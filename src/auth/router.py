@@ -33,6 +33,11 @@ async def register_route(
     request: RegisterRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
 ) -> APIResponse:
+    if user_dao.get_by_query(email=request.email):
+        return APIResponse(
+            message="Email already in use",
+            status_code=status.HTTP_400_BAD_REQUEST,
+        )
     return APIResponse(
         message="Registration successful",
         status_code=status.HTTP_200_OK,

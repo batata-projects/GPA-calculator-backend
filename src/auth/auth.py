@@ -11,34 +11,14 @@ from src.db.models import User
 
 def register(request: RegisterRequest, user_dao: UserDAO) -> AuthResponse:
     try:
-        if not request.first_name or not request.last_name:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="First name and last name are required",
-            )
-        if not request.email:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email is required",
-            )
-        if user_dao.get_by_query(email=request.email):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already in use",
-            )
         result = user_dao.client.auth.sign_up(request.auth_model_dump())
         user = User.validate_supabase_user(result.user)
         return AuthResponse(user=user)
     except AuthApiError as e:
-        if "Password" in str(e):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character",
-            )
         if "Email rate limit exceeded" in str(e):
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email rate limit exceeded, please try again later",
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                detail="Email rate limit exceeded",
             )
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

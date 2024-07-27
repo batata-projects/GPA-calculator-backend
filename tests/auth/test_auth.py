@@ -28,7 +28,6 @@ class TestRegister:
 
         response = register(register_request, user_dao)
 
-        assert user_dao.get_by_query.called
         assert user_dao.client.auth.sign_up.called
 
         assert response.user == user1
