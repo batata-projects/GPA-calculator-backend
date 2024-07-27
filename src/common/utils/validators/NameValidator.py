@@ -1,5 +1,4 @@
 def validate_name(v: str) -> str:
-    # check that name is only of characters, not empty and capital
     if not v.isalpha():
         raise ValueError("Name must only contain characters")
     if not v.strip():
