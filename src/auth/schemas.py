@@ -72,7 +72,7 @@ class OTPRequest(PydanticBaseModel):
     )
 
 
-class SignInWithOTPRequest(PydanticBaseModel):
+class VerifyOTPRequest(PydanticBaseModel):
     email: EmailStr = Field(
         default="email@mail.com", description="Email must be valid email"
     )

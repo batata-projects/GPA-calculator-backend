@@ -11,9 +11,9 @@ from src.auth.schemas import (
     OTPRequest,
     RegisterRequest,
     ResetPasswordRequest,
-    SignInWithOTPRequest,
+    VerifyOTPRequest,
 )
-from src.auth.sign_in_with_otp import sign_in_with_otp
+from src.auth.verify_otp import verify_otp
 from src.common.responses import APIResponse
 from src.common.responses.API_response import APIResponse
 from src.db.dao import UserDAO
@@ -125,17 +125,17 @@ async def request_otp_route(
 
 
 @auth_router.post(
-    "/sign-in-with-otp",
+    "/verify-otp",
     response_class=APIResponse,
-    summary="Sign In With OTP",
-    description="Sign in with OTP",
+    summary="Verify OTP",
+    description="Verify OTP",
 )
-async def sign_in_with_otp_route(
-    request: SignInWithOTPRequest,
+async def verify_otp_route(
+    request: VerifyOTPRequest,
     user_dao: UserDAO = Depends(get_user_dao_unauthenticated),
 ) -> APIResponse:
     return APIResponse(
-        message="Sign in with OTP successful",
+        message="OTP verification successful",
         status_code=status.HTTP_200_OK,
-        data=sign_in_with_otp(request, user_dao).model_dump(),
+        data=verify_otp(request, user_dao).model_dump(),
     )

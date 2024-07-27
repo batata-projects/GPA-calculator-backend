@@ -1,11 +1,11 @@
-from src.auth.schemas import SignInWithOTPRequest
+from src.auth.schemas import VerifyOTPRequest
 from src.common.responses import AuthResponse
 from src.common.session import Session
 from src.db.dao import UserDAO
 from src.db.models import User
 
 
-def sign_in_with_otp(request: SignInWithOTPRequest, user_dao: UserDAO) -> AuthResponse:
+def verify_otp(request: VerifyOTPRequest, user_dao: UserDAO) -> AuthResponse:
     response = user_dao.client.auth.verify_otp(
         {"email": request.email, "token": request.otp, "type": "recovery"}
     )
