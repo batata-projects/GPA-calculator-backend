@@ -1,3 +1,5 @@
+from typing import Any
+
 from fastapi import Depends, status
 
 from src.common.responses import APIResponse
@@ -7,17 +9,18 @@ from src.core.user.dashboard import get_dashboard_data
 from src.db.dao import CourseDAO, UserDAO
 from src.db.dependencies import get_course_dao, get_user_dao
 from src.db.models import User
+from src.db.models.courses import Course
 
-users_router = BaseRouter[User](
+users_router_class = BaseRouter[User](
     prefix="/users",
     tags=["Users"],
     name="User",
     model=User,
     get_dao=get_user_dao,
-).build_router()
+)
 
 
-@users_router.get("/dashboard/{user_id}")
+@users_router_class.router.get("/dashboard/{user_id}")
 async def get_dashboard(
     user_id: UuidStr,
     user_dao: UserDAO = Depends(get_user_dao),
@@ -80,3 +83,6 @@ async def get_dashboard(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             message=str(e),
         )
+
+
+users_router = users_router_class.build_router()
