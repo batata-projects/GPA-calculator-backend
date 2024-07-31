@@ -27,7 +27,11 @@ async def create(
         "subject": request["subject"],
         "course_code": request["course_code"],
     }
-    queried_course = dao.get_by_query(**query_params)[0]
+    queried_courses = dao.get_by_query(**query_params)
+    queried_course = None
+    if len(queried_courses) > 0:
+        queried_course = queried_courses[0]
+    # print(queried_course.credits, request["credits"])
     if queried_course and queried_course.credits != request["credits"]:
         raise ValueError("Course already exists with different credit value")
     return await courses_router_class.create(request, dao)
@@ -42,37 +46,46 @@ async def create_many(
     # then if same found check their credits
     ############################# UNDER CONSTRUCTION #############################
     for course in request:
-        courses = [
-            course
-            for course in request
-            if course["subject"] == course["subject"]
-            and course["course_code"] == course["course_code"]
-        ]
-        if len(courses) > 1:
-            for course in courses:
-                if course["credits"] != courses[0]["credits"]:
-                    raise ValueError("Same course exists with different credit value")
-
-    for course in request:
         query_params = {
             "subject": course["subject"],
             "course_code": course["course_code"],
         }
         queried_courses = dao.get_by_query(**query_params)
-        if queried_course:
+        if len(queried_courses) > 0:
             queried_course = queried_courses[0]
-            # print(queried_course)
-        if queried_course and queried_course.credits != course["credits"]:
-            raise ValueError("Course already exists with different credit value")
+            if queried_course and queried_course.credits != course["credits"]:
+                raise ValueError("Course already exists with different credit value")
     return await courses_router_class.create_many(request, dao)
 
 
-@courses_router_class.router.put("/")
+@courses_router_class.router.put("/{id}")
 async def update(
     id: UuidStr,
     request: dict[str, Any] = courses_router_class.request,
     dao: BaseDAO[Course] = Depends(courses_router_class.get_dao),
 ) -> APIResponse:
+    # Case1: the credits are being updated
+    # Case2: the course subject and code is updated, with the new course having different credits than the same course found previously in the DB
+    # i.e. changing PHYS 210L (1 cred) to PHYS 210 (3 creds) and PHYS 210 is already in the DB
+
+    course_to_update = dao.get_by_query(id=id)[0]
+    # print(course_to_update)
+    # if your are updating the credits of a course
+    if course_to_update.credits != request["credits"]:
+        raise ValueError("Cannot update credits of a course")
+    elif (
+        course_to_update.subject != request["subject"]
+        or course_to_update.course_code != request["course_code"]
+    ):
+        query_params = {
+            "subject": request["subject"],
+            "course_code": request["course_code"],
+        }
+        queried_courses = dao.get_by_query(**query_params)
+        if len(queried_courses) > 0:
+            queried_course = queried_courses[0]
+            if queried_course and queried_course.credits != request["credits"]:
+                raise ValueError("Course already exists with different credit value")
     return await courses_router_class.update(id, request, dao)
 
 
