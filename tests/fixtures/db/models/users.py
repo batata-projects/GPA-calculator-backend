@@ -6,10 +6,10 @@ from src.db.models import User
 
 
 @pytest.fixture
-def users(valid_uuid: Mock) -> list[User]:
+def users(uuid_generator: Mock) -> list[User]:
     return [
         User(
-            id=valid_uuid,
+            id=uuid_generator(),
             email="jad@mail.com",
             first_name="Jad",
             last_name="Shaker",
@@ -18,7 +18,7 @@ def users(valid_uuid: Mock) -> list[User]:
             grade=12.9,
         ),
         User(
-            id=valid_uuid,
+            id=uuid_generator(),
             email="rayan@mail.com",
             first_name="Rayan",
             last_name="Fakhreddine",

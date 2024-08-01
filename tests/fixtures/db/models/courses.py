@@ -2,15 +2,17 @@ from unittest.mock import Mock
 
 import pytest
 
-from src.db.models import Course
+from src.db.models import Course, User
 
 
 @pytest.fixture
-def courses(valid_uuid: Mock) -> list[Course]:
+def courses(uuid_generator: Mock, user1: User) -> list[Course]:
+    if user1.id is None:
+        user1.id = uuid_generator()
     return [
         Course(
-            id=valid_uuid,
-            user_id=valid_uuid,
+            id=uuid_generator(),
+            user_id=user1.id,
             subject="EECE",
             course_code="230",
             term=202310,
@@ -19,8 +21,8 @@ def courses(valid_uuid: Mock) -> list[Course]:
             graded=True,
         ),
         Course(
-            id=valid_uuid,
-            user_id=valid_uuid,
+            id=uuid_generator(),
+            user_id=user1.id,
             subject="FEAA",
             course_code="200",
             term=202310,

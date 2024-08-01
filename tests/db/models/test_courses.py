@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pytest
 from pydantic import NonNegativeInt
 
@@ -6,9 +8,9 @@ from src.db.models import Course
 
 
 class TestCourse:
-    def test_course_successful(self, valid_uuid: UuidStr) -> None:
-        course_id = valid_uuid
-        user_id = valid_uuid
+    def test_course_successful(self, uuid_generator: Mock) -> None:
+        course_id = uuid_generator()
+        user_id = uuid_generator()
         subject = "EECE"
         course_code = "230"
         term = 202310
@@ -36,8 +38,8 @@ class TestCourse:
         assert course.grade == grade
         assert course.graded == graded
 
-    def test_course_no_id(self, valid_uuid: UuidStr) -> None:
-        user_id = valid_uuid
+    def test_course_no_id(self, uuid_generator: Mock) -> None:
+        user_id = uuid_generator()
         subject = "EECE"
         course_code = "230"
         term = 202310
@@ -64,10 +66,10 @@ class TestCourse:
         assert course.graded == graded
 
     def test_course_invalid_id(
-        self, valid_uuid: UuidStr, invalid_uuid: UuidStr
+        self, uuid_generator: Mock, invalid_uuid: UuidStr
     ) -> None:
         course_id = invalid_uuid
-        user_id = valid_uuid
+        user_id = uuid_generator()
         subject = "EECE"
         course_code = "230"
         term = 202310
@@ -91,11 +93,11 @@ class TestCourse:
         "user_id, subject, course_code, term, credits, grade, graded",
         [
             (None, "EECE", "230", 202310, 3, 4.3, True),
-            ("valid_uuid", None, "230", 202310, 3, 4.3, True),
-            ("valid_uuid", "EECE", None, 202310, 3, 4.3, True),
-            ("valid_uuid", "EECE", "230", None, 3, 4.3, True),
-            ("valid_uuid", "EECE", "230", 202310, None, 4.3, True),
-            ("valid_uuid", "EECE", "230", 202310, 3, 4.3, None),
+            ("uuid_generator", None, "230", 202310, 3, 4.3, True),
+            ("uuid_generator", "EECE", None, 202310, 3, 4.3, True),
+            ("uuid_generator", "EECE", "230", None, 3, 4.3, True),
+            ("uuid_generator", "EECE", "230", 202310, None, 4.3, True),
+            ("uuid_generator", "EECE", "230", 202310, 3, 4.3, None),
         ],
     )
     def test_course_none_attribute(
@@ -110,7 +112,7 @@ class TestCourse:
         request: pytest.FixtureRequest,
     ) -> None:
         if user_id is not None:
-            user_id = request.getfixturevalue(user_id)
+            user_id = request.getfixturevalue(user_id)()
         with pytest.raises(ValueError):
             Course(
                 user_id=user_id,

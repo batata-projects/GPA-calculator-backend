@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Union
 
 from pydantic import BaseModel as PydanticBaseModel
 from pydantic import EmailStr, Field, field_validator
@@ -8,13 +8,10 @@ from src.common.utils.validators import validate_name
 
 
 class RegisterRequest(PydanticBaseModel):
-    first_name: Optional[str] = Field(default="First Name", description="First Name")
-    last_name: Optional[str] = Field(default="Last Name", description="Last Name")
-    email: EmailStr = Field(
-        default="email@mail.com", description="Email must be valid email"
-    )
+    first_name: str = Field(description="First Name")
+    last_name: str = Field(description="Last Name")
+    email: EmailStr = Field(description="Email must be valid email")
     password: PasswordStr = Field(
-        default="Password123",
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
     )
 
@@ -24,7 +21,7 @@ class RegisterRequest(PydanticBaseModel):
 
     def auth_model_dump(
         self,
-    ) -> dict[str, Union[str, dict[str, dict[str, Optional[str]]]]]:
+    ) -> dict[str, Union[str, dict[str, dict[str, str]]]]:
         return {
             "email": self.email,
             "password": self.password,
@@ -38,12 +35,9 @@ class RegisterRequest(PydanticBaseModel):
 
 
 class LoginRequest(PydanticBaseModel):
-    email: EmailStr = Field(
-        default="email@mail.com", description="Email must be a valid email"
-    )
+    email: EmailStr = Field(description="Email must be a valid email")
     password: PasswordStr = Field(
-        default="Password123",
-        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
+        description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number."
     )
 
     def auth_model_dump(self) -> dict[str, str]:
@@ -53,8 +47,20 @@ class LoginRequest(PydanticBaseModel):
         }
 
 
+class ForgetPasswordRequest(PydanticBaseModel):
+    email: EmailStr = Field(description="Email must be valid email")
+
+
 class ResetPasswordRequest(PydanticBaseModel):
     password: PasswordStr = Field(
-        default="Password123",
         description="Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
     )
+
+
+class OTPRequest(PydanticBaseModel):
+    email: EmailStr = Field(description="Email must be valid email")
+
+
+class VerifyOTPRequest(PydanticBaseModel):
+    email: EmailStr = Field(description="Email must be valid email")
+    otp: str = Field(description="OTP must be 6 characters long")
