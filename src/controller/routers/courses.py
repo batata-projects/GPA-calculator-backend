@@ -64,7 +64,7 @@ async def create_many(
 
 
 @courses_router_class.router.put("/{id}")
-async def update(    #do we need to update, are we calling update?
+async def update(
     id: UuidStr,
     request: dict[str, Any] = courses_router_class.request,
     dao: BaseDAO[Course] = Depends(courses_router_class.get_dao),
