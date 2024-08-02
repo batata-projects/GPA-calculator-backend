@@ -17,7 +17,12 @@ from .fixtures.common.utils.types.CourseStr import (
 from .fixtures.common.utils.types.PasswordStr import invalid_password, valid_password
 from .fixtures.common.utils.types.TermInt import invalid_term, valid_term
 from .fixtures.common.utils.types.UuidStr import invalid_uuid, uuid_generator
-from .fixtures.common.utils.validators.NameValidator import invalid_name, valid_name
+from .fixtures.common.utils.validators.NameValidator import (
+    invalid_name1,
+    invalid_name2,
+    invalid_name3,
+    valid_name,
+)
 from .fixtures.controller.routers._base_router import (
     router_empty,
     router_error,

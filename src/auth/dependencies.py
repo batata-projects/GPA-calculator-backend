@@ -33,18 +33,4 @@ async def get_access_token(
 async def get_refresh_token(
     token: str = Depends(APIKeyHeader(name="refresh-token")),
 ) -> str:
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="No token provided"
-        )
-    return token
-
-
-async def get_password_reset_token(
-    token: str = Depends(APIKeyHeader(name="captcha_token")),
-) -> str:
-    if token is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="No token provided"
-        )
     return token
