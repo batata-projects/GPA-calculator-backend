@@ -11,7 +11,7 @@ from src.db.models.users import User
 
 
 class TestResetPassword:
-    async def test_reset_password_successful(
+    def test_reset_password_successful(
         self,
         reset_password_request: ResetPasswordRequest,
         user1: User,

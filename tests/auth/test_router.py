@@ -117,15 +117,15 @@ class TestResetPasswordRoute:
         user1: User,
     ) -> None:
         user_dao = Mock()
-        user_dao.client.auth.reset_password.return_value = GoTrueAuthResponse(
+        user_dao.client.auth.update_user.return_value = GoTrueAuthResponse(
             user=gotrue_user,
             session=None,
         )
         response = await reset_password_route(reset_password_request, user_dao)
-        res = eval(response.body.decode("utf-8"))
+        res = eval(response.body.decode("utf-8"), {"null": None})
 
         assert response.status_code == status.HTTP_200_OK
         assert res == {
             "message": "Password change successful",
-            "data": {"user": user1.model_dump()},
+            "data": {"user": user1.model_dump(), "session": None},
         }
