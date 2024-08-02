@@ -83,8 +83,14 @@ async def update(
     course_to_update = dao.get_by_query(id=id)[0]
     # print(course_to_update)
     # if your are updating the credits of a course
-    if course_to_update.credits != request["credits"]:
-        raise ValueError("Cannot update credits of a course")
+    if not dao.get_by_query(
+        **{
+            "subject": course_to_update.subject,
+            "course_code": course_to_update.course_code,
+            "credits": request["credits"],
+        }
+    ):
+        raise ValueError("Course exists with different credit value")
     if dao.get_by_query(
         **{
             "subject": course_to_update.subject,
