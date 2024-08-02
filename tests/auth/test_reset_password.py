@@ -2,9 +2,9 @@ from unittest.mock import Mock
 
 import pytest
 from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
-from gotrue.types import User as GoTrueUser
+from gotrue.types import User as GoTrueUser  # type: ignore
 
-from src.auth.password_reset import reset_password
+from src.auth.reset_password import reset_password
 from src.auth.schemas import ResetPasswordRequest
 from src.common.utils.types import PasswordStr
 from src.db.models.users import User

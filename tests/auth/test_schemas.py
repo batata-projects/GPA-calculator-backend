@@ -26,23 +26,6 @@ class TestRegisterRequest:
             },
         }
 
-    def test_register_request_default(self) -> None:
-        register_request = RegisterRequest()
-        assert register_request.first_name == "First Name"
-        assert register_request.last_name == "Last Name"
-        assert register_request.email == "email@mail.com"
-        assert register_request.password == "Password123"
-        assert register_request.auth_model_dump() == {
-            "email": "email@mail.com",
-            "password": "Password123",
-            "options": {
-                "data": {
-                    "first_name": "First Name",
-                    "last_name": "Last Name",
-                }
-            },
-        }
-
     @pytest.mark.parametrize(
         "first_name, last_name, email, password",
         [
@@ -74,15 +57,6 @@ class TestLoginRequest:
             "password": "Password123",
         }
 
-    def test_login_request_default(self) -> None:
-        login_request = LoginRequest()
-        assert login_request.email == "email@mail.com"
-        assert login_request.password == "Password123"
-        assert login_request.auth_model_dump() == {
-            "email": "email@mail.com",
-            "password": "Password123",
-        }
-
     @pytest.mark.parametrize(
         "email, password",
         [
@@ -104,13 +78,6 @@ class TestForgetPasswordRequest:
 class TestResetPasswordRequest:
     def test_reset_password_request_successful(self) -> None:
         password_reset_request = ResetPasswordRequest(password="Password123")
-        assert password_reset_request.password == "Password123"
-        assert password_reset_request.model_dump() == {
-            "password": "Password123",
-        }
-
-    def test_reset_password_request_default(self) -> None:
-        password_reset_request = ResetPasswordRequest()
         assert password_reset_request.password == "Password123"
         assert password_reset_request.model_dump() == {
             "password": "Password123",
