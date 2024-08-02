@@ -2,7 +2,7 @@ from typing import Any
 
 import pytest
 
-from src.auth.schemas import LoginRequest, RegisterRequest
+from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest
 
 
 @pytest.fixture
@@ -18,3 +18,8 @@ def register_request() -> Any:
 @pytest.fixture
 def login_request() -> Any:
     return LoginRequest(email="rayan@mail.com", password="pasSword123")
+
+
+@pytest.fixture
+def reset_password_request() -> Any:
+    return ResetPasswordRequest(password="newPasSword123")

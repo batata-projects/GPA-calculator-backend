@@ -6,8 +6,13 @@ from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
 from gotrue.types import Session as GoTrueSession  # type: ignore
 from gotrue.types import User as GoTrueUser
 
-from src.auth.router import login_route, refresh_token_route, register_route
-from src.auth.schemas import LoginRequest, RegisterRequest
+from src.auth.router import (
+    login_route,
+    refresh_token_route,
+    register_route,
+    reset_password_route,
+)
+from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest
 from src.common.session import Session
 from src.db.models import User
 
@@ -62,11 +67,6 @@ class TestLoginRoute:
 
 
 @pytest.mark.asyncio
-class TestResetPasswordRoute:
-    async def test_reset_password_route_successful(self) -> None: ...
-
-
-@pytest.mark.asyncio
 class TestForgetPasswordRoute:
     async def test_forget_password_route_successful(self) -> None: ...
 
@@ -106,3 +106,26 @@ class TestRequestOTPRoute:
 @pytest.mark.asyncio
 class TestVerifyOTPRoute:
     async def test_verify_otp_route_successful(self) -> None: ...
+
+
+@pytest.mark.asyncio
+class TestResetPasswordRoute:
+    async def test_reset_password_route_successful(
+        self,
+        reset_password_request: ResetPasswordRequest,
+        gotrue_user: GoTrueUser,
+        user1: User,
+    ) -> None:
+        user_dao = Mock()
+        user_dao.client.auth.update_user.return_value = GoTrueAuthResponse(
+            user=gotrue_user,
+            session=None,
+        )
+        response = await reset_password_route(reset_password_request, user_dao)
+        res = eval(response.body.decode("utf-8"), {"null": None})
+
+        assert response.status_code == status.HTTP_200_OK
+        assert res == {
+            "message": "Password change successful",
+            "data": {"user": user1.model_dump(), "session": None},
+        }

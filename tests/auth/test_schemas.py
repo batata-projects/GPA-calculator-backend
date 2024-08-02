@@ -1,6 +1,6 @@
 import pytest
 
-from src.auth.schemas import LoginRequest, RegisterRequest
+from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest
 
 
 class TestRegisterRequest:
@@ -76,9 +76,17 @@ class TestForgetPasswordRequest:
 
 
 class TestResetPasswordRequest:
-    def test_reset_password_request_successful(self) -> None: ...
+    def test_reset_password_request_successful(self) -> None:
+        password_reset_request = ResetPasswordRequest(password="Password123")
+        assert password_reset_request.password == "Password123"
+        assert password_reset_request.model_dump() == {
+            "password": "Password123",
+        }
 
-    def test_reset_password_request_invalid(self) -> None: ...
+    @pytest.mark.parametrize("password", ["password123"])
+    def test_reset_password_request_invalid(self, password: str) -> None:
+        with pytest.raises(ValueError):
+            ResetPasswordRequest(password=password)
 
 
 class TestOTPRequest:
