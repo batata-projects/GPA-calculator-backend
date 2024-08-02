@@ -34,6 +34,8 @@ async def create(
     # print(queried_course.credits, request["credits"])
     if queried_course and queried_course.credits != request["credits"]:
         raise ValueError("Course already exists with different credit value")
+    elif queried_course and queried_course.graded != request["graded"]:
+        raise ValueError("Course already exists with different graded value")
     return await courses_router_class.create(request, dao)
 
 
@@ -55,11 +57,14 @@ async def create_many(
             queried_course = queried_courses[0]
             if queried_course and queried_course.credits != course["credits"]:
                 raise ValueError("Course already exists with different credit value")
+            elif queried_course and queried_course.graded != course["graded"]:
+                raise ValueError("Course already exists with different graded value")
+            
     return await courses_router_class.create_many(request, dao)
 
 
 @courses_router_class.router.put("/{id}")
-async def update(
+async def update(    #do we need to update, are we calling update?
     id: UuidStr,
     request: dict[str, Any] = courses_router_class.request,
     dao: BaseDAO[Course] = Depends(courses_router_class.get_dao),
@@ -73,6 +78,8 @@ async def update(
     # if your are updating the credits of a course
     if course_to_update.credits != request["credits"]:
         raise ValueError("Cannot update credits of a course")
+    elif course_to_update.graded != request["graded"]:
+        raise ValueError("Cannot update graded status of a course")
     elif (
         course_to_update.subject != request["subject"]
         or course_to_update.course_code != request["course_code"]
@@ -86,6 +93,8 @@ async def update(
             queried_course = queried_courses[0]
             if queried_course and queried_course.credits != request["credits"]:
                 raise ValueError("Course already exists with different credit value")
+            elif queried_course and queried_course.graded != request["graded"]:
+                raise ValueError("Course already exists with different graded value")
     return await courses_router_class.update(id, request, dao)
 
 
