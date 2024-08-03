@@ -1,5 +1,4 @@
 import pytest
-from fastapi import status
 
 from src.controller.routers._base_router import BaseRouter
 from src.controller.routers.courses import courses_router
@@ -22,13 +21,11 @@ class TestValidationInCreate:
         router_successful: BaseRouter[TestObject],
         test_dao_successful: TestDAO,
         course1: Course,
-    ) -> None:
-        ...
+    ) -> None: ...
 
     async def test_create_same_course_different_credits(
         self,
         router_successful: BaseRouter[TestObject],
         test_dao_successful: TestDAO,
         course1: Course,
-    ) -> None:
-        ...
+    ) -> None: ...
