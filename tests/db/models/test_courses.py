@@ -187,7 +187,7 @@ class TestCourse:
             "graded": True,
             "grade": 4.3,
         }
-        assert Course.check_grade_and_graded(values) == values
+        assert Course._check_grade_and_graded(values) == values
 
     def test_check_grade_and_graded_invalid(self) -> None:
         values = {
@@ -195,4 +195,4 @@ class TestCourse:
             "grade": 4.3,
         }
         with pytest.raises(ValueError):
-            Course.check_grade_and_graded(values)
+            Course._check_grade_and_graded(values)

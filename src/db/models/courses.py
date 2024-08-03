@@ -47,10 +47,23 @@ class Course(BaseModel):
         else:
             raise ValueError(f"Invalid term number: {term_number}")
 
-    @model_validator(mode="before")
-    def check_grade_and_graded(cls, values: dict[str, Any]) -> dict[str, Any]:
+    # @model_validator(mode="before")
+    # def check_grade_and_graded(cls, values: dict[str, Any]) -> dict[str, Any]:
+    #     graded = values.get("graded")
+    #     grade = values.get("grade")
+    #     if not graded and grade not in [-1, 0, 1, None]:
+    #         raise ValueError("Grade must be -1, 0, or 1 when graded is False")
+    #     return values
+
+    @classmethod
+    def _check_grade_and_graded(cls, values: dict[str, Any]) -> dict[str, Any]:
         graded = values.get("graded")
         grade = values.get("grade")
         if not graded and grade not in [-1, 0, 1, None]:
             raise ValueError("Grade must be -1, 0, or 1 when graded is False")
         return values
+
+    # Validator method that uses the standalone method
+    @model_validator(mode="before")
+    def check_grade_and_graded(cls, values: dict[str, Any]) -> dict[str, Any]:
+        return cls._check_grade_and_graded(values)
