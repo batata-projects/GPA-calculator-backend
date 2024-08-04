@@ -59,9 +59,6 @@ class TestRegister:
                 user_metadata={
                     "first_name": first_name,
                     "last_name": last_name,
-                    "credits": user1.credits,
-                    "counted_credits": user1.counted_credits,
-                    "grade": user1.grade,
                 },
                 aud="authenticated",
                 app_metadata={},

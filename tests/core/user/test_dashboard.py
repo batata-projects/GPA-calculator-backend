@@ -47,7 +47,6 @@ class TestGetDashboardData:
                 "email": "jad@mail.com",
                 "first_name": "Jad",
                 "last_name": "Shaker",
-                "credits": 6,
                 "gpa": 4.3,
             },
             "terms": {

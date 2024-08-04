@@ -14,9 +14,6 @@ def gotrue_user(user1: User) -> GoTrueUser:
         user_metadata={
             "first_name": user1.first_name,
             "last_name": user1.last_name,
-            "credits": user1.credits,
-            "counted_credits": user1.counted_credits,
-            "grade": user1.grade,
         },
         aud="authenticated",
         app_metadata={},

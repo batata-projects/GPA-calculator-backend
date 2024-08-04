@@ -13,18 +13,12 @@ def users(uuid_generator: Mock) -> list[User]:
             email="jad@mail.com",
             first_name="Jad",
             last_name="Shaker",
-            credits=6,
-            counted_credits=3,
-            grade=12.9,
         ),
         User(
             id=uuid_generator(),
             email="rayan@mail.com",
             first_name="Rayan",
             last_name="Fakhreddine",
-            credits=16,
-            counted_credits=15,
-            grade=14.0,
         ),
     ]
 
@@ -52,28 +46,4 @@ def users_same_last_name(
     users: list[User],
 ) -> list[User]:
     users[0].last_name = users[1].last_name
-    return users
-
-
-@pytest.fixture
-def users_same_credits(
-    users: list[User],
-) -> list[User]:
-    users[0].credits = users[1].credits
-    return users
-
-
-@pytest.fixture
-def users_same_counted_credits(
-    users: list[User],
-) -> list[User]:
-    users[0].counted_credits = users[1].counted_credits
-    return users
-
-
-@pytest.fixture
-def users_same_grade(
-    users: list[User],
-) -> list[User]:
-    users[0].grade = users[1].grade
     return users
