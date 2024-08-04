@@ -7,7 +7,6 @@ from tests.fixtures.db.dao._base_dao import TestDAO
 from tests.fixtures.db.models._base_model import TestObject
 
 
-@pytest.mark.asyncio
 class TestCoursesRouter:
     def test_courses_router(self) -> None:
         assert courses_router.prefix == "/courses"

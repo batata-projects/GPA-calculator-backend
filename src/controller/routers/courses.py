@@ -64,7 +64,7 @@ async def create_many(
             elif queried_course and queried_course.term == course["term"]:
                 raise ValueError("Course already exists with the same term")
             elif queried_course and queried_course.graded != course["graded"]:
-                raise ValueError("Course already exists with different graded value")    
+                raise ValueError("Course already exists with different graded value")
     return await courses_router_class.create_many(request, dao)
 
 
@@ -113,7 +113,7 @@ async def update(
                 raise ValueError("Course already exists with different graded value")
         for course in queried_courses:
             if course.term == request["term"]:
-                raise ValueError("Course already exists with the same term")            
+                raise ValueError("Course already exists with the same term")
     return await courses_router_class.update(id, request, dao)
 
 
