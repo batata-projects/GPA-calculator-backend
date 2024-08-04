@@ -75,12 +75,6 @@ class TestForgetPasswordRequest:
     def test_forget_password_request_invalid(self) -> None: ...
 
 
-class TestOTPRequest:
-    def test_otp_request_successful(self) -> None: ...
-
-    def test_otp_request_invalid(self) -> None: ...
-
-
 class TestResetPasswordRequest:
     def test_reset_password_request_successful(self) -> None:
         password_reset_request = ResetPasswordRequest(password="Password123")

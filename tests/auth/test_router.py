@@ -6,13 +6,13 @@ from gotrue import AuthResponse as GoTrueAuthResponse  # type: ignore
 from gotrue.types import Session as GoTrueSession  # type: ignore
 from gotrue.types import User as GoTrueUser
 
-from src.auth.schemas import LoginRequest, RegisterRequest
 from src.auth.router import (
     login_route,
     refresh_token_route,
     register_route,
     reset_password_route,
 )
+from src.auth.schemas import LoginRequest, RegisterRequest, ResetPasswordRequest
 from src.common.session import Session
 from src.db.models import User
 
