@@ -54,7 +54,7 @@ def get_dashboard_data(user: User, courses: list[Course]) -> dict[str, Any]:
 
     for term in terms.values():
         if term.counted_credits:
-            term.gpa = term.grade / term.counted_credits
+            term.gpa = round(term.grade / term.counted_credits, ndigits=10)
 
     for course in courses_dict.values():
         if course.grade and course.grade != -1:
@@ -71,7 +71,9 @@ def get_dashboard_data(user: User, courses: list[Course]) -> dict[str, Any]:
                     "grade",
                 }
             ),
-            "gpa": grade / counted_credits if counted_credits else 0.0,
+            "gpa": (
+                round(grade / counted_credits, ndigits=10) if counted_credits else 0.0
+            ),
         },
         "terms": {
             term_number: term.model_dump(

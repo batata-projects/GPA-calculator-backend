@@ -42,10 +42,7 @@ from .fixtures.db.models.users import (
     user1,
     user2,
     users,
-    users_same_counted_credits,
-    users_same_credits,
     users_same_first_name,
-    users_same_grade,
     users_same_last_name,
 )
 from .fixtures.others.gotrue import gotrue_session, gotrue_user

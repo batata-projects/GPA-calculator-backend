@@ -26,18 +26,12 @@ class TestValidData:
         assert ValidData.User.email == validItems.emailStr
         assert ValidData.User.first_name == validItems.firstName
         assert ValidData.User.last_name == validItems.lastName
-        assert ValidData.User.credits == validItems.nonNegativeInt
-        assert ValidData.User.counted_credits == validItems.nonNegativeInt
-        assert ValidData.User.grade == validItems.nonNegativeFloat
 
         assert User(
             id=ValidData.User.id,
             email=ValidData.User.email,
             first_name=ValidData.User.first_name,
             last_name=ValidData.User.last_name,
-            credits=ValidData.User.credits,
-            counted_credits=ValidData.User.counted_credits,
-            grade=ValidData.User.grade,
         )
 
     def test_course_valid_data(self) -> None:

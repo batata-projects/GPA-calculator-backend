@@ -47,7 +47,6 @@ async def test_get_dashboard_successful(
             },
             "user": {
                 "id": user1.id,
-                "credits": course1.credits + course2.credits,
                 "email": user1.email,
                 "first_name": user1.first_name,
                 "last_name": user1.last_name,

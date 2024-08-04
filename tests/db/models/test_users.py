@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
 import pytest
-from pydantic import EmailStr, NonNegativeFloat, NonNegativeInt
+from pydantic import EmailStr
 
 from src.db.models import User
 
@@ -12,61 +12,40 @@ class TestUser:
         email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
-        credits = 0
-        counted_credits = 0
-        grade = 0.0
 
         user = User(
             id=user_id,
             email=email,
             first_name=first_name,
             last_name=last_name,
-            credits=credits,
-            counted_credits=counted_credits,
-            grade=grade,
         )
 
         assert user.id == user_id
         assert user.email == email
         assert user.first_name == first_name
         assert user.last_name == last_name
-        assert user.credits == credits
-        assert user.counted_credits == counted_credits
-        assert user.grade == grade
 
     def test_user_no_id(self) -> None:
         email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
-        credits = 0
-        counted_credits = 0
-        grade = 0.0
 
         user = User(
             email=email,
             first_name=first_name,
             last_name=last_name,
-            credits=credits,
-            counted_credits=counted_credits,
-            grade=grade,
         )
 
         assert user.id is None
         assert user.email == email
         assert user.first_name == first_name
         assert user.last_name == last_name
-        assert user.credits == credits
-        assert user.counted_credits == counted_credits
-        assert user.grade == grade
 
     def test_user_invalid_id(self) -> None:
         user_id = "invalid"
         email = "rayan@mail.com"
         first_name = "Rayan"
         last_name = "Fakhreddine"
-        credits = 0
-        counted_credits = 0
-        grade = 0.0
 
         with pytest.raises(ValueError):
             User(
@@ -74,20 +53,14 @@ class TestUser:
                 email=email,
                 first_name=first_name,
                 last_name=last_name,
-                credits=credits,
-                counted_credits=counted_credits,
-                grade=grade,
             )
 
     @pytest.mark.parametrize(
-        "email, first_name, last_name, credits, counted_credits, grade",
+        "email, first_name, last_name",
         [
-            (None, "Rayan", "Fakhreddine", 0, 0, 0.0),
-            ("rayan@mail.com", None, "Fakhreddine", 0, 0, 0.0),
-            ("rayan@mail.com", "Rayan", None, 0, 0, 0.0),
-            ("rayan@mail.com", "Rayan", "Fakhreddine", None, 0, 0.0),
-            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, None, 0.0),
-            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, 0, None),
+            (None, "Rayan", "Fakhreddine"),
+            ("rayan@mail.com", None, "Fakhreddine"),
+            ("rayan@mail.com", "Rayan", None),
         ],
     )
     def test_user_none_attribute(
@@ -95,29 +68,24 @@ class TestUser:
         email: EmailStr,
         first_name: str,
         last_name: str,
-        credits: NonNegativeInt,
-        counted_credits: NonNegativeInt,
-        grade: NonNegativeFloat,
     ) -> None:
         with pytest.raises(ValueError):
             User(
                 email=email,
                 first_name=first_name,
                 last_name=last_name,
-                credits=credits,
-                counted_credits=counted_credits,
-                grade=grade,
             )
 
     @pytest.mark.parametrize(
-        "email, first_name, last_name, credits, counted_credits, grade",
+        "email, first_name, last_name",
         [
-            ("jaadshaker@mail", "Jad", "Shaker", 0, 0, 0.0),
-            ("rayan@mail.com", 123, "Fakhreddine", 0, 0, 0.0),
-            ("rayan@mail.com", "Rayan", 123, 0, 0, 0.0),
-            ("rayan@mail.com", "Rayan", "Fakhreddine", -1, 0, 0.0),
-            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, -1, 0.0),
-            ("rayan@mail.com", "Rayan", "Fakhreddine", 0, 0, -1),
+            ("jaadshaker@mail", "Jad", "Shaker"),
+            ("rayan@mail.com", 123, "Fakhreddine"),
+            (
+                "rayan@mail.com",
+                "Rayan",
+                123,
+            ),
         ],
     )
     def test_user_invalid_attribute(
@@ -125,16 +93,10 @@ class TestUser:
         email: EmailStr,
         first_name: str,
         last_name: str,
-        credits: NonNegativeInt,
-        counted_credits: NonNegativeInt,
-        grade: NonNegativeFloat,
     ) -> None:
         with pytest.raises(ValueError):
             User(
                 email=email,
                 first_name=first_name,
                 last_name=last_name,
-                credits=credits,
-                counted_credits=counted_credits,
-                grade=grade,
             )
