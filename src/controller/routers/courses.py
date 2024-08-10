@@ -84,14 +84,6 @@ async def update(
         }
     ):
         raise ValueError("Course exists with different credit value")
-    if dao.get_by_query(
-        **{
-            "subject": course_to_update.subject,
-            "course_code": course_to_update.course_code,
-            "term": request["term"],
-        }
-    ):
-        raise ValueError("Course already exists with the same term")
     if course_to_update.credits != request["credits"]:
         raise ValueError("Cannot update credits of a course")
     elif course_to_update.graded != request["graded"]:
