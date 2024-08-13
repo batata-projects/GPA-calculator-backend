@@ -57,7 +57,7 @@ def get_dashboard_data(user: User, courses: list[Course]) -> dict[str, Any]:
             term.gpa = round(term.grade / term.counted_credits, ndigits=10)
 
     for course in courses_dict.values():
-        if course.grade and course.grade != -1:
+        if course.grade is not None and course.grade != -1:
             credits += course.credits
             if course.graded:
                 counted_credits += course.credits
