@@ -34,7 +34,7 @@ def get_dashboard_data(user: User, courses: list[Course]) -> dict[str, Any]:
                 name=" ".join(map(str, Course.convert_to_term_name(term_number)))
             )
 
-        if course.grade and course.grade != -1:
+        if course.grade is not None and course.grade != -1:
             terms[term_number].credits += course.credits
             if course.graded:
                 terms[term_number].counted_credits += course.credits
